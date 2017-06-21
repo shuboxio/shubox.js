@@ -3,6 +3,15 @@ const ts = require('gulp-typescript')
 const mocha = require('gulp-mocha')
 const tsProject = ts.createProject('./tsconfig.json')
 const runSequence = require('run-sequence')
+const browserify = require('gulp-browserify')
+const rename = require('gulp-rename')
+
+gulp.task('bundle', function () {
+  return gulp.src('./src/shubox.js', { read: false })
+    .pipe(browserify({ standalone: 'Shubox' }))
+    .pipe(rename('bundle.js'))
+    .pipe(gulp.dest('dist'))
+})
 
 gulp.task('build', function () {
   return gulp.src('./src/**/*.ts', { base: '.' })

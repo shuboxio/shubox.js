@@ -1,9 +1,15 @@
 {
   "devDependencies": {
+    "amd-optimize": "^0.6.1",
     "chai": "^4.0.2",
     "gulp": "^3.9.1",
+    "gulp-browserify": "^0.5.1",
+    "gulp-concat": "^2.6.1",
     "gulp-mocha": "^4.3.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-requirejs": "^1.0.0-rc2",
     "gulp-typescript": "^3.1.7",
+    "gulp-uglify": "^3.0.0",
     "jsdom": "^11.0.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^3.4.2",

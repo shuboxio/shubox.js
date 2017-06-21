@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "es3",
+    "module": "amd",
+    "target": "ES5",
+    "outFile": "dist/shubox-amd.js"
+  }
+}
