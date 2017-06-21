@@ -3,23 +3,21 @@ const ts = require('gulp-typescript')
 const mocha = require('gulp-mocha')
 const tsProject = ts.createProject('./tsconfig.json')
 const runSequence = require('run-sequence')
-const small = require('small').gulp
+const rollup = require('rollup')
+const rollupTypescript = require('rollup-plugin-typescript')
 
 gulp.task('bundle', function () {
-  return gulp.src('./src/**/*.ts')
-    .pipe(tsProject()) // Compile typescript to javascript
-    .pipe(small('shubox.js', {
-      outputFileName: {
-        commonjs: 'output.common.js',
-        amd: 'output.amd.js',
-        standalone: 'output.standalone.js',
-        universal: 'output.universal.js'
-      },
-      exportPackage: {
-        universal: 'kek'
-      }
-    }))
-    .pipe(gulp.dest('./dist'))
+  return rollup.rollup({
+    entry: './src/shubox.ts',
+    plugins: [ rollupTypescript() ]
+  })
+    .then(function (bundle) {
+      bundle.write({
+        format: 'iife',
+        moduleName: 'library',
+        dest: './dist/library.js'
+      })
+    })
 })
 
 gulp.task('build', function () {

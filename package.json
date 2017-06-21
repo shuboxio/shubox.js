@@ -14,6 +14,8 @@
     "jsdom-global": "^3.0.2",
     "mocha": "^3.4.2",
     "mocha-jsdom": "^1.1.0",
+    "rollup": "^0.43.0",
+    "rollup-plugin-typescript": "^0.8.1",
     "run-sequence": "^1.2.2",
     "small": "^0.2.9",
     "tsd": "^0.6.5",
