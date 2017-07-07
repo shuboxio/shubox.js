@@ -1,4 +1,3 @@
-/// <reference path="../../typings/globals/mocha/index.d.ts" />
 import * as Chai from 'chai';
 import { setupJsDom, teardownJsDom } from '../spec_helper';
 import { fetchSetup } from '../../src/lib/fetch_setup';

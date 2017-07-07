@@ -5,8 +5,9 @@ const tsProject = ts.createProject('./tsconfig.json')
 const runSequence = require('run-sequence')
 const rollup = require('rollup')
 const rollupTypescript = require('rollup-plugin-typescript')
+const insert = require('gulp-insert')
 
-gulp.task('bundle', function () {
+gulp.task('rollup', function () {
   return rollup.rollup({
     entry: './src/shubox.ts',
     plugins: [ rollupTypescript() ]
@@ -14,10 +15,16 @@ gulp.task('bundle', function () {
     .then(function (bundle) {
       bundle.write({
         format: 'iife',
-        moduleName: 'library',
-        dest: './dist/library.js'
+        moduleName: 'shu',
+        dest: './dist/shubox.js'
       })
     })
+})
+
+gulp.task('bundle', ['rollup'], function () {
+  return gulp.src('./dist/shubox.js')
+    .pipe(insert.append('var Shubox = shu.Shubox;'))
+    .pipe(gulp.dest('./dist'))
 })
 
 gulp.task('build', function () {
