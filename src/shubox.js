@@ -1,7 +1,7 @@
 "use strict";
-/// <reference types="dropzone"/>
+/// <reference types="../typings/shubox"/>
 exports.__esModule = true;
-var fetch_setup_1 = require("../src/lib/fetch_setup");
+var fetch_setup_1 = require("./lib/fetch_setup");
 var Shubox = (function () {
     function Shubox(selector) {
         this.options = {};
