@@ -4,8 +4,8 @@
 // TypeScript Version: 2.3.4
 
 declare namespace Shubox {
-  export interface DefaultOptionsHash {
-    success?: (file:Dropzone.DropzoneFile) => void;
+  export interface DefaultOptions {
+    success?: (file: Dropzone.DropzoneFile) => void;
     error?: (file: any, message: string) => void;
     textBehavior?: string;
     s3urlTemplate?: string;
@@ -23,5 +23,29 @@ declare namespace Shubox {
     lastModified: number;
     s3: string;
     s3url: string;
+    postData: object[];
   }
+
+  export interface Callbacks {
+    accept: (file: ShuboxFile, done: (error?: string | Error) => void) => void;
+    sending: (
+      file: ShuboxFile,
+      xhr: XMLHttpRequest,
+      formData: FormData,
+    ) => void;
+    success: (file: ShuboxFile, response: Object | string) => void;
+    error: (file: ShuboxFile, message: string) => void;
+    uploadProgress: (
+      file: ShuboxFile,
+      progress: number,
+      bytesSent: number,
+    ) => void;
+    totalUploadProgress: (
+      totalProgress: number,
+      totalBytes: number,
+      totalBytesSent: number,
+    ) => void;
+  }
+
+  export interface FormCallbacks {}
 }
