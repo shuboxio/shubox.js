@@ -42,7 +42,7 @@ gulp.task('test', function () {
     }))
 })
 
-gulp.task('default', ['build', 'test'])
+gulp.task('default', () => runSequence('build', 'test'))
 
 gulp.task('watch', () => {
   gulp.watch('./**/*.ts', () => runSequence('build', 'test'))
