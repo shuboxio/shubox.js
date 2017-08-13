@@ -43,40 +43,22 @@ export class Shubox {
 
   formCallbacks: Shubox.FormCallbacks = {};
 
+  init(selector: string): (this: HTMLElement, ev: Event) => any {
+    return function(this, ev) {
+      return 'done';
+    };
+  }
+
   constructor(selector: string) {
-    let els = document.querySelectorAll(selector);
-    this.selector = selector;
     fetchSetup(window);
 
-    for (let index = 0; index < els.length; ++index) {
-      let el = els[index] as HTMLElement;
-      this.callbacks.element = el;
-
-      if ('INPUT' === el.tagName || 'TEXTAREA' === el.tagName) {
-        mergeObject(this.options, this.defaultOptions, this.formOptions, {});
-        mergeObject(this.callbacks, this.defaultCallbacks, this.formCallbacks);
-      } else {
-        mergeObject(this.options, this.defaultOptions, {});
-        mergeObject(this.callbacks, this.defaultCallbacks);
-      }
-
-      Shubox.instances[index] = new window.Dropzone(el, {
-        url: 'https://localhost-4100.s3.amazonaws.com/',
-        uploadMethod: 'PUT',
-        previewsContainer: this.options.previewsContainer,
-        previewTemplate: this.options.previewTemplate,
-        clickable: this.options.clickable,
-        accept: this.callbacks.accept,
-        sending: this.callbacks.sending,
-        success: this.callbacks.success,
-        error: this.callbacks.error,
-        uploadprogress: this.callbacks.uploadProgress,
-        totaluploadprogress: this.callbacks.totalUploadProgress,
-        maxFilesize: 100000,
-        maxFiles: this.options.maxFiles,
-        dictMaxFilesExceeded: this.options.dictMaxFilesExceeded,
-        acceptedFiles: this.options.acceptedFiles,
-      });
+    if (!window.Dropzone) {
+      let dropzoneJs = document.createElement('script');
+      dropzoneJs.src =
+        'https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.0/min/dropzone.min.js';
+      dropzoneJs.id = 'dropzone_script';
+      dropzoneJs.onload = this.init(selector);
+      document.head.appendChild(dropzoneJs);
     }
   }
 }
