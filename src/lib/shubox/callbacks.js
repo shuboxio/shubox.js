@@ -7,7 +7,7 @@ var ShuboxCallbacks = (function () {
     function ShuboxCallbacks() {
     }
     ShuboxCallbacks.prototype.accept = function (file, done) {
-        fetch('http://localhost/api/signature', {
+        fetch('http://localhost:4101/signatures', {
             method: 'post',
             mode: 'cors',
             body: object_to_form_data_1.objectToFormData({

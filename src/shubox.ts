@@ -1,22 +1,22 @@
-/// <reference types="../typings/shubox"/>
+///<reference path="../typings/shubox" />
 
 import {fetchSetup} from './lib/fetch_setup';
 import {insertAtCursor} from './lib/insert_at_cursor';
 import {ShuboxCallbacks} from './lib/shubox/callbacks';
-import {mergeObject} from './lib/mergeObject';
+import {mergeObject} from './lib/merge_object';
 
 declare var window: any;
 
 export class Shubox {
+  static instances: Array<Shubox> = [];
+
   selector: string;
 
-  options: object = {};
+  options: any = {};
 
   formOptions: object = {previewsContainer: false};
 
   callbacks: ShuboxCallbacks = new ShuboxCallbacks();
-
-  public static instances: Array<Shubox>;
 
   defaultOptions: Shubox.DefaultOptions = {
     success: function(file) {},
@@ -49,7 +49,8 @@ export class Shubox {
     fetchSetup(window);
 
     for (let index = 0; index < els.length; ++index) {
-      let el = els[index];
+      let el = els[index] as HTMLElement;
+      this.callbacks.element = el;
 
       if ('INPUT' === el.tagName || 'TEXTAREA' === el.tagName) {
         mergeObject(this.options, this.defaultOptions, this.formOptions, {});
@@ -60,7 +61,7 @@ export class Shubox {
       }
 
       Shubox.instances[index] = new window.Dropzone(el, {
-        url: '%AWS_ENDPOINT%',
+        url: 'https://localhost-4100.s3.amazonaws.com/',
         uploadMethod: 'PUT',
         previewsContainer: this.options.previewsContainer,
         previewTemplate: this.options.previewTemplate,
@@ -69,20 +70,13 @@ export class Shubox {
         sending: this.callbacks.sending,
         success: this.callbacks.success,
         error: this.callbacks.error,
-        uploadprogress: this.callbacks.uploadprogress,
-        totaluploadprogress: this.callbacks.totaluploadprogress,
+        uploadprogress: this.callbacks.uploadProgress,
+        totaluploadprogress: this.callbacks.totalUploadProgress,
         maxFilesize: 100000,
         maxFiles: this.options.maxFiles,
         dictMaxFilesExceeded: this.options.dictMaxFilesExceeded,
         acceptedFiles: this.options.acceptedFiles,
       });
-
-      if (typeof onAddedfile != 'undefined') {
-        Shubox.instances[index].on('addedfile', onAddedfile);
-      }
-      if (typeof onQueueComplete != 'undefined') {
-        Shubox.instances[index].on('queuecomplete', onQueueComplete);
-      }
-    } // end els for loop
+    }
   }
 }

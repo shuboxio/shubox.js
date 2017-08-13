@@ -20,14 +20,14 @@
     "jsdom-global": "^3.0.2",
     "mocha": "^3.4.2",
     "mocha-jsdom": "^1.1.0",
-    "rollup": "^0.43.0",
+    "rollup": "^0.45.2",
     "rollup-plugin-typescript": "^0.8.1",
     "run-sequence": "^1.2.2",
     "small": "^0.2.9",
     "tsd": "^0.6.5",
     "tslint": "^5.5.0",
     "tslint-config-prettier": "^1.1.0",
-    "typescript": "^2.3.4",
+    "typescript": "^2.4.2",
     "typings": "^2.1.1"
   }
 }

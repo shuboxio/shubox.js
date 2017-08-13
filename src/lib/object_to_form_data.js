@@ -12,7 +12,8 @@ function objectToFormData(obj, form, namespace) {
                 formKey = property;
             }
             // if the property is an object/hash, and not a File,
-            if (typeof obj[property] === 'object' && !(obj[property] instanceof window.File)) {
+            if (typeof obj[property] === 'object' &&
+                !(obj[property] instanceof window.File)) {
                 objectToFormData(obj[property], formData, property);
             }
             else {

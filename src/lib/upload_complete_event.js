@@ -3,11 +3,12 @@ exports.__esModule = true;
 var object_to_form_data_1 = require("./object_to_form_data");
 var filename_from_file_1 = require("./filename_from_file");
 function uploadCompleteEvent(file, extraParams) {
-    fetch('http://localhost/api/upload/success', {
+    fetch('https://localhost:4101/uploads', {
         method: 'post',
         mode: 'cors',
         body: object_to_form_data_1.objectToFormData({
             extraParams: extraParams,
+            bucket: 'localhost-4100',
             uploaded: {
                 width: file.width,
                 height: file.height,

@@ -5,11 +5,12 @@ export function uploadCompleteEvent(
   file: Shubox.ShuboxFile,
   extraParams: object,
 ): void {
-  fetch('http://localhost/api/upload/success', {
+  fetch('https://localhost:4101/uploads', {
     method: 'post',
     mode: 'cors',
     body: objectToFormData({
       extraParams: extraParams,
+      bucket: 'localhost-4100',
 
       uploaded: {
         width: file.width,

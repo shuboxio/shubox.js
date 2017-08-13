@@ -1,9 +1,9 @@
 "use strict";
-/// <reference types="../typings/shubox"/>
+///<reference path="../typings/shubox" />
 exports.__esModule = true;
 var fetch_setup_1 = require("./lib/fetch_setup");
 var callbacks_1 = require("./lib/shubox/callbacks");
-var mergeObject_1 = require("./lib/mergeObject");
+var merge_object_1 = require("./lib/merge_object");
 var Shubox = (function () {
     function Shubox(selector) {
         this.options = {};
@@ -35,16 +35,17 @@ var Shubox = (function () {
         fetch_setup_1.fetchSetup(window);
         for (var index = 0; index < els.length; ++index) {
             var el = els[index];
+            this.callbacks.element = el;
             if ('INPUT' === el.tagName || 'TEXTAREA' === el.tagName) {
-                mergeObject_1.mergeObject(this.options, this.defaultOptions, this.formOptions, {});
-                mergeObject_1.mergeObject(this.callbacks, this.defaultCallbacks, this.formCallbacks);
+                merge_object_1.mergeObject(this.options, this.defaultOptions, this.formOptions, {});
+                merge_object_1.mergeObject(this.callbacks, this.defaultCallbacks, this.formCallbacks);
             }
             else {
-                mergeObject_1.mergeObject(this.options, this.defaultOptions, {});
-                mergeObject_1.mergeObject(this.callbacks, this.defaultCallbacks);
+                merge_object_1.mergeObject(this.options, this.defaultOptions, {});
+                merge_object_1.mergeObject(this.callbacks, this.defaultCallbacks);
             }
             Shubox.instances[index] = new window.Dropzone(el, {
-                url: '%AWS_ENDPOINT%',
+                url: 'https://localhost-4100.s3.amazonaws.com/',
                 uploadMethod: 'PUT',
                 previewsContainer: this.options.previewsContainer,
                 previewTemplate: this.options.previewTemplate,
@@ -53,21 +54,16 @@ var Shubox = (function () {
                 sending: this.callbacks.sending,
                 success: this.callbacks.success,
                 error: this.callbacks.error,
-                uploadprogress: this.callbacks.uploadprogress,
-                totaluploadprogress: this.callbacks.totaluploadprogress,
+                uploadprogress: this.callbacks.uploadProgress,
+                totaluploadprogress: this.callbacks.totalUploadProgress,
                 maxFilesize: 100000,
                 maxFiles: this.options.maxFiles,
                 dictMaxFilesExceeded: this.options.dictMaxFilesExceeded,
                 acceptedFiles: this.options.acceptedFiles
             });
-            if (typeof onAddedfile != 'undefined') {
-                Shubox.instances[index].on('addedfile', onAddedfile);
-            }
-            if (typeof onQueueComplete != 'undefined') {
-                Shubox.instances[index].on('queuecomplete', onQueueComplete);
-            }
-        } // end els for loop
+        }
     }
+    Shubox.instances = [];
     return Shubox;
 }());
 exports.Shubox = Shubox;

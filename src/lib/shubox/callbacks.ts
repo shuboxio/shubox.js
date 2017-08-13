@@ -5,11 +5,11 @@ import {uploadCompleteEvent} from '../upload_complete_event';
 declare var window: any;
 
 export class ShuboxCallbacks {
-  private element: HTMLElement | HTMLInputElement;
+  public element: HTMLElement | HTMLInputElement;
   private options: Shubox.DefaultOptions;
 
   accept(file, done) {
-    fetch('http://localhost/api/signature', {
+    fetch('http://localhost:4101/signatures', {
       method: 'post',
       mode: 'cors',
       body: objectToFormData({
