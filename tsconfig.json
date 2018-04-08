@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "lib": ["dom", "es2015", "scripthost"],
+    "pretty": true,
+    "strictNullChecks": true,
+    "inlineSourceMap": true,
+    "declaration": true,
+    "rootDir": "packages",
+    "baseUrl": "packages",
+    "outDir": "dist/modules",
+    "declarationDir": "dist/types",
+    "paths": {
+      "*": ["*"]
+    }
+  },
+  "include": [
+    "packages/*/src/**/*.ts",
+    "packages/*/index.ts",
+    "packages/@shubox/*/src/**/*.ts",
+    "packages/@shubox/*/index.ts",
+    "packages/@shubox/*/test/**/*.ts"
+  ]
+}

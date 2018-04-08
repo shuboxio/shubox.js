@@ -1,0 +1,34 @@
+{
+  "name": "shubox.js",
+  "version": "1.0.0",
+  "description": "Shubox javascript SDK",
+  "main": "index.js",
+  "author": "joel@shubox.io",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rimraf dist packages/**/dist",
+    "compile": "tsc",
+    "predist": "yarn compile",
+    "dev": "webpack --mode development",
+    "lint": "tslint --project tsconfig.json",
+    "prebuild": "yarn lint && yarn dist",
+    "build": "lerna run build",
+    "prerelease": "yarn build",
+    "release": "lerna publish"
+  },
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "packages/@shubox/*"
+  ],
+  "devDependencies": {
+    "@types/webpack-env": "^1.13.5",
+    "lerna": "^2.9.1",
+    "rimraf": "^2.6.2",
+    "ts-loader": "^4.1.0",
+    "tslint": "^5.9.1",
+    "typescript": "^2.8.1",
+    "webpack": "^4.3.0",
+    "webpack-cli": "^2.0.13"
+  }
+}
