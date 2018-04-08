@@ -25,7 +25,6 @@ export class Shubox {
     s3urlTemplate: '{{s3url}}',
     acceptedFiles: 'image/*',
     clickable: true,
-    previewsContainer: null,
     dictMaxFilesExceeded:
       'Your file limit of {{maxFiles}} file(s) has been reached.',
     maxFiles: null,
@@ -43,9 +42,51 @@ export class Shubox {
 
   formCallbacks: Shubox.FormCallbacks = {};
 
-  init(selector: string): (this: HTMLElement, ev: Event) => any {
-    return function(this, ev) {
-      return 'done';
+  init(selector: string) {
+    let els = document.querySelectorAll(selector);
+    this.selector = selector;
+
+    return () => {
+      for (let index = 0; index < els.length; ++index) {
+        let el = els[index] as HTMLElement;
+        this.callbacks.element = el;
+
+        if ('INPUT' === el.tagName || 'TEXTAREA' === el.tagName) {
+          this.options = mergeObject(
+            this.options,
+            this.defaultOptions,
+            this.formOptions,
+            {},
+          );
+          this.callbacks = mergeObject(
+            this.callbacks,
+            this.defaultCallbacks,
+            this.formCallbacks,
+          ) as ShuboxCallbacks;
+        } else {
+          this.options = mergeObject(this.options, this.defaultOptions, {});
+          this.callbacks = mergeObject(
+            this.callbacks,
+            this.defaultCallbacks,
+          ) as ShuboxCallbacks;
+        }
+        Shubox.instances[index] = new window.Dropzone(el, {
+          url: 'https://localhost-4100.s3.amazonaws.com/',
+          uploadMethod: 'PUT',
+          previewsContainer: this.options.previewsContainer,
+          clickable: this.options.clickable,
+          accept: this.callbacks.accept,
+          sending: this.callbacks.sending,
+          success: this.callbacks.success,
+          error: this.callbacks.error,
+          uploadprogress: this.callbacks.uploadProgress,
+          totaluploadprogress: this.callbacks.totalUploadProgress,
+          maxFilesize: 100000,
+          maxFiles: this.options.maxFiles,
+          dictMaxFilesExceeded: this.options.dictMaxFilesExceeded,
+          acceptedFiles: this.options.acceptedFiles,
+        });
+      }
     };
   }
 
@@ -59,6 +100,8 @@ export class Shubox {
       dropzoneJs.id = 'dropzone_script';
       dropzoneJs.onload = this.init(selector);
       document.head.appendChild(dropzoneJs);
+    } else {
+      this.init(selector)();
     }
   }
 }
