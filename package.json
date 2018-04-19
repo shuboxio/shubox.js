@@ -8,6 +8,7 @@
   "scripts": {
     "clean": "rimraf dist packages/**/dist",
     "compile": "tsc",
+    "dist": "node scripts/dist-to-packages.js",
     "predist": "yarn compile",
     "dev": "webpack --mode development",
     "lint": "tslint --project tsconfig.json",
