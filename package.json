@@ -20,7 +20,8 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "packages/@shubox/*"
+    "packages/@shubox/*",
+    "packages/@types/*"
   ],
   "devDependencies": {
     "@types/webpack-env": "^1.13.5",
