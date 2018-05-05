@@ -1,8 +1,8 @@
 # Shubox.js Requirements Checklist
 
 [x] UMD for js module so that it can be used solo, or with/by other packaging libs.
-[] Use any version of dropzone that is installed.
-[] Load dropzone from CDN if it is not installed.
+[-] Use any version of dropzone that is installed. (use npm)
+[-] Load dropzone from CDN if it is not installed.
 [] Have a default signature url. Allow overriding.
 [] Have a default upload announce url (for webhooks). Allow overriding.
 [] Initialize with provided shubox public key.
