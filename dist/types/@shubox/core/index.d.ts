@@ -7,5 +7,5 @@ export declare class Shubox {
     options: any;
     formOptions: object;
     callbacks: ShuboxCallbacks;
-    constructor();
+    constructor(selector?: string);
 }

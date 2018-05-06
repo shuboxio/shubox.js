@@ -12,5 +12,7 @@ export class Shubox {
   formOptions: object = {previewsContainer: false};
   callbacks: ShuboxCallbacks = new ShuboxCallbacks();
 
-  constructor() {}
+  constructor(selector: string = '.shubox') {
+    this.selector = selector;
+  }
 }

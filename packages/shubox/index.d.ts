@@ -1,1 +1,1 @@
-export * from "@shubox/core"
+export * from '@shubox/core';

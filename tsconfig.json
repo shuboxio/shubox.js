@@ -21,6 +21,6 @@
     "packages/*/index.ts",
     "packages/@shubox/*/src/**/*.ts",
     "packages/@shubox/*/index.ts",
-    "packages/@shubox/*/test/**/*.ts"
+    "packages/@shubox/tests/*.ts"
   ]
 }
