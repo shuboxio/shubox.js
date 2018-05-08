@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Shubox: <%= currentPage.title %> Example</title>
+  <script src="/main.js" defer></script>
+</head>
+
+<body>
+  <main>
+    <div class="sidebar">
+      <ul class="nav">
+        <% pages.forEach(page => { %>
+          <li>
+            <a href="<%= page.path %>" class="<%= page.path == currentPage.path ? " active " : " " %>">
+              <%= page.title %>
+            </a>
+          </li>
+          <% }) %>
+      </ul>
+    </div>
+
+    <div class="container">

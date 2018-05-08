@@ -16,6 +16,7 @@
     "build": "lerna run build",
     "prerelease": "yarn build",
     "release": "lerna publish",
+    "start": "lerna run --scope @shubox/examples --stream start",
     "test": "yarn compile && mocha --require babel-polyfill --require babel-register --require jsdom-global/register -R spec dist/modules/@shubox/tests/index.js"
   },
   "private": true,
