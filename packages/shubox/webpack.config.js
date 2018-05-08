@@ -14,10 +14,9 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.BannerPlugin({
       banner: (() => {
-        const { version } = require('../../lerna.json')
+        const {version} = require('../../lerna.json')
         const year = new Date().getFullYear()
         return `/*
 Shubox ${version}

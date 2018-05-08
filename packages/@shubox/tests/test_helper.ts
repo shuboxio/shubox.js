@@ -7,7 +7,18 @@ declare const global: {
 
 function setupJsDom(onInit?) {
   jsdom.env({
-    html: '<!DOCTYPE html><html><head></head><body></body></html>',
+    html: `
+      <!DOCTYPE html>
+      <html>
+        <head></head>
+        <body>
+          <div id="main">
+            <div class="upload upload1"></div>
+            <div class="upload upload2"></div>
+          </div>
+        </body>
+      </html>
+    `,
     features: {
       FetchExternalResources: ['script'],
       ProcessExternalResources: ['script'],
