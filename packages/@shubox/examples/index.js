@@ -1,2 +1,2 @@
-import { Shubox } from 'shubox'
+import Shubox from 'shubox'
 new Shubox()

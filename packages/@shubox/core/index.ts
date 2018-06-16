@@ -3,7 +3,7 @@ import {ShuboxCallbacks} from './src/shubox_callbacks';
 import {mergeObject} from './src/merge_object';
 import * as Dropzone from 'dropzone';
 
-export class Shubox {
+export default class Shubox {
   static instances: Array<Dropzone> = [];
 
   signatureUrl: string = 'https://api.shubox.io/signatures';

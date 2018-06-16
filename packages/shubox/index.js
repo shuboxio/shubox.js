@@ -1,1 +1,2 @@
-export * from '@shubox/core'
+import Shubox from '@shubox/core'
+export default Shubox
