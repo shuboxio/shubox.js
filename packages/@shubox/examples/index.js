@@ -1,1 +1,2 @@
-console.log('Go');
+import { Shubox } from 'shubox'
+new Shubox()

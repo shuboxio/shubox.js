@@ -1,7 +1,7 @@
 /// <reference types="dropzone" />
 import { ShuboxCallbacks } from './src/shubox_callbacks';
 import * as Dropzone from 'dropzone';
-export declare class Shubox {
+export default class Shubox {
     static instances: Array<Dropzone>;
     signatureUrl: string;
     uploadUrl: string;
