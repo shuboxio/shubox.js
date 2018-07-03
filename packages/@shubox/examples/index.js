@@ -1,2 +1,3 @@
 import Shubox from 'shubox'
-new Shubox()
+
+const avatar = new Shubox('#avatar')
