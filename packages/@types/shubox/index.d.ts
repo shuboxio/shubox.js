@@ -4,7 +4,7 @@
 // TypeScript Version: 2.3.4
 
 declare namespace Shubox {
-  export interface DefaultOptions {
+  export interface ShuboxDefaultOptions {
     success?: (file: Dropzone.DropzoneFile) => void;
     error?: (file: any, message: string) => void;
     textBehavior?: string;
@@ -15,6 +15,7 @@ declare namespace Shubox {
     dictMaxFilesExceeded?: string;
     maxFiles?: null | number;
     extraParams?: object;
+    transformName?: null | string;
   }
 
   export interface ShuboxFile extends Dropzone.DropzoneFile {
@@ -25,27 +26,7 @@ declare namespace Shubox {
     s3url: string;
     postData: object[];
   }
-
-  export interface Callbacks {
-    accept: (file: ShuboxFile, done: (error?: string | Error) => void) => void;
-    sending: (
-      file: ShuboxFile,
-      xhr: XMLHttpRequest,
-      formData: FormData,
-    ) => void;
-    success: (file: ShuboxFile, response: Object | string) => void;
-    error: (file: ShuboxFile, message: string) => void;
-    uploadProgress: (
-      file: ShuboxFile,
-      progress: number,
-      bytesSent: number,
-    ) => void;
-    totalUploadProgress: (
-      totalProgress: number,
-      totalBytes: number,
-      totalBytesSent: number,
-    ) => void;
-  }
-
-  export interface FormCallbacks {}
 }
+
+export = Shubox;
+export as namespace Shubox;

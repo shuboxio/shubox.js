@@ -1,6 +1,8 @@
+import Shubox from 'shubox';
 export declare class ShuboxCallbacks {
-    element: HTMLElement | HTMLInputElement;
+    shubox: Shubox;
     private options;
+    constructor(shubox: Shubox);
     accept(file: any, done: any): void;
     sending(file: any, xhr: any, formData: any): void;
     success(file: any, response: any): void;

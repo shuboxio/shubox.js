@@ -1,0 +1,4 @@
+export var ShuboxFormOptions = {
+    previewsContainer: false,
+};
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2h1Ym94X2Zvcm1fb3B0aW9ucy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL3BhY2thZ2VzL0BzaHVib3gvY29yZS9zcmMvc2h1Ym94X2Zvcm1fb3B0aW9ucy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxNQUFNLENBQUMsSUFBTSxpQkFBaUIsR0FBRztJQUMvQixpQkFBaUIsRUFBRSxLQUFLO0NBQ3pCLENBQUMifQ==

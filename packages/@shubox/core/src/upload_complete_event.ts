@@ -1,10 +1,16 @@
 import {objectToFormData} from './object_to_form_data';
 import {filenameFromFile} from './filename_from_file';
 
-export function uploadCompleteEvent(
-  file: Shubox.ShuboxFile,
-  extraParams: object,
-): void {
+export interface ShuboxFile extends Dropzone.DropzoneFile {
+  width: number;
+  height: number;
+  lastModified: number;
+  s3: string;
+  s3url: string;
+  postData: object[];
+}
+
+export function uploadCompleteEvent(file: ShuboxFile, extraParams: object,): void {
   fetch('https://localhost:4101/uploads', {
     method: 'post',
     mode: 'cors',

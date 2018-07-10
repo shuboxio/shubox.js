@@ -1,14 +1,12 @@
 /// <reference types="dropzone" />
-import { ShuboxCallbacks } from './src/shubox_callbacks';
 import * as Dropzone from 'dropzone';
 export default class Shubox {
     static instances: Array<Dropzone>;
     signatureUrl: string;
     uploadUrl: string;
     selector: string;
+    element: HTMLElement | HTMLInputElement;
     options: any;
-    formOptions: object;
-    callbacks: ShuboxCallbacks;
-    init(selector: string): void;
-    constructor(selector?: string);
+    constructor(selector?: string, options?: object);
+    init(options: object): void;
 }

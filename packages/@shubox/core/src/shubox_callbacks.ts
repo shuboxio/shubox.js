@@ -1,12 +1,17 @@
 import {objectToFormData} from './object_to_form_data';
 import {filenameFromFile} from './filename_from_file';
 import {uploadCompleteEvent} from './upload_complete_event';
+import Shubox from 'shubox';
 
 declare var window: any;
 
 export class ShuboxCallbacks {
-  public element: HTMLElement | HTMLInputElement;
-  private options: Shubox.DefaultOptions;
+  public shubox: Shubox;
+  private options: Shubox.ShuboxDefaultOptions;
+
+  constructor(shubox: Shubox) {
+    this.shubox = shubox;
+  }
 
   accept(file, done) {
     fetch('http://localhost:4101/signatures', {
@@ -14,7 +19,7 @@ export class ShuboxCallbacks {
       mode: 'cors',
       body: objectToFormData({
         file: {
-          upload_name: this.element.dataset.shuboxTransform || '',
+          upload_name: this.shubox.element.dataset.shuboxTransform || '',
           name: filenameFromFile(file),
           type: file.type,
           size: file.size,
@@ -41,7 +46,7 @@ export class ShuboxCallbacks {
   }
 
   sending(file, xhr, formData) {
-    this.element.classList.add('shubox-uploading');
+    this.shubox.element.classList.add('shubox-uploading');
 
     let keys = Object.keys(file.postData);
     keys.forEach(function(key) {
@@ -51,8 +56,8 @@ export class ShuboxCallbacks {
   }
 
   success(file, response) {
-    this.element.classList.add('shubox-success');
-    this.element.classList.remove('shubox-uploading');
+    this.shubox.element.classList.add('shubox-success');
+    this.shubox.element.classList.remove('shubox-uploading');
     let match = /\<Location\>(.*)\<\/Location\>/g.exec(response) || ['', ''];
     let url = match[1];
     file.s3url = url.replace(/%2F/g, '/');
@@ -66,8 +71,8 @@ export class ShuboxCallbacks {
   }
 
   error(file, message) {
-    this.element.classList.remove('shubox-uploading');
-    this.element.classList.add('shubox-error');
+    this.shubox.element.classList.remove('shubox-uploading');
+    this.shubox.element.classList.add('shubox-error');
 
     window.Dropzone.prototype.defaultOptions.error(file, message);
 
@@ -77,7 +82,7 @@ export class ShuboxCallbacks {
   }
 
   uploadProgress(file, progress, bytesSent) {
-    this.element.dataset.shuboxProgress = String(progress);
+    this.shubox.element.dataset.shuboxProgress = String(progress);
     window.Dropzone.prototype.defaultOptions.uploadprogress(
       file,
       progress,
@@ -86,7 +91,7 @@ export class ShuboxCallbacks {
   }
 
   totalUploadProgress(totalProgress, totalBytes, totalBytesSent) {
-    this.element.dataset.shuboxTotalProgress = String(totalProgress);
+    this.shubox.element.dataset.shuboxTotalProgress = String(totalProgress);
     window.Dropzone.prototype.defaultOptions.totaluploadprogress(
       totalProgress,
       totalBytes,
