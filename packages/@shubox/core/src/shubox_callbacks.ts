@@ -1,3 +1,4 @@
+import * as Dropzone from 'dropzone';
 import {objectToFormData} from './object_to_form_data';
 import {filenameFromFile} from './filename_from_file';
 import {uploadCompleteEvent} from './upload_complete_event';
@@ -13,89 +14,94 @@ export class ShuboxCallbacks {
     this.shubox = shubox;
   }
 
-  accept(file, done) {
-    fetch('http://localhost:4101/signatures', {
-      method: 'post',
-      mode: 'cors',
-      body: objectToFormData({
-        file: {
-          upload_name: this.shubox.element.dataset.shuboxTransform || '',
-          name: filenameFromFile(file),
-          type: file.type,
-          size: file.size,
-        },
-        uuid: 'UUID',
-      }),
-    })
-      .then(response => {
-        return response.json();
-      })
-      .then(json => {
-        if (json.error_message) {
-          console.log(json.error_message);
-          done(`Error preparing the upload: ${json.error_message}`);
-        } else {
-          file.postData = json;
-          file.s3 = json.key;
-          done();
+  toHash() {
+    return {
+      accept: function (file, done) {
+        fetch('http://localhost:4101/signatures', {
+          method: 'post',
+          mode: 'cors',
+          body: objectToFormData({
+            file: {
+              upload_name: this.shubox.element.dataset.shuboxTransform || '',
+              name: filenameFromFile(file),
+              type: file.type,
+              size: file.size,
+            },
+            uuid: 'UUID',
+          }),
+        })
+        .then(response => {
+          return response.json();
+        })
+        .then(json => {
+          if (json.error_message) {
+            console.log(json.error_message);
+            done(`Error preparing the upload: ${json.error_message}`);
+          } else {
+            file.postData = json;
+            file.s3 = json.key;
+            done();
+          }
+        })
+        .catch(err => {
+          console.log(`There was a problem with your request: ${err.message}`);
+        });
+      }.bind(this),
+
+      sending: function (file, xhr, formData) {
+        this.shubox.element.classList.add('shubox-uploading');
+
+        let keys = Object.keys(file.postData);
+        keys.forEach(function(key) {
+          let val = file.postData[key];
+          formData.append(key, val);
+        });
+      }.bind(this),
+
+      success: function (file, response) {
+        this.shubox.element.classList.add('shubox-success');
+        this.shubox.element.classList.remove('shubox-uploading');
+        let match = /\<Location\>(.*)\<\/Location\>/g.exec(response) || ['', ''];
+        let url = match[1];
+        file.s3url = url.replace(/%2F/g, '/');
+
+        uploadCompleteEvent(file, {});
+        Dropzone.prototype.defaultOptions.success!(file, response);
+
+        if (this.options.success) {
+          this.options.success(file);
         }
-      })
-      .catch(err => {
-        console.log(`There was a problem with your request: ${err.message}`);
-      });
-  }
+      }.bind(this),
 
-  sending(file, xhr, formData) {
-    this.shubox.element.classList.add('shubox-uploading');
+      error: function (file, message) {
+        this.shubox.element.classList.remove('shubox-uploading');
+        this.shubox.element.classList.add('shubox-error');
+        let xhr = new XMLHttpRequest(); // bc type signature
 
-    let keys = Object.keys(file.postData);
-    keys.forEach(function(key) {
-      let val = file.postData[key];
-      formData.append(key, val);
-    });
-  }
+        Dropzone.prototype.defaultOptions.error!(file, message, xhr);
 
-  success(file, response) {
-    this.shubox.element.classList.add('shubox-success');
-    this.shubox.element.classList.remove('shubox-uploading');
-    let match = /\<Location\>(.*)\<\/Location\>/g.exec(response) || ['', ''];
-    let url = match[1];
-    file.s3url = url.replace(/%2F/g, '/');
+        if (this.options.error) {
+          this.options.error(file, message);
+        }
+      }.bind(this),
 
-    uploadCompleteEvent(file, {});
-    window.Dropzone.prototype.defaultOptions.success(file);
+      uploadProgress: function (file, progress, bytesSent) {
+        this.shubox.element.dataset.shuboxProgress = String(progress);
+        Dropzone.prototype.defaultOptions.uploadprogress!(
+          file,
+          progress,
+          bytesSent,
+        );
+      }.bind(this),
 
-    if (this.options.success) {
-      this.options.success(file);
+      totalUploadProgress: function (totalProgress, totalBytes, totalBytesSent) {
+        this.shubox.element.dataset.shuboxTotalProgress = String(totalProgress);
+        Dropzone.prototype.defaultOptions.totaluploadprogress!(
+          totalProgress,
+          totalBytes,
+          totalBytesSent,
+        );
+      }.bind(this)
     }
-  }
-
-  error(file, message) {
-    this.shubox.element.classList.remove('shubox-uploading');
-    this.shubox.element.classList.add('shubox-error');
-
-    window.Dropzone.prototype.defaultOptions.error(file, message);
-
-    if (this.options.error) {
-      this.options.error(file, message);
-    }
-  }
-
-  uploadProgress(file, progress, bytesSent) {
-    this.shubox.element.dataset.shuboxProgress = String(progress);
-    window.Dropzone.prototype.defaultOptions.uploadprogress(
-      file,
-      progress,
-      bytesSent,
-    );
-  }
-
-  totalUploadProgress(totalProgress, totalBytes, totalBytesSent) {
-    this.shubox.element.dataset.shuboxTotalProgress = String(totalProgress);
-    window.Dropzone.prototype.defaultOptions.totaluploadprogress(
-      totalProgress,
-      totalBytes,
-      totalBytesSent,
-    );
   }
 }

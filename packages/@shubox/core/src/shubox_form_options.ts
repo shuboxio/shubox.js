@@ -1,3 +1,5 @@
-export const ShuboxFormOptions = {
+const ShuboxFormOptions = {
   previewsContainer: false,
 };
+
+export { ShuboxFormOptions };

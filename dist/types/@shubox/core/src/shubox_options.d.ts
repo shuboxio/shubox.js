@@ -1,4 +1,4 @@
-export declare const ShuboxOptions: {
+declare const ShuboxOptions: {
     error: (file: any, message: any) => void;
     sending: (file: any, xhr: any, formData: any) => void;
     success: (file: any) => void;
@@ -13,3 +13,4 @@ export declare const ShuboxOptions: {
     maxFiles: null;
     extraParams: {};
 };
+export { ShuboxOptions };

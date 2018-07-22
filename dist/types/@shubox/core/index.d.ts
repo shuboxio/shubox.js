@@ -1,5 +1,5 @@
 /// <reference types="dropzone" />
-import * as Dropzone from 'dropzone';
+import Dropzone from 'dropzone';
 export default class Shubox {
     static instances: Array<Dropzone>;
     signatureUrl: string;
@@ -7,6 +7,7 @@ export default class Shubox {
     selector: string;
     element: HTMLElement | HTMLInputElement;
     options: any;
+    callbacks: any;
     constructor(selector?: string, options?: object);
     init(options: object): void;
 }

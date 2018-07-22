@@ -10,9 +10,9 @@
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.1.3.tgz#b8a74352977a23b604c01aa784f5b793443fb7dc"
 
-"@types/dropzone@^5.0.2":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@types/dropzone/-/dropzone-5.0.2.tgz#41bb8364aa5e6f9ed0f8beb1780881c725193a18"
+"@types/dropzone@^5.0.4":
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/@types/dropzone/-/dropzone-5.0.4.tgz#91d3ff382a2348dc7058f77e6d646e4e79779a5c"
   dependencies:
     "@types/jquery" "*"
 
@@ -2077,9 +2077,9 @@ dot-prop@^3.0.0:
   dependencies:
     is-obj "^1.0.0"
 
-dropzone@^5.4.0:
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/dropzone/-/dropzone-5.4.0.tgz#3290c07f59b189eb5a11e99a58c9b2adae5acfec"
+dropzone@^5.5.1:
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/dropzone/-/dropzone-5.5.1.tgz#06e2f513e61d6aa363d4b556f18574f47cf7ba26"
 
 duplexer3@^0.1.4:
   version "0.1.4"

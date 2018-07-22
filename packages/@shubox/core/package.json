@@ -17,10 +17,10 @@
     "access": "public"
   },
   "dependencies": {
-    "dropzone": "^5.4.0"
+    "dropzone": "^5.5.1"
   },
   "devDependencies": {
-    "@types/dropzone": "^5.0.2",
+    "@types/dropzone": "^5.0.4",
     "@types/shubox": "^1.0.0"
   }
 }

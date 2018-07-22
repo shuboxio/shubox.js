@@ -1,3 +1,4 @@
-export declare const ShuboxFormOptions: {
+declare const ShuboxFormOptions: {
     previewsContainer: boolean;
 };
+export { ShuboxFormOptions };
