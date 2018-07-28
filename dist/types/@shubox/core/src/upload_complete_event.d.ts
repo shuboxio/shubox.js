@@ -1,3 +1,4 @@
+import Shubox from 'shubox';
 export interface ShuboxFile extends Dropzone.DropzoneFile {
     width: number;
     height: number;
@@ -6,4 +7,4 @@ export interface ShuboxFile extends Dropzone.DropzoneFile {
     s3url: string;
     postData: object[];
 }
-export declare function uploadCompleteEvent(file: ShuboxFile, extraParams: object): void;
+export declare function uploadCompleteEvent(shubox: Shubox, file: ShuboxFile, extraParams: object): void;

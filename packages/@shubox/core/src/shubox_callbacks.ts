@@ -1,7 +1,7 @@
-import * as Dropzone from 'dropzone';
 import {objectToFormData} from './object_to_form_data';
 import {filenameFromFile} from './filename_from_file';
 import {uploadCompleteEvent} from './upload_complete_event';
+import Dropzone from 'dropzone';
 import Shubox from 'shubox';
 
 declare var window: any;
@@ -17,33 +17,36 @@ export class ShuboxCallbacks {
   toHash() {
     return {
       accept: function (file, done) {
-        fetch('http://localhost:4101/signatures', {
+        fetch(this.shubox.signatureUrl, {
           method: 'post',
           mode: 'cors',
           body: objectToFormData({
             file: {
-              upload_name: this.shubox.element.dataset.shuboxTransform || '',
               name: filenameFromFile(file),
               type: file.type,
               size: file.size,
             },
-            uuid: 'UUID',
+            uuid: this.shubox.uuid,
           }),
         })
-        .then(response => {
+        .then(function (response) {
           return response.json();
         })
-        .then(json => {
+        .then(function (json) {
           if (json.error_message) {
             console.log(json.error_message);
             done(`Error preparing the upload: ${json.error_message}`);
           } else {
+            Shubox.instances.forEach(dz => {
+              (dz as any).options.url = json.aws_endpoint
+            });
+
             file.postData = json;
             file.s3 = json.key;
             done();
           }
-        })
-        .catch(err => {
+        }.bind(this))
+        .catch(function (err) {
           console.log(`There was a problem with your request: ${err.message}`);
         });
       }.bind(this),
@@ -65,11 +68,11 @@ export class ShuboxCallbacks {
         let url = match[1];
         file.s3url = url.replace(/%2F/g, '/');
 
-        uploadCompleteEvent(file, {});
+        uploadCompleteEvent(this.shubox, file, {});
         Dropzone.prototype.defaultOptions.success!(file, response);
 
-        if (this.options.success) {
-          this.options.success(file);
+        if (this.shubox.options.success) {
+          this.shubox.options.success(file);
         }
       }.bind(this),
 
@@ -80,8 +83,8 @@ export class ShuboxCallbacks {
 
         Dropzone.prototype.defaultOptions.error!(file, message, xhr);
 
-        if (this.options.error) {
-          this.options.error(file, message);
+        if (this.shubox.options.error) {
+          this.shubox.options.error(file, message);
         }
       }.bind(this),
 

@@ -1,5 +1,6 @@
 import {objectToFormData} from './object_to_form_data';
 import {filenameFromFile} from './filename_from_file';
+import Shubox from 'shubox';
 
 export interface ShuboxFile extends Dropzone.DropzoneFile {
   width: number;
@@ -10,15 +11,21 @@ export interface ShuboxFile extends Dropzone.DropzoneFile {
   postData: object[];
 }
 
-export function uploadCompleteEvent(file: ShuboxFile, extraParams: object,): void {
-  fetch('https://localhost:4101/uploads', {
-    method: 'post',
+export function uploadCompleteEvent(
+  shubox: Shubox,
+  file: ShuboxFile,
+  extraParams: object,
+  ): void {
+
+  fetch(shubox.uploadUrl, {
+    method: 'POST',
     mode: 'cors',
     body: objectToFormData({
+      uuid: shubox.uuid,
       extraParams: extraParams,
       bucket: 'localhost-4100',
 
-      uploaded: {
+      file: {
         width: file.width,
         height: file.height,
         lastModified: file.lastModified,
@@ -30,7 +37,8 @@ export function uploadCompleteEvent(file: ShuboxFile, extraParams: object,): voi
         type: file.type,
       },
     }),
-  }).catch(function(err) {
-    console.log('There was a problem with your request:' + err.message);
+  })
+  .catch(function(err) {
+    console.log(`There was a problem with your request: ${err.message}`);
   });
 }

@@ -9,6 +9,7 @@ export default class Shubox {
   static instances: Array<Dropzone> = [];
   signatureUrl: string = 'https://api.shubox.io/signatures';
   uploadUrl: string = 'https://api.shubox.io/uploads';
+  uuid: string = '';
   selector: string;
   element: HTMLElement | HTMLInputElement;
   options: any = {};
@@ -16,6 +17,21 @@ export default class Shubox {
 
   constructor(selector: string = '.shubox', options: object = {}) {
     this.selector = selector;
+
+    if(options['signatureUrl']){
+      this.signatureUrl = options['signatureUrl'];
+      delete(options['signatureUrl']);
+    }
+
+    if(options['uploadUrl']){
+      this.uploadUrl = options['uploadUrl'];
+      delete(options['uploadUrl']);
+    }
+
+    if(options['uuid']){
+      this.uuid = options['uuid'];
+      delete(options['uuid']);
+    }
 
     this.init(options);
   }
@@ -38,8 +54,7 @@ export default class Shubox {
       }
 
       Shubox.instances[i] = new Dropzone(this.element, {
-        url: 'https://localhost-4100.s3.amazonaws.com/',
-        method: 'PUT',
+        url: 'http://localhost',
         previewsContainer: this.options.previewsContainer,
         clickable: this.options.clickable,
         maxFilesize: 100000,
