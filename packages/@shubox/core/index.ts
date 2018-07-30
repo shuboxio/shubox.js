@@ -57,7 +57,6 @@ export default class Shubox {
         url: 'http://localhost',
         previewsContainer: this.options.previewsContainer,
         clickable: this.options.clickable,
-        maxFilesize: 100000,
         maxFiles: this.options.maxFiles,
         dictMaxFilesExceeded: this.options.dictMaxFilesExceeded,
         acceptedFiles: this.options.acceptedFiles,
