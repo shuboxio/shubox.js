@@ -7,8 +7,8 @@ module.exports = {
   },
 
   output: {
-    filename: '[name].umd.js',
     path: path.resolve('./dist'),
+    filename: '[name].umd.js',
     library: 'Shubox',
     libraryTarget: 'umd'
   },
@@ -20,7 +20,7 @@ module.exports = {
         const year = new Date().getFullYear()
         return `/*
 Shubox ${version}
-Copyright © ${year} Gray Dog Labs, LLC
+Copyright © ${year} Jayroh, LLC
  */`
       })(),
       raw: true

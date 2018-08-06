@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Shubox client SDK",
   "repository": "https://github.com/shubox.io/shubox",
-  "author": "Gray Dog Labs, LLC",
+  "author": "Jayroh LLC",
   "contributors": ["Joel Oliveira <joel@shubox.io>"],
   "main": "dist/shubox.umd.js",
   "module": "index.js",
@@ -14,7 +14,7 @@
   "scripts": {
     "prepack": "cp ../../README.md .",
     "dev": "webpack --mode development",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production && echo \" window.Shubox = (window.Shubox || {default: null}).default;\" >> ./dist/shubox.umd.js && cp ./dist/shubox.umd.js ../@shubox/examples/public/shubox.umd.js"
   },
   "publishConfig": {
     "access": "public"

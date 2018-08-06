@@ -17,7 +17,16 @@ app.set('view engine', viewEngine)
 app.use(express.static(publicPath))
 app.use(webpackMiddleware(webpack(webpackConfig), {lazy: true}))
 
-const pages = [{path: '/hello', title: 'Hello'}]
+const pages = [
+  {
+    path: '/hello',
+    title: 'Avatar Demo'
+  },
+  {
+    path: '/standalone',
+    title: 'Standalone Script'
+  }
+]
 
 app.get('/', (req, res) => {
   res.redirect(pages[0].path)

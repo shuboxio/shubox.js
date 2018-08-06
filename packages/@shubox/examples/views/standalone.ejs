@@ -1,0 +1,17 @@
+<% include layout/head %>
+
+<div id="avatar">
+  Click here or drag and drop
+</div>
+
+<script src="/shubox.umd.js"></script>
+
+<script>
+new Shubox('#avatar', {
+  signatureUrl: 'http://localhost:4101/signatures',
+  uploadUrl: 'http://localhost:4101/uploads',
+  uuid: '0a7f9323-5c00-428b-8931-9ac7a8f9fee6'
+})
+</script>
+
+<% include layout/tail %>
