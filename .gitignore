@@ -1,2 +1,3 @@
 node_modules
 *.log
+packages/@shubox/examples/public/shubox_config.js
