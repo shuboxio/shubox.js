@@ -10,6 +10,7 @@ module.exports = {
     path: path.resolve('./dist'),
     filename: '[name].umd.js',
     library: 'Shubox',
+    libraryExport: "default",
     libraryTarget: 'umd'
   },
 
