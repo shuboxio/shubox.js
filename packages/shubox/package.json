@@ -14,7 +14,7 @@
   "scripts": {
     "prepack": "cp ../../README.md .",
     "dev": "webpack --mode development",
-    "build": "webpack --mode production && echo \" window.Shubox = (window.Shubox || {default: null}).default;\" >> ./dist/shubox.umd.js && cp ./dist/shubox.umd.js ../@shubox/examples/public/shubox.umd.js"
+    "build": "webpack --mode production && cp ./dist/shubox.umd.js ../@shubox/examples/public/shubox.umd.js"
   },
   "publishConfig": {
     "access": "public"
