@@ -1,7 +1,14 @@
 import Shubox from 'shubox'
 
 const avatar = new Shubox('#avatar', {
-  signatureUrl: 'http://localhost:4101/signatures',
-  uploadUrl: 'http://localhost:4101/uploads',
-  uuid: '0a7f9323-5c00-428b-8931-9ac7a8f9fee6'
+  uuid: window.shuboxSandboxUUID,
+  previewsContainer: false,
+  success: function (file) {
+    let img = new Image()
+    img.onload = function () {
+      let el = document.getElementById('avatar')
+      el.insertAdjacentHTML('beforeend', '<img src="' + file.s3url + '">')
+    }
+    img.src = file.s3url
+  }
 })
