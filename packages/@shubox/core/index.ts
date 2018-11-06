@@ -1,6 +1,5 @@
 import {ShuboxCallbacks} from './src/shubox_callbacks';
 import {ShuboxOptions} from './src/shubox_options';
-import {ShuboxFormOptions} from './src/shubox_form_options';
 import {mergeObject} from './src/merge_object';
 import Dropzone from 'dropzone';
 
@@ -42,15 +41,11 @@ export default class Shubox {
     for (var i = 0; i < els.length; i++) {
       this.element = els[i] as HTMLElement;
       this.callbacks = new ShuboxCallbacks(this).toHash();
-
-      if (
-        'INPUT' === this.element.tagName ||
-        'TEXTAREA' === this.element.tagName
-      ) {
-        this.options = mergeObject(this.options, ShuboxOptions, ShuboxFormOptions, options);
-      } else {
-        this.options = mergeObject(this.options, ShuboxOptions, options);
-      }
+      this.options = mergeObject(
+        this.options,
+        new ShuboxOptions(this).toHash(),
+        options
+      )
 
       Shubox.instances[i] = new Dropzone(this.element, {
         url: 'http://localhost',
