@@ -11,4 +11,5 @@ export declare class ShuboxCallbacks {
         uploadProgress: any;
         totalUploadProgress: any;
     };
+    formSuccess(file: any, response: any): void;
 }

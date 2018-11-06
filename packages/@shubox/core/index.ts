@@ -1,5 +1,4 @@
 import {ShuboxCallbacks} from './src/shubox_callbacks';
-import {ShuboxFormCallbacks} from './src/shubox_form_callbacks';
 import {ShuboxOptions} from './src/shubox_options';
 import {ShuboxFormOptions} from './src/shubox_form_options';
 import {mergeObject} from './src/merge_object';
@@ -18,19 +17,19 @@ export default class Shubox {
   constructor(selector: string = '.shubox', options: object = {}) {
     this.selector = selector;
 
-    if(options['signatureUrl']){
+    if (options['signatureUrl']) {
       this.signatureUrl = options['signatureUrl'];
-      delete(options['signatureUrl']);
+      delete options['signatureUrl'];
     }
 
-    if(options['uploadUrl']){
+    if (options['uploadUrl']) {
       this.uploadUrl = options['uploadUrl'];
-      delete(options['uploadUrl']);
+      delete options['uploadUrl'];
     }
 
-    if(options['uuid']){
+    if (options['uuid']) {
       this.uuid = options['uuid'];
-      delete(options['uuid']);
+      delete options['uuid'];
     }
 
     this.init(options);
@@ -42,15 +41,15 @@ export default class Shubox {
 
     for (var i = 0; i < els.length; i++) {
       this.element = els[i] as HTMLElement;
-      let shuboxCallbacks = new ShuboxCallbacks(this).toHash();
+      this.callbacks = new ShuboxCallbacks(this).toHash();
 
-      if ('INPUT' === this.element.tagName || 'TEXTAREA' === this.element.tagName) {
-        let shuboxFormCallbacks = new ShuboxFormCallbacks(this).toHash();
+      if (
+        'INPUT' === this.element.tagName ||
+        'TEXTAREA' === this.element.tagName
+      ) {
         this.options = mergeObject(this.options, ShuboxOptions, ShuboxFormOptions, options);
-        this.callbacks = mergeObject(this.callbacks, shuboxCallbacks, shuboxFormCallbacks);
       } else {
         this.options = mergeObject(this.options, ShuboxOptions, options);
-        this.callbacks = mergeObject(this.callbacks, shuboxCallbacks)
       }
 
       Shubox.instances[i] = new Dropzone(this.element, {
