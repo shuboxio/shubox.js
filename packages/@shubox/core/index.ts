@@ -1,6 +1,5 @@
 import {ShuboxCallbacks} from './src/shubox_callbacks';
 import {ShuboxOptions} from './src/shubox_options';
-import {mergeObject} from './src/merge_object';
 import Dropzone from 'dropzone';
 
 export default class Shubox {
@@ -41,11 +40,11 @@ export default class Shubox {
     for (var i = 0; i < els.length; i++) {
       this.element = els[i] as HTMLElement;
       this.callbacks = new ShuboxCallbacks(this).toHash();
-      this.options = mergeObject(
-        this.options,
-        new ShuboxOptions(this).toHash(),
-        options
-      )
+      this.options = {
+        ...this.options,
+        ...(new ShuboxOptions(this).toHash()),
+        ...options
+      }
 
       Shubox.instances[i] = new Dropzone(this.element, {
         url: 'http://localhost',
