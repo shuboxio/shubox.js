@@ -11,4 +11,5 @@ export default class Shubox {
     callbacks: any;
     constructor(selector?: string, options?: object);
     init(options: object): void;
+    _paste(dz: any): (event: any) => void;
 }

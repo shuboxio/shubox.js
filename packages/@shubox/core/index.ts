@@ -46,7 +46,7 @@ export default class Shubox {
         ...options
       }
 
-      Shubox.instances[i] = new Dropzone(this.element, {
+      let _dz = new Dropzone(this.element, {
         url: 'http://localhost',
         previewsContainer: this.options.previewsContainer,
         clickable: this.options.clickable,
@@ -60,6 +60,25 @@ export default class Shubox {
         uploadprogress: this.callbacks.uploadProgress,
         totaluploadprogress: this.callbacks.totalUploadProgress,
       });
+      this.element.addEventListener("paste", this._paste(_dz));
+      Shubox.instances[i] = _dz;
     }
   }
+
+  // Private
+
+  _paste(dz) {
+    return(function(event){
+      let items = (
+        event.clipboardData || event.originalEvent.clipboardData
+      ).items;
+
+      for (let item of items) {
+        if (item.kind === 'file') {
+          // adds the file to your dropzone instance
+          dz.addFile(item.getAsFile())
+        }
+      }
+    })
+  };
 }
