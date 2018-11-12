@@ -14,6 +14,8 @@ export class ShuboxOptions {
       success: function(file) {},
       textBehavior: 'replace',
       s3urlTemplate: '{{s3url}}',
+      successTemplate: '{{s3url}}',
+      uploadingTemplate: '',
       acceptedFiles: 'image/*',
       clickable: true,
       previewTemplate:

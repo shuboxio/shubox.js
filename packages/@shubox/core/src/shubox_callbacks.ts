@@ -10,6 +10,15 @@ declare var window: any;
 export class ShuboxCallbacks {
   public shubox: Shubox;
   private options: Shubox.ShuboxDefaultOptions;
+  readonly replaceable : Array<string> = [
+    'height',
+    'width',
+    'name',
+    's3',
+    's3url',
+    'size',
+    'type',
+  ];
 
   constructor(shubox: Shubox) {
     this.shubox = shubox;
@@ -59,6 +68,11 @@ export class ShuboxCallbacks {
       sending: function(file, xhr, formData) {
         this.shubox.element.classList.add('shubox-uploading');
 
+        // Update the form value if it is able
+        if (this._isFormElement()) {
+          this._updateFormValue(file, 'uploadingTemplate');
+        }
+
         let keys = Object.keys(file.postData);
         keys.forEach(function(key) {
           let val = file.postData[key];
@@ -69,16 +83,22 @@ export class ShuboxCallbacks {
       success: function(file, response) {
         this.shubox.element.classList.add('shubox-success');
         this.shubox.element.classList.remove('shubox-uploading');
-        let match = /\<Location\>(.*)\<\/Location\>/g.exec(response) || [
-          '',
-          '',
-        ];
-        let url = match[1];
+        let match = /\<Location\>(.*)\<\/Location\>/g.exec(response) || ['', ''];
+        let url   = match[1];
         file.s3url = url.replace(/%2F/g, '/');
 
         uploadCompleteEvent(this.shubox, file, {});
         Dropzone.prototype.defaultOptions.success!(file, response);
 
+        // Update the form value if it is able
+        if (this._isFormElement()) {
+          this._updateFormValue(file, 'successTemplate');
+        }
+
+        // Run the Dropzone callback
+        Dropzone.prototype.defaultOptions.success!(file, {});
+
+        // If supplied, run the options callback
         if (this.shubox.options.success) {
           this.shubox.options.success(file);
         }
@@ -115,38 +135,53 @@ export class ShuboxCallbacks {
       }.bind(this),
     };
 
-    if (['INPUT', 'TEXTAREA'].indexOf(this.shubox.element.tagName) > -1) {
-      _hash.success = this.formSuccess.bind(this);
-    }
 
     return _hash;
   }
 
-  formSuccess(file, response) {
+  // Private
+
+  _updateFormValue(file, templateName) {
     let el = this.shubox.element as HTMLInputElement;
-    el.classList.add('shubox-success');
-    el.classList.remove('shubox-uploading');
+    let interpolatedText = ''
 
-    let match = /\<Location\>(.*)\<\/Location\>/g.exec(response) || ['', ''];
-    file.s3url = match[1].replace(/%2F/g, '/');
-    file.transformName =
-      this.shubox.options.transformName || el.dataset.shuboxTransform || '';
+    if(templateName == 'successTemplate' && !!this.shubox.options.s3urlTemplate) {
+      window.console && window.console.warn(`DEPRECATION: The "s3urlTemplate" will be deprecated by version 1.0. Please update to "successTemplate".`)
 
-    let s3urlInterpolated = this.shubox.options.s3urlTemplate || '';
-    s3urlInterpolated = s3urlInterpolated.replace('{{s3url}}', file.s3url);
-
-    if (
-      el.tagName == 'TEXTAREA' &&
-      this.shubox.options.textBehavior == 'insertAtCursor'
-    ) {
-      insertAtCursor(el, s3urlInterpolated);
-    } else if (this.shubox.options.textBehavior == 'append') {
-      el.value = el.value + s3urlInterpolated;
-    } else {
-      el.value = s3urlInterpolated;
+      templateName = 's3urlTemplate'
     }
 
-    Dropzone.prototype.defaultOptions.success!(file, {});
-    this.shubox.options.success(file);
+    if (!!this.shubox.options[templateName]){
+      interpolatedText = this.shubox.options[templateName];
+    }
+
+    for (let key of this.replaceable) {
+      interpolatedText = interpolatedText.replace(`{{${key}}}`, file[key])
+    }
+
+    if (this._insertableAtCursor(el)) {
+      insertAtCursor(el, interpolatedText);
+
+    } else if (this._isAppendingText()) {
+      el.value = el.value + interpolatedText;
+
+    } else {
+      el.value = interpolatedText;
+    }
+  }
+
+  _isFormElement(): boolean {
+    return(['INPUT', 'TEXTAREA'].indexOf(this.shubox.element.tagName) > -1)
+  }
+
+  _isAppendingText(): boolean {
+    return(this.shubox.options.textBehavior == 'append')
+  }
+
+  _insertableAtCursor(el : HTMLInputElement): boolean {
+    return (
+      el.tagName == 'TEXTAREA' &&
+        this.shubox.options.textBehavior == 'insertAtCursor'
+    )
   }
 }

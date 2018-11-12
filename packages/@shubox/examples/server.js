@@ -25,6 +25,10 @@ const pages = [
   {
     path: '/standalone',
     title: 'Standalone Script'
+  },
+  {
+    path: '/form',
+    title: 'GitHub Textarea'
   }
 ]
 

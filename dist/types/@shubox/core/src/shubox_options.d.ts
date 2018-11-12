@@ -8,6 +8,8 @@ export declare class ShuboxOptions {
         success: (file: any) => void;
         textBehavior: string;
         s3urlTemplate: string;
+        successTemplate: string;
+        uploadingTemplate: string;
         acceptedFiles: string;
         clickable: boolean;
         previewTemplate: string;

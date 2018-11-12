@@ -2,6 +2,7 @@ import Shubox from 'shubox';
 export declare class ShuboxCallbacks {
     shubox: Shubox;
     private options;
+    readonly replaceable: Array<string>;
     constructor(shubox: Shubox);
     toHash(): {
         accept: any;
@@ -11,5 +12,8 @@ export declare class ShuboxCallbacks {
         uploadProgress: any;
         totalUploadProgress: any;
     };
-    formSuccess(file: any, response: any): void;
+    _updateFormValue(file: any, templateName: any): void;
+    _isFormElement(): boolean;
+    _isAppendingText(): boolean;
+    _insertableAtCursor(el: HTMLInputElement): boolean;
 }
