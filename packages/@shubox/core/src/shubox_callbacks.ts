@@ -20,6 +20,21 @@ export class ShuboxCallbacks {
     'type',
   ];
 
+  static pasteCallback(dz: Dropzone) {
+    return(function(event){
+      let items = (
+        event.clipboardData || event.originalEvent.clipboardData
+      ).items;
+
+      for (let item of items) {
+        if (item.kind === 'file') {
+          // adds the file to your dropzone instance
+          dz.addFile(item.getAsFile())
+        }
+      }
+    })
+  }
+
   constructor(shubox: Shubox) {
     this.shubox = shubox;
   }

@@ -1,8 +1,11 @@
+/// <reference types="dropzone" />
+import Dropzone from 'dropzone';
 import Shubox from 'shubox';
 export declare class ShuboxCallbacks {
     shubox: Shubox;
     private options;
     readonly replaceable: Array<string>;
+    static pasteCallback(dz: Dropzone): (event: any) => void;
     constructor(shubox: Shubox);
     toHash(): {
         accept: any;
