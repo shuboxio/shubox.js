@@ -7,8 +7,8 @@
 - [x] Initialize with provided shubox public key.
 - [x] After initialize - fetch AWS endpoint.
 - [ ] After initialize - fetch file size limit.
-- [ ] Load dropzone from CDN if it is not installed.
-- [ ] Enable copy+paste feature in dropzone (currently disabled)
+- [x] ~~Load dropzone from CDN if it is not installed.~~
+- [x] Enable copy+paste feature in dropzone (currently disabled)
 
 # Notes
 
