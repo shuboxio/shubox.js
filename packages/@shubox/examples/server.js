@@ -20,16 +20,20 @@ app.use(webpackMiddleware(webpack(webpackConfig), {lazy: true}))
 const pages = [
   {
     path: '/hello',
-    title: 'Avatar Demo'
+    title: 'Avatar Demo',
   },
   {
     path: '/standalone',
-    title: 'Standalone Script'
+    title: 'Standalone Script',
   },
   {
     path: '/form',
-    title: 'GitHub Textarea'
-  }
+    title: 'GitHub Textarea',
+  },
+  {
+    path: '/await_generation',
+    title: 'Awaiting Variant Generation',
+  },
 ]
 
 app.get('/', (req, res) => {

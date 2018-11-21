@@ -2,6 +2,7 @@ import {objectToFormData} from './object_to_form_data';
 import {filenameFromFile} from './filename_from_file';
 import {uploadCompleteEvent} from './upload_complete_event';
 import {insertAtCursor} from './insert_at_cursor';
+import {TransformCallback} from './transform_callback'
 import Dropzone from 'dropzone';
 import Shubox from 'shubox';
 
@@ -112,6 +113,15 @@ export class ShuboxCallbacks {
 
         // Run the Dropzone callback
         Dropzone.prototype.defaultOptions.success!(file, {});
+
+        if (this.shubox.options.transformCallbacks) {
+          let callbacks = this.shubox.options.transformCallbacks;
+
+          for(let variant in callbacks) {
+            let callback = callbacks[variant]
+            new TransformCallback(file, variant, callback).run()
+          }
+        }
 
         // If supplied, run the options callback
         if (this.shubox.options.success) {
