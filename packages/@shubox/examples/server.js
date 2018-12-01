@@ -29,11 +29,7 @@ const pages = [
   {
     path: '/form',
     title: 'GitHub Textarea',
-  },
-  {
-    path: '/await_generation',
-    title: 'Awaiting Variant Generation',
-  },
+  }
 ]
 
 app.get('/', (req, res) => {
