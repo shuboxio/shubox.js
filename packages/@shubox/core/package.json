@@ -17,8 +17,7 @@
     "dropzone": "^5.5.1"
   },
   "devDependencies": {
-    "@types/dropzone": "^5.0.4",
-    "@types/shubox": "^0.1.2"
+    "@types/dropzone": "^5.0.4"
   },
   "gitHead": "a21bf12e67b826e264afc88142927d263d40d87b"
 }

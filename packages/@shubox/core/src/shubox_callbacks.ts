@@ -8,9 +8,23 @@ import Shubox from 'shubox';
 
 declare var window: any;
 
+export interface ShuboxDefaultOptions {
+  success?: (file: Dropzone.DropzoneFile) => void;
+  error?: (file: any, message: string) => void;
+  textBehavior?: string;
+  s3urlTemplate?: string;
+  acceptedFiles?: string;
+  clickable?: boolean;
+  previewsContainer?: null | string | HTMLElement;
+  dictMaxFilesExceeded?: string;
+  maxFiles?: null | number;
+  extraParams?: object;
+  transformName?: null | string;
+}
+
 export class ShuboxCallbacks {
   public shubox: Shubox;
-  private options: Shubox.ShuboxDefaultOptions;
+  private options: ShuboxDefaultOptions;
   readonly replaceable : Array<string> = [
     'height',
     'width',
