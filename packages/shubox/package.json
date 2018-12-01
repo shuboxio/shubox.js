@@ -2,11 +2,8 @@
   "name": "shubox",
   "version": "0.1.0",
   "description": "Shubox client SDK",
-  "repository": "https://github.com/shubox.io/shubox",
-  "author": "Jayroh LLC",
-  "contributors": [
-    "Joel Oliveira <joel@shubox.io>"
-  ],
+  "repository": "https://github.com/shubox.io/shubox.js",
+  "author": "joel@shubox.io",
   "main": "dist/shubox.umd.js",
   "module": "index.js",
   "license": "MIT",

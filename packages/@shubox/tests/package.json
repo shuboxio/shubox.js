@@ -2,11 +2,8 @@
   "name": "@shubox/tests",
   "version": "0.1.0",
   "description": "Shubox Client SDK: Tests",
-  "repository": "https://github.com/shuboxio/shubox",
-  "author": "Jayroh LLC",
-  "contributors": [
-    "Joel Oliveira <joel@shubox.io>"
-  ],
+  "repository": "https://github.com/shuboxio/shubox.js",
+  "author": "joel@shubox.io",
   "main": "dist/module/index.js",
   "types": "dist/types/index.d.ts",
   "license": "MIT",

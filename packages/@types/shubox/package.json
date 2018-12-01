@@ -1,9 +1,12 @@
 {
   "name": "@types/shubox",
   "version": "0.1.0",
-  "description": "TypeScript definitions for Shubox",
-  "main": "index.js",
+  "description": "Shubox Client SDK: TypeScript definitions",
+  "repository": "https://github.com/shuboxio/shubox.js",
   "author": "joel@shubox.io",
+  "main": "index.js",
   "license": "MIT",
-  "private": true
+  "publishConfig": {
+    "access": "public"
+  }
 }

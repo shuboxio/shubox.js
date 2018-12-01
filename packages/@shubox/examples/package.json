@@ -1,7 +1,12 @@
 {
   "name": "@shubox/examples",
   "version": "0.1.0",
-  "private": true,
+  "description": "Shubox Client SDK: Examples/Demos",
+  "repository": "https://github.com/shuboxio/shubox.js",
+  "author": "joel@shubox.io",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
