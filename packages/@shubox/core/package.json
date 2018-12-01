@@ -1,6 +1,6 @@
 {
   "name": "@shubox/core",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Shubox Client SDK: Core library",
   "repository": "https://github.com/shuboxio/shubox",
   "author": "Jayroh LLC",
@@ -21,6 +21,6 @@
   },
   "devDependencies": {
     "@types/dropzone": "^5.0.4",
-    "@types/shubox": "^1.0.0"
+    "@types/shubox": "^0.1.0"
   }
 }
