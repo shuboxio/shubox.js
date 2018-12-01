@@ -1,6 +1,6 @@
 {
   "name": "@types/shubox",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Shubox Client SDK: TypeScript definitions",
   "repository": "https://github.com/shuboxio/shubox.js",
   "author": "joel@shubox.io",
