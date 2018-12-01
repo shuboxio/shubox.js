@@ -4,6 +4,7 @@
   "description": "Shubox Client SDK: Examples/Demos",
   "repository": "https://github.com/shuboxio/shubox.js",
   "author": "joel@shubox.io",
+  "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
@@ -19,5 +20,6 @@
   },
   "scripts": {
     "start": "node server.js"
-  }
+  },
+  "gitHead": "a21bf12e67b826e264afc88142927d263d40d87b"
 }

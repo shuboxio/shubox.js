@@ -24,5 +24,6 @@
   "dependencies": {
     "jsdom-global": "^3.0.2",
     "shubox": "^0.1.1"
-  }
+  },
+  "gitHead": "a21bf12e67b826e264afc88142927d263d40d87b"
 }
