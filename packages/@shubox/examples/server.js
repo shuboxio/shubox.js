@@ -27,9 +27,13 @@ const pages = [
     title: 'Standalone Script',
   },
   {
-    path: '/form',
+    path: '/github',
     title: 'GitHub Textarea',
-  }
+  },
+  {
+    path: '/form-insert-at',
+    title: 'Inserting Text',
+  },
 ]
 
 app.get('/', (req, res) => {

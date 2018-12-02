@@ -7,7 +7,6 @@ export declare class ShuboxOptions {
         sending: (file: any, xhr: any, formData: any) => void;
         success: (file: any) => void;
         textBehavior: string;
-        s3urlTemplate: string;
         successTemplate: string;
         uploadingTemplate: string;
         acceptedFiles: string;

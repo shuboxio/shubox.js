@@ -6,6 +6,7 @@ export interface ShuboxDefaultOptions {
     error?: (file: any, message: string) => void;
     textBehavior?: string;
     s3urlTemplate?: string;
+    successTemplate?: string;
     acceptedFiles?: string;
     clickable?: boolean;
     previewsContainer?: null | string | HTMLElement;

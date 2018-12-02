@@ -61,7 +61,7 @@ export default class Shubox {
         totaluploadprogress: this.callbacks.totalUploadProgress,
       });
       this.element.addEventListener("paste", ShuboxCallbacks.pasteCallback(_dz));
-      Shubox.instances[i] = _dz;
+      Shubox.instances.push(_dz);
     }
   }
 }

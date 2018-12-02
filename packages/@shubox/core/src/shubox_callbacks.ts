@@ -13,6 +13,7 @@ export interface ShuboxDefaultOptions {
   error?: (file: any, message: string) => void;
   textBehavior?: string;
   s3urlTemplate?: string;
+  successTemplate?: string;
   acceptedFiles?: string;
   clickable?: boolean;
   previewsContainer?: null | string | HTMLElement;
@@ -75,7 +76,7 @@ export class ShuboxCallbacks {
           .then(
             function(json) {
               if (json.error_message) {
-                console.log(json.error_message);
+                window.console && window.console.log(json.error_message);
                 done(`Error preparing the upload: ${json.error_message}`);
               } else {
                 Shubox.instances.forEach(dz => {
@@ -89,7 +90,7 @@ export class ShuboxCallbacks {
             }.bind(this),
           )
           .catch(function(err) {
-            console.log(
+            window.console && window.console.log(
               `There was a problem with your request: ${err.message}`,
             );
           });
@@ -184,13 +185,18 @@ export class ShuboxCallbacks {
     let el = this.shubox.element as HTMLInputElement;
     let interpolatedText = ''
 
-    if(templateName == 'successTemplate' && !!this.shubox.options.s3urlTemplate) {
-      window.console && window.console.warn(`DEPRECATION: The "s3urlTemplate" will be deprecated by version 1.0. Please update to "successTemplate".`)
+    // If we're processing the successTemplate, and the user instead used
+    // the deprecated "s3urlTemplate" option, then rename the template name
+    // to use that one as the key.
+    if(templateName == 'successTemplate' && this.shubox.options.s3urlTemplate) {
+      window.console && window.console.warn(
+        `DEPRECATION: The "s3urlTemplate" will be deprecated by version 1.0. Please update to "successTemplate".`
+      )
 
       templateName = 's3urlTemplate'
     }
 
-    if (!!this.shubox.options[templateName]){
+    if (this.shubox.options[templateName]){
       interpolatedText = this.shubox.options[templateName];
     }
 

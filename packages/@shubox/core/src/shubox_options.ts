@@ -13,7 +13,6 @@ export class ShuboxOptions {
       sending: function(file, xhr, formData) {},
       success: function(file) {},
       textBehavior: 'replace',
-      s3urlTemplate: '{{s3url}}',
       successTemplate: '{{s3url}}',
       uploadingTemplate: '',
       acceptedFiles: 'image/*',
