@@ -34,6 +34,10 @@ const pages = [
     path: '/form-insert-at',
     title: 'Inserting Text',
   },
+  {
+    path: '/events',
+    title: 'Event Handlers',
+  },
 ]
 
 app.get('/', (req, res) => {

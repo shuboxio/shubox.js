@@ -51,6 +51,7 @@ export default class Shubox {
         previewsContainer: this.options.previewsContainer,
         clickable: this.options.clickable,
         maxFiles: this.options.maxFiles,
+        maxFilesize: this.options.maxFilesize,
         dictMaxFilesExceeded: this.options.dictMaxFilesExceeded,
         acceptedFiles: this.options.acceptedFiles,
         accept: this.callbacks.accept,

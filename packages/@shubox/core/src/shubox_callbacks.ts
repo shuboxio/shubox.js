@@ -70,29 +70,24 @@ export class ShuboxCallbacks {
             uuid: this.shubox.uuid,
           }),
         })
-          .then(function(response) {
+          .then((response) => {
             return response.json();
           })
-          .then(
-            function(json) {
-              if (json.error_message) {
-                window.console && window.console.log(json.error_message);
-                done(`Error preparing the upload: ${json.error_message}`);
-              } else {
-                Shubox.instances.forEach(dz => {
-                  (dz as any).options.url = json.aws_endpoint;
-                });
+          .then((json) => {
+            if (json.error) {
+              this.shubox.callbacks.error(file, json.error)
+            } else {
+              Shubox.instances.forEach(dz => {
+                (dz as any).options.url = json.aws_endpoint;
+              });
 
-                file.postData = json;
-                file.s3 = json.key;
-                done();
-              }
-            }.bind(this),
-          )
-          .catch(function(err) {
-            window.console && window.console.log(
-              `There was a problem with your request: ${err.message}`,
-            );
+              file.postData = json;
+              file.s3 = json.key;
+              done();
+            }
+          })
+          .catch((err) => {
+            this.shubox.callbacks.error(file, err.message)
           });
       }.bind(this),
 

@@ -448,6 +448,12 @@
   width: 100%;
 }
 
+textarea.shubox--textarea--no-click-bar {
+  border-bottom: 1px solid #d1d5da;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+
 .shubox--form .shubox--click-to-upload:focus,
 .shubox--form textarea:focus {
   outline: none;
