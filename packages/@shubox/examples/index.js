@@ -58,20 +58,11 @@ const events = new Shubox('#avatar-events', {
   signatureUrl: 'http://localhost:4101/signatures',
   uploadUrl: 'http://localhost:4101/uploads',
   previewsContainer: false,
+  maxFiles: 1,
 
-  addedfile: function(file) {
-    logEvent('Added file!')
-  },
-  error: function (file, message) {
-    logEvent('Oops. Error: ' + message)
-  },
-  sending: function (file, xhr, formData) {
-    logEvent('Sending file!')
-  },
-  queuecomplete: function() {
-    logEvent('Queue complete!')
-  },
-  success: function(file, responseText, e) {
-    logEvent('File sent successfully!')
-  }
+  addedfile: function(file) { logEvent('Added file!') },
+  error: function (file, message) { logEvent('Oops. Error: ' + message) },
+  queuecomplete: function() { logEvent('Queue complete!') },
+  sending: function (file, xhr, formData) { logEvent('Sending file!') },
+  success: function(file, responseText, e) { logEvent('File sent!') },
 })

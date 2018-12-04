@@ -6,6 +6,7 @@ export interface ShuboxDefaultOptions {
     error?: (file: Dropzone.DropzoneFile, message: string) => void;
     sending?: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: any) => void;
     addedfile?: (file: Dropzone.DropzoneFile) => void;
+    queuecomplete?: () => void;
     textBehavior?: string;
     s3urlTemplate?: string;
     successTemplate?: string;
@@ -27,6 +28,7 @@ export declare class ShuboxCallbacks {
         accept: any;
         sending: (file: any, xhr: any, formData: any) => void;
         addedfile: (file: any) => void;
+        queuecomplete: () => void;
         success: any;
         error: (file: any, message: any) => void;
         uploadProgress: any;

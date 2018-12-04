@@ -9,7 +9,9 @@ export class ShuboxOptions {
 
   toHash() {
     return {
+      addedfile: function(file) {},
       error: function(file, message) {},
+      queuecomplete: function() {},
       sending: function(file, xhr, formData) {},
       success: function(file) {},
       textBehavior: 'replace',

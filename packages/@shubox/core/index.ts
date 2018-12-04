@@ -61,6 +61,7 @@ export default class Shubox {
         error: this.callbacks.error,
         uploadprogress: this.callbacks.uploadProgress,
         totaluploadprogress: this.callbacks.totalUploadProgress,
+        queuecomplete: this.callbacks.queuecomplete,
       });
       this.element.addEventListener("paste", ShuboxCallbacks.pasteCallback(_dz));
       Shubox.instances.push(_dz);
