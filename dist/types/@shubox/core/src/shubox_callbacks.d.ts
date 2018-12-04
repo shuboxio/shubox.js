@@ -3,7 +3,8 @@ import Dropzone from 'dropzone';
 import Shubox from 'shubox';
 export interface ShuboxDefaultOptions {
     success?: (file: Dropzone.DropzoneFile) => void;
-    error?: (file: any, message: string) => void;
+    error?: (file: Dropzone.DropzoneFile, message: string) => void;
+    sending?: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: any) => void;
     textBehavior?: string;
     s3urlTemplate?: string;
     successTemplate?: string;
@@ -23,9 +24,9 @@ export declare class ShuboxCallbacks {
     constructor(shubox: Shubox);
     toHash(): {
         accept: any;
-        sending: any;
+        sending: (file: any, xhr: any, formData: any) => void;
         success: any;
-        error: any;
+        error: (file: any, message: any) => void;
         uploadProgress: any;
         totalUploadProgress: any;
     };

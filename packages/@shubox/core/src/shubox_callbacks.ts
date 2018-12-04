@@ -10,7 +10,8 @@ declare var window: any;
 
 export interface ShuboxDefaultOptions {
   success?: (file: Dropzone.DropzoneFile) => void;
-  error?: (file: any, message: string) => void;
+  error?: (file: Dropzone.DropzoneFile, message: string) => void;
+  sending?: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: any) => void;
   textBehavior?: string;
   s3urlTemplate?: string;
   successTemplate?: string;
@@ -91,7 +92,7 @@ export class ShuboxCallbacks {
           });
       }.bind(this),
 
-      sending: function(file, xhr, formData) {
+      sending: (file, xhr, formData) => {
         this.shubox.element.classList.add('shubox-uploading');
 
         // Update the form value if it is able
@@ -104,7 +105,10 @@ export class ShuboxCallbacks {
           let val = file.postData[key];
           formData.append(key, val);
         });
-      }.bind(this),
+
+        // Run user's provided sending callback
+        this.shubox.options.sending(file, xhr, formData);
+      },
 
       success: function(file, response) {
         this.shubox.element.classList.add('shubox-success');
@@ -139,17 +143,17 @@ export class ShuboxCallbacks {
         }
       }.bind(this),
 
-      error: function(file, message) {
+      error: (file, message) => {
         this.shubox.element.classList.remove('shubox-uploading');
         this.shubox.element.classList.add('shubox-error');
-        let xhr = new XMLHttpRequest(); // bc type signature
 
+        let xhr = new XMLHttpRequest(); // bc type signature
         Dropzone.prototype.defaultOptions.error!(file, message, xhr);
 
         if (this.shubox.options.error) {
           this.shubox.options.error(file, message);
         }
-      }.bind(this),
+      },
 
       uploadProgress: function(file, progress, bytesSent) {
         this.shubox.element.dataset.shuboxProgress = String(progress);
