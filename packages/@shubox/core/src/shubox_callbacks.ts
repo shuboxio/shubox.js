@@ -12,6 +12,7 @@ export interface ShuboxDefaultOptions {
   success?: (file: Dropzone.DropzoneFile) => void;
   error?: (file: Dropzone.DropzoneFile, message: string) => void;
   sending?: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: any) => void;
+  addedfile?: (file: Dropzone.DropzoneFile) => void;
   textBehavior?: string;
   s3urlTemplate?: string;
   successTemplate?: string;
@@ -108,6 +109,13 @@ export class ShuboxCallbacks {
 
         // Run user's provided sending callback
         this.shubox.options.sending(file, xhr, formData);
+      },
+
+      addedfile: (file) => {
+        if(Dropzone.prototype.defaultOptions.addedfile) {
+          Dropzone.prototype.defaultOptions.addedfile(file);
+        }
+        this.shubox.options.addedfile(file);
       },
 
       success: function(file, response) {

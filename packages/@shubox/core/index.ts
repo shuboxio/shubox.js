@@ -55,6 +55,7 @@ export default class Shubox {
         dictMaxFilesExceeded: this.options.dictMaxFilesExceeded,
         acceptedFiles: this.options.acceptedFiles,
         accept: this.callbacks.accept,
+        addedfile: this.callbacks.addedfile,
         sending: this.callbacks.sending,
         success: this.callbacks.success,
         error: this.callbacks.error,
