@@ -46,7 +46,7 @@ export default class Shubox {
         ...options
       }
 
-      let _dz = new Dropzone(this.element, {
+      let dzOptions = {
         url: 'http://localhost',
         previewsContainer: this.options.previewsContainer,
         clickable: this.options.clickable,
@@ -62,9 +62,10 @@ export default class Shubox {
         uploadprogress: this.callbacks.uploadProgress,
         totaluploadprogress: this.callbacks.totalUploadProgress,
         queuecomplete: this.callbacks.queuecomplete,
-      });
-      this.element.addEventListener("paste", ShuboxCallbacks.pasteCallback(_dz));
-      Shubox.instances.push(_dz);
+      }
+      let dropzone = new Dropzone(this.element, { ...options, ...dzOptions });
+      this.element.addEventListener("paste", ShuboxCallbacks.pasteCallback(dropzone));
+      Shubox.instances.push(dropzone);
     }
   }
 }

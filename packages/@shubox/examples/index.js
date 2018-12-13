@@ -2,8 +2,6 @@ import Shubox from 'shubox'
 
 const avatar = new Shubox('#avatar', {
   uuid: window.shuboxSandboxUUID,
-  signatureUrl: 'http://localhost:4101/signatures',
-  uploadUrl: 'http://localhost:4101/uploads',
   previewsContainer: false,
   success: function(file) {
     let img = new Image()
@@ -17,8 +15,6 @@ const avatar = new Shubox('#avatar', {
 
 const githubForm = new Shubox('#shubox--textarea', {
   uuid: window.shuboxSandboxUUID,
-  signatureUrl: 'http://localhost:4101/signatures',
-  uploadUrl: 'http://localhost:4101/uploads',
   clickable: '#shubox--click-to-upload',
   uploadingTemplate: '![Uploading {{name}}...]()',
   successTemplate: '![{{name}}]({{s3url}})',
@@ -26,24 +22,18 @@ const githubForm = new Shubox('#shubox--textarea', {
 
 const atCursor = new Shubox('#shubox--textarea--cursor', {
   uuid: window.shuboxSandboxUUID,
-  signatureUrl: 'http://localhost:4101/signatures',
-  uploadUrl: 'http://localhost:4101/uploads',
   successTemplate: ' {{s3url}} ',
   textBehavior: 'insertAtCursor',
 })
 
 const append = new Shubox('#shubox--textarea--append', {
   uuid: window.shuboxSandboxUUID,
-  signatureUrl: 'http://localhost:4101/signatures',
-  uploadUrl: 'http://localhost:4101/uploads',
   successTemplate: ' See? Told you. Right after --> {{s3url}}',
   textBehavior: 'append',
 })
 
 const replace = new Shubox('#shubox--textarea--replace', {
   uuid: window.shuboxSandboxUUID,
-  signatureUrl: 'http://localhost:4101/signatures',
-  uploadUrl: 'http://localhost:4101/uploads',
   s3urlTemplate: 'Replaced with: {{s3url}} ',
   textBehavior: 'replace',
 })
@@ -55,8 +45,6 @@ const logEvent = function(e){
 
 const events = new Shubox('#avatar-events', {
   uuid: window.shuboxSandboxUUID,
-  signatureUrl: 'http://localhost:4101/signatures',
-  uploadUrl: 'http://localhost:4101/uploads',
   previewsContainer: false,
   maxFiles: 1,
 

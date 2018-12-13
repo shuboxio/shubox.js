@@ -133,7 +133,7 @@ export class ShuboxCallbacks {
         let url   = match[1];
         file.s3url = url.replace(/%2F/g, '/');
 
-        uploadCompleteEvent(this.shubox, file, {});
+        uploadCompleteEvent(this.shubox, file, (this.shubox.options.extraParams || {}));
         Dropzone.prototype.defaultOptions.success!(file, response);
 
         // Update the form value if it is able
