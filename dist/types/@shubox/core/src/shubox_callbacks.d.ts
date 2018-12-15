@@ -17,6 +17,7 @@ export interface ShuboxDefaultOptions {
     maxFiles?: null | number;
     extraParams?: object;
     transformName?: null | string;
+    s3Key?: null | string;
 }
 export declare class ShuboxCallbacks {
     shubox: Shubox;

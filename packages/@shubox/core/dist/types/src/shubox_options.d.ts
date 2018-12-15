@@ -13,6 +13,7 @@ export declare class ShuboxOptions {
         uploadingTemplate: string;
         acceptedFiles: string;
         clickable: boolean;
+        s3Key: null;
         previewTemplate: string;
         previewsContainer: boolean | null;
         transformName: null;

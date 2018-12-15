@@ -24,6 +24,7 @@ export interface ShuboxDefaultOptions {
   maxFiles?: null | number;
   extraParams?: object;
   transformName?: null | string;
+  s3Key?: null | string;
 }
 
 export class ShuboxCallbacks {
@@ -71,6 +72,7 @@ export class ShuboxCallbacks {
               size: file.size,
             },
             uuid: this.shubox.uuid,
+            s3Key: this.shubox.options.s3Key
           }),
         })
           .then((response) => {
