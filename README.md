@@ -13,14 +13,14 @@
 
 # Shubox
 
->  Simple. Fast. _Customizable._  
+>  Simple. Fast. _Customizable._
 >  Upload images from your web app directly to Amazon S3.
 
 ## What does this do?
 
 The Shubox mission is to take the tedium and boilerplate out of the web-based file storage and image manipulation story. After signing up for a shubox account and setting our js library up on your website(s) you will be able to:
 
-* Upload to S3, "the internet's ftp server", **_directly_ from the web browser**. 
+* Upload to S3, "the internet's ftp server", **_directly_ from the web browser**.
 * Manipulate and transform images and videos after they are uploaded - **cropping, optimizing, changing formats**.
 * Using front-end technologies you are comfortable with, **Javascript and CSS**, you can create the user experience YOU want using our Javascript library. We have [some demos at Codepen](https://codepen.io/shubox/)!
 
@@ -44,7 +44,7 @@ Follow [@shuboxio](https://twitter.com/shuboxio) on Twitter for important announ
 	* [Download the Library](#download-the-library)
 	* [Your First Shubox Code](#initialize-your-shubox-object)
 * [Set Up Your Own S3 Bucket](#set-up-your-own-s3-bucket)
-* [Examples &amp; Ideas](#examples-ideas)
+* [Examples &amp; Ideas](#examples--ideas)
 * [Library Documentation](#library-documentation)
 * [Development Notes](#development-notes)
 	* [Setup](#development-setup)
@@ -99,7 +99,9 @@ In your HTML:
 
 ## Initialize your Shubox object
 
-For this (very contrived) example let's say you want your users to upload an avatar or profile photo, your sandbox UUID is `"oh-wow-this-is-a-random-uuid"`, and you have an HTML element with the ID `"#avatar"`.
+For this (very contrived) example let's say you want your users to upload an avatar or profile photo.
+You have an HTML element with the ID `"#avatar"`.
+And your provided sandbox UUID is `"oh-wow-this-is-a-random-uuid"`.
 
 ```
 new Shubox('#avatar', { uuid: "oh-wow-this-is-a-random-uuid" })
@@ -113,7 +115,100 @@ Coming soon!
 
 # Examples & Ideas
 
-On its way!
+Between the common and not-so-common use-cases, we've gathered some up and will
+be adding to them down below for the times you might be looking for a quick
+copypasta, or ideas as to what you could do with the Shubox library.
+
+*NOTE:* All of the following are in ES6 syntax and assume that you have already
+installed the shubox script into your JS bundle, or have embedded and executed
+the standalone shubox.js script.
+
+## Upload an "Avatar" and manually insert into your element
+
+```html
+<div id="avatar"></div>
+```
+
+```javascript
+const shuboxUUID = "[copied from Shubox dashboard]"
+
+const avatar = new Shubox('#avatar', {
+  uuid: window.shuboxUUID,
+
+  // prevents from inserting the base64 preview image
+  previewsContainer: false,
+
+  success: function(file) { // passed a ShuboxFile object
+    // create new image element
+    let img = new Image()
+
+    // once loaded, insert it inside div#avatar
+    img.onload = function() {
+      let el = document.getElementById('avatar')
+      el.insertAdjacentHTML('beforeend', '<img src="' + file.s3url + '">')
+    }
+
+    // assign the src and let it load
+    img.src = file.s3url
+  }
+})
+```
+
+## Mimicing the GitHub file upload user experience
+
+```html
+<textarea placeholder="Leave a comment or drag and drop some images."
+          class="shubox--textarea"
+          id="shubox--textarea"></textarea>
+
+<div id="shubox--click-to-upload" class="shubox--click-to-upload">
+  Attach files by dragging &amp; dropping, <strong>selecting them</strong>,
+  or pasting from the clipboard.
+</div>
+```
+
+```javascript
+const shuboxUUID = "[copied from Shubox dashboard]"
+
+const githubForm = new Shubox('#shubox--textarea', {
+  uuid: window.shuboxUUID,
+
+  // clicking on the element corresponding to the `clickable` selector
+  // will trigger the file dialog
+  clickable: '#shubox--click-to-upload',
+
+  // Once the file starts uploading the string in `uploadingTemplate` will be
+  // interpolated with the file's name and added to the textarea
+  uploadingTemplate: '![Uploading {{name}}...]()',
+
+  // Once the file completes uploading the string in `successTemplate` will be
+  // interpolated with the file's name and S3 url, then placed in the textarea
+  successTemplate: '![{{name}}]({{s3url}})'
+})
+```
+
+## Add the final S3 url to the location of the cursor in the input/textarea
+
+```html
+<textarea placeholder="Leave a comment or drag and drop some images."
+          class="shubox--textarea shubox--textarea--no-click-bar"
+          id="shubox--textarea--cursor">Click to place cursor and upload.</textarea>
+```
+
+
+```javascript
+const shuboxUUID = "[copied from Shubox dashboard]"
+
+const atCursor = new Shubox('#shubox--textarea--cursor', {
+  uuid: window.shuboxUUID,
+  // when inserting text into an input or textarea the `insertAtCursor` value
+  // tells shubox to add the S3 url wherever the cursor is currently placed
+  textBehavior: 'insertAtCursor',
+  // the text inserted into the form element is the final S3 url with a space
+  // before and after
+  successTemplate: ' {{s3url}} '
+})
+```
 
 # Library Documentation
 
