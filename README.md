@@ -1,14 +1,18 @@
 
 
-<p width="100%" style="background:#f9f2ff; text-align:center">
-  <img src="https://shubox.io/assets/blog/shubox.svg" width="150" height="150">
+<p width="100%" bgcolor="#f9f2ff">
+  <center>
+    <img src="https://shubox.io/assets/blog/shubox.svg" width="150" height="150">
+  </center>
 </p>
 
-<p align="center">
+<p>
+  <center>
   <br>
   <a href="https://www.npmjs.com/package/shubox"><img src="https://img.shields.io/npm/v/shubox.svg?style=flat" alt="npm"></a>
   <a href="https://unpkg.com/shubox"><img src="https://img.badgesize.io/https://unpkg.com/shubox/dist/shubox.umd.js?compression=gzip" alt="gzip size"></a>
   <a href="https://www.npmjs.com/package/shubox"><img src="https://img.shields.io/npm/dt/shubox.svg" alt="downloads" ></a><br>
+  </center>
 </p>
 
 # Shubox
@@ -101,10 +105,10 @@ In your HTML:
 
 For this (very contrived) example let's say you want your users to upload an avatar or profile photo.
 You have an HTML element with the ID `"#avatar"`.
-And your provided sandbox UUID is `"oh-wow-this-is-a-random-uuid"`.
+And your provided sandbox key is `"abcde-qwerty-12345`.
 
 ```
-new Shubox('#avatar', { uuid: "oh-wow-this-is-a-random-uuid" })
+new Shubox('#avatar', { key: "abcde-qwerty-12345" })
 ```
 
 That's it! When you click that element you will see a file dialog pop up where you can select your image. Once that image is selected it will be uploaded to the sandbox S3 bucket. Your code works! Sure, it uploads to a temporary S3 bucket, but the code works! (More info soon on how to set up your own bucket)
@@ -130,10 +134,10 @@ the standalone shubox.js script.
 ```
 
 ```javascript
-const shuboxUUID = "[copied from Shubox dashboard]"
+const shuboxKey = "[copied from Shubox dashboard]"
 
 const avatar = new Shubox('#avatar', {
-  uuid: window.shuboxUUID,
+  key: window.shuboxKey,
 
   // prevents from inserting the base64 preview image
   previewsContainer: false,
@@ -168,10 +172,10 @@ const avatar = new Shubox('#avatar', {
 ```
 
 ```javascript
-const shuboxUUID = "[copied from Shubox dashboard]"
+const shuboxKey = "[copied from Shubox dashboard]"
 
 const githubForm = new Shubox('#shubox--textarea', {
-  uuid: window.shuboxUUID,
+  key: window.shuboxKey,
 
   // clicking on the element corresponding to the `clickable` selector
   // will trigger the file dialog
@@ -197,10 +201,10 @@ const githubForm = new Shubox('#shubox--textarea', {
 
 
 ```javascript
-const shuboxUUID = "[copied from Shubox dashboard]"
+const shuboxKey = "[copied from Shubox dashboard]"
 
 const atCursor = new Shubox('#shubox--textarea--cursor', {
-  uuid: window.shuboxUUID,
+  key: window.shuboxKey,
   // when inserting text into an input or textarea the `insertAtCursor` value
   // tells shubox to add the S3 url wherever the cursor is currently placed
   textBehavior: 'insertAtCursor',
