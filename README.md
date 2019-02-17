@@ -1,18 +1,14 @@
 
 
-<p width="100%" bgcolor="#f9f2ff">
-  <center>
-    <img src="https://shubox.io/assets/blog/shubox.svg" width="150" height="150">
-  </center>
+<p width="100%" bgcolor="#f9f2ff" align="center">
+  <img src="https://shubox.io/assets/blog/shubox.svg" width="150" height="150">
 </p>
 
-<p>
-  <center>
+<p align="center"g>
   <br>
   <a href="https://www.npmjs.com/package/shubox"><img src="https://img.shields.io/npm/v/shubox.svg?style=flat" alt="npm"></a>
   <a href="https://unpkg.com/shubox"><img src="https://img.badgesize.io/https://unpkg.com/shubox/dist/shubox.umd.js?compression=gzip" alt="gzip size"></a>
   <a href="https://www.npmjs.com/package/shubox"><img src="https://img.shields.io/npm/dt/shubox.svg" alt="downloads" ></a><br>
-  </center>
 </p>
 
 # Shubox
