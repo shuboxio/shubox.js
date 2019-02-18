@@ -4,7 +4,7 @@ export default class Shubox {
     static instances: Array<Dropzone>;
     signatureUrl: string;
     uploadUrl: string;
-    uuid: string;
+    key: string;
     selector: string;
     element: HTMLElement | HTMLInputElement;
     options: any;

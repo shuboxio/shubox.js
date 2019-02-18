@@ -71,7 +71,7 @@ export class ShuboxCallbacks {
               type: file.type,
               size: file.size,
             },
-            uuid: this.shubox.uuid,
+            key: this.shubox.key,
             s3Key: this.shubox.options.s3Key
           }),
         })

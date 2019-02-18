@@ -21,7 +21,7 @@ export function uploadCompleteEvent(
     method: 'POST',
     mode: 'cors',
     body: objectToFormData({
-      uuid: shubox.uuid,
+      key: shubox.key,
       transformName: shubox.options.transformName,
       extraParams: extraParams,
       bucket: 'localhost-4100',

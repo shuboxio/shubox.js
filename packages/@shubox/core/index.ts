@@ -6,7 +6,7 @@ export default class Shubox {
   static instances: Array<Dropzone> = [];
   signatureUrl: string = 'https://api.shubox.io/signatures';
   uploadUrl: string = 'https://api.shubox.io/uploads';
-  uuid: string = '';
+  key: string = '';
   selector: string;
   element: HTMLElement | HTMLInputElement;
   options: any = {};
@@ -26,8 +26,13 @@ export default class Shubox {
     }
 
     if (options['uuid']) {
-      this.uuid = options['uuid'];
+      this.key = options['uuid'];
       delete options['uuid'];
+    }
+
+    if (options['key']) {
+      this.key = options['key'];
+      delete options['key'];
     }
 
     this.init(options);
