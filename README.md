@@ -153,7 +153,7 @@ const avatar = new Shubox('#avatar', {
 })
 ```
 
-![](https://shubox-codepen-io.s3.amazonaws.com/s-codepen-io/6d455937/shubox_demo_avatar.gif)
+![](https://shubox.io/images/README/shubox_demo_avatar.gif)
 
 ## Mimicing the GitHub file upload user experience
 
@@ -188,7 +188,7 @@ const githubForm = new Shubox('#shubox--textarea', {
 })
 ```
 
-![](https://shubox-codepen-io.s3.amazonaws.com/s-codepen-io/bfaeadb7/shubox_demo_github_form.gif)
+![](https://shubox.io/images/README/shubox_demo_github_form.gif)
 
 ## Add the final S3 url to the location of the cursor in the input/textarea
 
@@ -213,7 +213,7 @@ const atCursor = new Shubox('#shubox--textarea--cursor', {
 })
 ```
 
-![](https://shubox-codepen-io.s3.amazonaws.com/s-codepen-io/85e07a5e/shubox_demo_insert_at_cursor.gif)
+![](https://shubox.io/images/README/shubox_demo_insert_at_cursor.gif)
 
 ## Replace all text in input/textarea with S3 URL
 
@@ -233,7 +233,7 @@ const replace = new Shubox('#shubox--textarea--replace', {
 })
 ```
 
-![](https://shubox-codepen-io.s3.amazonaws.com/s-codepen-io/f05a428c/shubox_demo_replace_text.gif)
+![](https://shubox.io/images/README/shubox_demo_replace_text.gif)
 
 ## Append S3 URL at the tail end of input/textarea
 
@@ -255,7 +255,7 @@ const append = new Shubox('#shubox--textarea--append', {
 })
 ```
 
-![](https://shubox-codepen-io.s3.amazonaws.com/s-codepen-io/d8d0c304/shubox_demo_append_after.gif)
+![](https://shubox.io/images/README/shubox_demo_append_after.gif)
 
 # Library Documentation
 
@@ -304,7 +304,7 @@ yarn start
 # ... then open up http://localhost:9001/
 ```
 
-![](https://shubox-codepen-io.s3.amazonaws.com/s-codepen-io/8282dc2a/localhost-9001.png)
+![](https://shubox.io/images/README/localhost-9001.png)
 
 ## Lerna
 
