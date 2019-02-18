@@ -1,7 +1,7 @@
 import Shubox from 'shubox'
 
 const avatar = new Shubox('#avatar', {
-  uuid: window.shuboxSandboxUUID,
+  key: window.shuboxSandboxKey,
   previewsContainer: false,
   success: function(file) {
     let img = new Image()
@@ -14,37 +14,40 @@ const avatar = new Shubox('#avatar', {
 })
 
 const githubForm = new Shubox('#shubox--textarea', {
-  uuid: window.shuboxSandboxUUID,
+  key: window.shuboxSandboxKey,
   clickable: '#shubox--click-to-upload',
   uploadingTemplate: '![Uploading {{name}}...]()',
   successTemplate: '![{{name}}]({{s3url}})',
 })
 
 const atCursor = new Shubox('#shubox--textarea--cursor', {
-  uuid: window.shuboxSandboxUUID,
+  key: window.shuboxSandboxKey,
+  clickable: null,
   successTemplate: ' {{s3url}} ',
   textBehavior: 'insertAtCursor',
 })
 
 const append = new Shubox('#shubox--textarea--append', {
-  uuid: window.shuboxSandboxUUID,
+  key: window.shuboxSandboxKey,
+  clickable: null,
   successTemplate: ' See? Told you. Right after --> {{s3url}}',
   textBehavior: 'append',
 })
 
 const replace = new Shubox('#shubox--textarea--replace', {
-  uuid: window.shuboxSandboxUUID,
+  key: window.shuboxSandboxKey,
+  clickable: null,
   s3urlTemplate: 'Replaced with: {{s3url}} ',
   textBehavior: 'replace',
 })
 
 const logEvent = function(e){
   let eventsEl = document.getElementById("events")
-  eventsEl.innerHTML = `<p>${e}</p>\n ${eventsEl.innerHTML}`
+  eventsEl.innerHTML = ` ${eventsEl.innerHTML}\n<li>${e}</li>`
 }
 
 const events = new Shubox('#avatar-events', {
-  uuid: window.shuboxSandboxUUID,
+  key: window.shuboxSandboxKey,
   previewsContainer: false,
   maxFiles: 1,
 

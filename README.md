@@ -64,7 +64,7 @@ To get things working as fast as possible we'll operate under the understanding 
 There's a lot under the hood (bucket setup, signatures, CORS policies) that needs to happen in order to get things working just right. We handle all of that stuff via the Shubox service.
 
 1. [Sign up for an account at Shubox](https://dashboard.shubox.io/sign_up)
-2. [Obtain your "Sandbox" ID from the Shubox dashboard.](https://dashboard.shubox.io/domains/sandbox). You'll need this for your Javascript code when you initialize your first Shubox object.
+2. [Obtain your "Sandbox" key from the Shubox dashboard.](https://dashboard.shubox.io/domains/sandbox). You'll need this for your Javascript code when you initialize your first Shubox object.
 
 ## Download the Library
 
@@ -154,6 +154,8 @@ const avatar = new Shubox('#avatar', {
 })
 ```
 
+![](https://shubox-codepen-io.s3.amazonaws.com/s-codepen-io/6d455937/shubox_demo_avatar.gif)
+
 ## Mimicing the GitHub file upload user experience
 
 ```html
@@ -187,6 +189,8 @@ const githubForm = new Shubox('#shubox--textarea', {
 })
 ```
 
+![](https://shubox-codepen-io.s3.amazonaws.com/s-codepen-io/bfaeadb7/shubox_demo_github_form.gif)
+
 ## Add the final S3 url to the location of the cursor in the input/textarea
 
 ```html
@@ -210,6 +214,50 @@ const atCursor = new Shubox('#shubox--textarea--cursor', {
 })
 ```
 
+![](https://shubox-codepen-io.s3.amazonaws.com/s-codepen-io/85e07a5e/shubox_demo_insert_at_cursor.gif)
+
+## Replace all text in input/textarea with S3 URL
+
+```html
+<textarea
+  tabindex="1"
+  placeholder="Leave a comment or drag and drop some images."
+  class="shubox--textarea shubox--textarea--no-click-bar"
+  id="shubox--textarea--replace">Drag & drop to replace this text</textarea>
+```
+
+```javascript
+const replace = new Shubox('#shubox--textarea--replace', {
+  key: window.shuboxSandboxKey,
+  s3urlTemplate: 'Replaced with: {{s3url}} ',
+  textBehavior: 'replace',
+})
+```
+
+![](https://shubox-codepen-io.s3.amazonaws.com/s-codepen-io/f05a428c/shubox_demo_replace_text.gif)
+
+## Append S3 URL at the tail end of input/textarea
+
+```html
+<textarea
+  tabindex="1"
+  placeholder="Leave a comment or drag and drop some images."
+  class="shubox--textarea shubox--textarea--no-click-bar"
+  id="shubox--textarea--append">
+    Dragging & dropping here will append after 👉
+</textarea>
+```
+
+```javascript
+const append = new Shubox('#shubox--textarea--append', {
+  key: window.shuboxSandboxKey,
+  successTemplate: ' See? Told you. Right after --> {{s3url}}',
+  textBehavior: 'append',
+})
+```
+
+![](https://shubox-codepen-io.s3.amazonaws.com/s-codepen-io/d8d0c304/shubox_demo_append_after.gif)
+
 # Library Documentation
 
 Current documentation [can be found on the Shubox website](https://shubox.io/docs/#javascript-api). _Updated_ docs are coming soon!
@@ -218,11 +266,46 @@ Current documentation [can be found on the Shubox website](https://shubox.io/doc
 
 ## Development Setup
 
-On the docket!
+*Clone this repo:*
 
-## Running Tests
+```sh
+git clone https://github.com/shuboxio/shubox.js.git shubox.js
+cd ./shubox.js
+```
 
-Guess what? I bet you won't guess. That's right! More coming soon -- both ***more*** tests and ***how*** to run the tests.
+*Install dependencies*
+
+```sh
+yarn install
+```
+
+*Grab your "Sandbox" key from the [Shubox dashboard](https://dashboard.shubox.io/domains/sandbox).*
+
+```sh
+open http://dashboard.shubox.io/domains/sandbox/key.txt
+```
+
+*Place your key into shubox_config.js as a global variable*. This will allow your local dev/example server to use your sandbox key.
+
+```sh
+echo "var shuboxSandboxUUID = '[SANDBOX KEY GOES HERE]';" > \
+  ./packages/@shubox/examples/public/shubox_config.js
+```
+
+*Run the tests*
+
+```sh
+yarn test
+```
+
+*Run local example server*
+
+```sh
+yarn start
+# ... then open up http://localhost:9001/
+```
+
+![](https://shubox-codepen-io.s3.amazonaws.com/s-codepen-io/8282dc2a/localhost-9001.png)
 
 ## Lerna
 

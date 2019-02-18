@@ -1,1 +1,1 @@
-var shuboxSandboxUUID = ''
+var shuboxSandboxKey = ''
