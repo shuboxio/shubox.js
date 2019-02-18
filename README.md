@@ -48,7 +48,6 @@ Follow [@shuboxio](https://twitter.com/shuboxio) on Twitter for important announ
 * [Library Documentation](#library-documentation)
 * [Development Notes](#development-notes)
 	* [Setup](#development-setup)
-	* [Running Tests](#running-tests)
 	* [Lerna](#lerna)
 * [Code of Conduct](#code-of-conduct)
 
