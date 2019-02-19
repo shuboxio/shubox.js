@@ -27,6 +27,10 @@ const pages = [
     title: 'Multiple File Previews',
   },
   {
+    path: '/await-generation',
+    title: 'Variant Callback',
+  },
+  {
     path: '/standalone',
     title: 'Standalone Script',
   },

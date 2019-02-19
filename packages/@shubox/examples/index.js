@@ -5,24 +5,24 @@ const avatar = new Shubox('#avatar', {
   signatureUrl: 'http://localhost:4101/signatures',
   uploadUrl: 'http://localhost:4101/uploads',
   previewsContainer: false,
-  s3Key: 'users/avatar/joel.jpg',
+  s3Key: 'users/avatar/me.jpg'
+})
+
+const cropped_avatar = new Shubox('#avatar-cropped', {
+  key: 'bf897b63-50f2-4055-b4f6-825e613f3d3e',
+  signatureUrl: 'http://localhost:4101/signatures',
+  uploadUrl: 'http://localhost:4101/uploads',
+  previewsContainer: false,
   transformName: 'test-transform',
   transformCallbacks: {
-    '200x': function(shuboxFile) {
-      console.log(shuboxFile.transforms["200x"].s3url)
-    },
-    'x100': function(shuboxFile) {
-      console.log(shuboxFile.transforms["x100"].s3url)
+    '144x144#': function(file) {
+      let el = document.getElementById('avatar-cropped')
+      el.insertAdjacentHTML(
+        'beforeend',
+        `<img src='${file.transforms["144x144#"].s3url}'>`
+      )
     }
-  },
-  success: function(file) {
-    let img = new Image()
-    img.onload = function() {
-      let el = document.getElementById('avatar')
-      el.insertAdjacentHTML('beforeend', '<img src="' + file.s3url + '">')
-    }
-    img.src = file.s3url
-  },
+  }
 })
 
 const multfiles = new Shubox("#shubox--multiple-files", {
