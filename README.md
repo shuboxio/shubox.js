@@ -155,6 +155,50 @@ const avatar = new Shubox('#avatar', {
 
 ![](https://shubox.io/images/README/shubox_demo_avatar.gif)
 
+## Upload avatar and insert generated transform/variant image
+
+"Transforms" are variants of uploaded images that you define in the Shubox dashboard. If you want a `100x100` sized image generated after an 800x600 photo is uploaded you can define that image transform in the [Image Transforms](https://dashboard.shubox.io/image_transforms) section of the dashboard.
+
+In the JS library you can define a corresponding callback that will fire once that version of the image is generated, and HTTP request and response successfully executed. For example, if you define a `"144x144#"` transform, that will intelligently resize and crop all uploaded images to that exact pixel size -- 144 pixels wide by 144 pixels tall. To run a callback once that image exists, the following options will add an image tag with that version of the image's URL.
+
+
+```html
+<div id="avatar"></div>
+```
+
+```javascript
+const shuboxKey = "[copied from Shubox dashboard]"
+
+const avatar = new Shubox('#avatar', {
+  key: window.shuboxKey,
+  previewsContainer: false,
+  
+  // the image transform's name, as defined
+  // in the dashboard, is 'test-transform'
+  transformName: 'test-transform',
+  
+  // a hash with N keys corresponding to
+  // the versions of the transforms
+  transformCallbacks: {
+  
+    // the image size defined in the dashboard is '144x144#'
+    '144x144#': function(shuboxFile) {
+    
+      // once image is found, insert an `img`
+      // tag with that url as the src
+      let el = document.getElementById('avatar')
+      el.insertAdjacentHTML(
+        'beforeend',
+        `<img src='${shuboxFile.transforms["144x144#"].s3url}'>`
+      )
+    }
+  }
+})
+
+```
+
+![](https://shubox.io/images/README/shubox_demo_transform_callback.gif)
+
 ## Mimicing the GitHub file upload user experience
 
 ```html
