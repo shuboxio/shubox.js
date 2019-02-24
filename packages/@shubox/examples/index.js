@@ -12,6 +12,7 @@ const cropped_avatar = new Shubox('#avatar-cropped', {
   key: 'bf897b63-50f2-4055-b4f6-825e613f3d3e',
   signatureUrl: 'http://localhost:4101/signatures',
   uploadUrl: 'http://localhost:4101/uploads',
+  cdn: 'http://local9001.shubox.io',
   previewsContainer: false,
   transformName: 'test-transform',
   transformCallbacks: {
@@ -40,6 +41,7 @@ const githubForm = new Shubox('#shubox--textarea', {
   clickable: '#shubox--click-to-upload',
   uploadingTemplate: '![Uploading {{name}}...]()',
   successTemplate: '![{{name}}]({{s3url}})',
+  transformName: 'test-transform',
 })
 
 const atCursor = new Shubox('#shubox--textarea--cursor', {
