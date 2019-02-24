@@ -18,6 +18,7 @@ export interface ShuboxDefaultOptions {
     extraParams?: object;
     transformName?: null | string;
     s3Key?: null | string;
+    cdn?: null | string;
 }
 export declare class ShuboxCallbacks {
     shubox: Shubox;

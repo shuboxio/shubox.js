@@ -27,7 +27,7 @@ export class TransformCallback {
       this.retry -= 1
 
       setTimeout(() => {
-        fetch(this.variantUrl, { method: 'HEAD' })
+        fetch(this._cacheBustedUrl(), { method: 'HEAD' })
           .then(this.validateResponse)
           .catch(this.run)
       }, delay)
@@ -43,5 +43,11 @@ export class TransformCallback {
     this.callback(this.file)
 
     return response
+  }
+
+  _cacheBustedUrl = () => {
+    let rand = Math.floor(Math.random() * Math.floor(10000000000))
+
+    return `${this.variantUrl}?q=${rand}`
   }
 }

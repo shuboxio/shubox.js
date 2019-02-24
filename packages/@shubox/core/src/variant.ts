@@ -18,9 +18,10 @@ export class Variant {
       .replace(/\^$/, "_carat")
       .replace(/\!$/, "_bang")
 
-    var filename = this.s3url.substring(this.s3url.lastIndexOf('/') + 1)
-    var variantFilename = `${variant}_${filename.replace(/\+/g, '%2B')}`
+    let filename = this.s3url.substring(this.s3url.lastIndexOf('/') + 1)
+    let variantFilename = `${variant}_${filename.replace(/\+/g, '%2B')}`
+    let url = this.s3url.replace(filename, variantFilename)
 
-    return(this.s3url.replace(filename, variantFilename))
+    return(url)
   }
 }

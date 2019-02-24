@@ -9,6 +9,7 @@ export class ShuboxOptions {
 
   toHash() {
     return {
+      cdn: null,
       addedfile: function(file) {},
       error: function(file, message) {},
       queuecomplete: function() {},

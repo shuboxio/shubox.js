@@ -3,6 +3,7 @@ export declare class ShuboxOptions {
     shubox: Shubox;
     constructor(shubox: Shubox);
     toHash(): {
+        cdn: null;
         addedfile: (file: any) => void;
         error: (file: any, message: any) => void;
         queuecomplete: () => void;

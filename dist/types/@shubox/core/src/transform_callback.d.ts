@@ -12,4 +12,5 @@ export declare class TransformCallback {
     constructor(file: ShuboxFile, variant: string | undefined, callback: (file: ShuboxFile) => void);
     run: (error?: any) => void;
     validateResponse: (response: any) => any;
+    _cacheBustedUrl: () => string;
 }

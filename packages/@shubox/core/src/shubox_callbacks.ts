@@ -25,6 +25,7 @@ export interface ShuboxDefaultOptions {
   extraParams?: object;
   transformName?: null | string;
   s3Key?: null | string;
+  cdn?: null | string;
 }
 
 export class ShuboxCallbacks {
@@ -133,7 +134,12 @@ export class ShuboxCallbacks {
         this.shubox.element.classList.remove('shubox-uploading');
         let match = /\<Location\>(.*)\<\/Location\>/g.exec(response) || ['', ''];
         let url   = match[1];
-        file.s3url = url.replace(/%2F/g, '/');
+        file.s3url = url.replace(/%2F/g, '/').replace(/%2B/g, '%20');
+
+        if (this.shubox.options.cdn) {
+          let path = file.s3url.split("/").slice(4).join("/");
+          file.s3url = `${this.shubox.options.cdn}/${path}`
+        }
 
         uploadCompleteEvent(this.shubox, file, (this.shubox.options.extraParams || {}));
         Dropzone.prototype.defaultOptions.success!(file, response);
