@@ -15,7 +15,6 @@ export declare class ShuboxOptions {
         acceptedFiles: string;
         clickable: boolean;
         s3Key: null;
-        previewTemplate: string;
         previewsContainer: boolean | null;
         transformName: null;
         dictMaxFilesExceeded: string;
