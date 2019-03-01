@@ -61,9 +61,14 @@ export class ShuboxCallbacks {
   }
 
   toHash() {
+    // assigning `this` (instance of ShuboxCallbacks) to `self` to that `this`
+    // inside the body of these callback functions are reserved for the
+    // instance of Dropzone that fires the function.
+    let self = this;
+
     let _hash = {
       accept: function(file, done) {
-        fetch(this.shubox.signatureUrl, {
+        fetch(self.shubox.signatureUrl, {
           method: 'post',
           mode: 'cors',
           body: objectToFormData({
@@ -72,8 +77,8 @@ export class ShuboxCallbacks {
               type: file.type,
               size: file.size,
             },
-            key: this.shubox.key,
-            s3Key: this.shubox.options.s3Key
+            key: self.shubox.key,
+            s3Key: self.shubox.options.s3Key
           }),
         })
           .then((response) => {
@@ -81,7 +86,7 @@ export class ShuboxCallbacks {
           })
           .then((json) => {
             if (json.error) {
-              this.shubox.callbacks.error(file, json.error)
+              self.shubox.callbacks.error(file, json.error)
             } else {
               Shubox.instances.forEach(dz => {
                 (dz as any).options.url = json.aws_endpoint;
@@ -93,16 +98,16 @@ export class ShuboxCallbacks {
             }
           })
           .catch((err) => {
-            this.shubox.callbacks.error(file, err.message)
+            self.shubox.callbacks.error(file, err.message)
           });
-      }.bind(this),
+      },
 
-      sending: (file, xhr, formData) => {
-        this.shubox.element.classList.add('shubox-uploading');
+      sending: function(file, xhr, formData) {
+        self.shubox.element.classList.add('shubox-uploading');
 
         // Update the form value if it is able
-        if (this._isFormElement()) {
-          this._updateFormValue(file, 'uploadingTemplate');
+        if (self._isFormElement()) {
+          self._updateFormValue(file, 'uploadingTemplate');
         }
 
         let keys = Object.keys(file.postData);
@@ -112,48 +117,41 @@ export class ShuboxCallbacks {
         });
 
         // Run user's provided sending callback
-        this.shubox.options.sending(file, xhr, formData);
+        self.shubox.options.sending(file, xhr, formData);
       },
 
-      addedfile: (file) => {
-        if(Dropzone.prototype.defaultOptions.addedfile) {
-          Dropzone.prototype.defaultOptions.addedfile(file);
-        }
-        this.shubox.options.addedfile(file);
+      addedfile: function(file) {
+        Dropzone.prototype.defaultOptions.addedfile!.apply(this, [file]);
+        self.shubox.options.addedfile(file);
       },
 
-      queuecomplete: () => {
-        if (Dropzone.prototype.defaultOptions.queuecomplete) {
-          Dropzone.prototype.defaultOptions.queuecomplete();
-        }
-        this.shubox.options.queuecomplete();
+      queuecomplete: function() {
+        Dropzone.prototype.defaultOptions.queuecomplete!.apply(this);
+        self.shubox.options.queuecomplete();
       },
 
       success: function(file, response) {
-        this.shubox.element.classList.add('shubox-success');
-        this.shubox.element.classList.remove('shubox-uploading');
+        self.shubox.element.classList.add('shubox-success');
+        self.shubox.element.classList.remove('shubox-uploading');
         let match = /\<Location\>(.*)\<\/Location\>/g.exec(response) || ['', ''];
         let url   = match[1];
         file.s3url = url.replace(/%2F/g, '/').replace(/%2B/g, '%20');
 
-        if (this.shubox.options.cdn) {
+        if (self.shubox.options.cdn) {
           let path = file.s3url.split("/").slice(4).join("/");
-          file.s3url = `${this.shubox.options.cdn}/${path}`
+          file.s3url = `${self.shubox.options.cdn}/${path}`
         }
 
-        uploadCompleteEvent(this.shubox, file, (this.shubox.options.extraParams || {}));
-        Dropzone.prototype.defaultOptions.success!(file, response);
+        uploadCompleteEvent(self.shubox, file, (self.shubox.options.extraParams || {}));
+        Dropzone.prototype.defaultOptions.success!.apply(this, [file, response]);
 
         // Update the form value if it is able
-        if (this._isFormElement()) {
-          this._updateFormValue(file, 'successTemplate');
+        if (self._isFormElement()) {
+          self._updateFormValue(file, 'successTemplate');
         }
 
-        // Run the Dropzone callback
-        Dropzone.prototype.defaultOptions.success!(file, {});
-
-        if (this.shubox.options.transformCallbacks) {
-          let callbacks = this.shubox.options.transformCallbacks;
+        if (self.shubox.options.transformCallbacks) {
+          let callbacks = self.shubox.options.transformCallbacks;
 
           for(let variant in callbacks) {
             let callback = callbacks[variant]
@@ -162,42 +160,39 @@ export class ShuboxCallbacks {
         }
 
         // If supplied, run the options callback
-        if (this.shubox.options.success) {
-          this.shubox.options.success(file);
+        if (self.shubox.options.success) {
+          self.shubox.options.success(file);
         }
-      }.bind(this),
+      },
 
-      error: (file, message) => {
-        this.shubox.element.classList.remove('shubox-uploading');
-        this.shubox.element.classList.add('shubox-error');
+      error: function (file, message) {
+        self.shubox.element.classList.remove('shubox-uploading');
+        self.shubox.element.classList.add('shubox-error');
 
         let xhr = new XMLHttpRequest(); // bc type signature
-        Dropzone.prototype.defaultOptions.error!(file, message, xhr);
+        Dropzone.prototype.defaultOptions.error!.apply(this, [file, message, xhr]);
 
-        if (this.shubox.options.error) {
-          this.shubox.options.error(file, message);
+        if (self.shubox.options.error) {
+          self.shubox.options.error(file, message);
         }
       },
 
       uploadProgress: function(file, progress, bytesSent) {
-        this.shubox.element.dataset.shuboxProgress = String(progress);
-        Dropzone.prototype.defaultOptions.uploadprogress!(
-          file,
-          progress,
-          bytesSent,
+        self.shubox.element.dataset.shuboxProgress = String(progress);
+        Dropzone.prototype.defaultOptions.uploadprogress!.apply(
+          this,
+          [file, progress, bytesSent]
         );
-      }.bind(this),
+      },
 
       totalUploadProgress: function(totalProgress, totalBytes, totalBytesSent) {
-        this.shubox.element.dataset.shuboxTotalProgress = String(totalProgress);
-        Dropzone.prototype.defaultOptions.totaluploadprogress!(
-          totalProgress,
-          totalBytes,
-          totalBytesSent,
+        self.shubox.element.dataset.shuboxTotalProgress = String(totalProgress);
+        Dropzone.prototype.defaultOptions.totaluploadprogress!.apply(
+          this,
+          [totalProgress, totalBytes, totalBytesSent]
         );
-      }.bind(this),
+      },
     };
-
 
     return _hash;
   }

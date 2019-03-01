@@ -32,9 +32,7 @@ export class ShuboxOptions {
           <div class="dz-error-mark"><span>✘</span></div>
           <div class="dz-error-message"><span data-dz-errormessage></span></div>
         </div>`,
-      previewsContainer: ['INPUT', 'TEXTAREA'].indexOf(this.shubox.element.tagName) >= 0
-        ? false
-        : null,
+      previewsContainer: ['INPUT', 'TEXTAREA'].indexOf(this.shubox.element.tagName) >= 0 ? false : null,
       transformName: null,
       dictMaxFilesExceeded:
         'Your file limit of {{maxFiles}} file(s) has been reached.',

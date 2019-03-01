@@ -27,14 +27,14 @@ export declare class ShuboxCallbacks {
     static pasteCallback(dz: Dropzone): (event: any) => void;
     constructor(shubox: Shubox);
     toHash(): {
-        accept: any;
+        accept: (file: any, done: any) => void;
         sending: (file: any, xhr: any, formData: any) => void;
         addedfile: (file: any) => void;
         queuecomplete: () => void;
-        success: any;
+        success: (file: any, response: any) => void;
         error: (file: any, message: any) => void;
-        uploadProgress: any;
-        totalUploadProgress: any;
+        uploadProgress: (file: any, progress: any, bytesSent: any) => void;
+        totalUploadProgress: (totalProgress: any, totalBytes: any, totalBytesSent: any) => void;
     };
     _updateFormValue(file: any, templateName: any): void;
     _isFormElement(): boolean;
