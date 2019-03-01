@@ -23,6 +23,10 @@ const pages = [
     title: 'Avatar Demo',
   },
   {
+    path: '/multiple-files',
+    title: 'Multiple File Previews',
+  },
+  {
     path: '/standalone',
     title: 'Standalone Script',
   },

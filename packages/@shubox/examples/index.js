@@ -13,6 +13,14 @@ const avatar = new Shubox('#avatar', {
   },
 })
 
+const multfiles = new Shubox("#shubox--multiple-files", {
+  key: window.shuboxSandboxKey,
+  previewsContainer: '#shubox--multiple-files-preview',
+  addedfile: () => { console.log('added') },
+  success: () => { console.log('file uploaded') },
+  queuecomplete: () => { console.log('done') }
+})
+
 const githubForm = new Shubox('#shubox--textarea', {
   key: window.shuboxSandboxKey,
   clickable: '#shubox--click-to-upload',
