@@ -155,6 +155,95 @@ const avatar = new Shubox('#avatar', {
 
 ![](https://shubox.io/images/README/shubox_demo_avatar.gif)
 
+## Upload several images with preview thumbnails
+
+```html
+<div class="multiple-files-container">
+  <div class="shubox--upload-target" id="shubox--multiple-files"></div>
+  <div class="shubox--upload-preview" id="shubox--multiple-files-preview"></div>
+</div>
+```
+
+```css
+.multiple-files-container {
+  padding: 40px;
+  width: 500px;
+  text-align: left;
+  margin: 0 auto;
+}
+
+.shubox--upload-target:hover {
+  border-color: silver;
+}
+
+.shubox--upload-target:before {
+  content: 'Drag && Drop || Click';
+  font-size: .6rem;
+  color: silver;
+  display: block;
+  font-family: courier;
+  margin-top: .4rem;
+  line-height: 1rem;
+}
+
+.shubox--upload-preview {
+  overflow: hidden;
+}
+
+.shubox--upload-preview > div {
+  display: inline-block;
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+  margin-right: 1rem;
+  overflow: hidden;
+}
+
+.dz-progress {
+  display: block;
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  right: 5px;
+}
+
+.dz-upload {
+  border-radius: 3px;
+  height: 5px;
+  background: #bce29e;
+  display: block;
+  clear: both;
+}
+
+.dz-upload[style="width: 100%;"] { display: none; }
+
+.dz-error-message,
+.dz-filename,
+.dz-size,
+.dz-success-mark,
+.dz-error-mark { display: none; }
+
+.dz-complete.dz-success .dz-success-mark,
+.dz-complete.dz-error .dz-error-mark {
+  display: block;
+  position: absolute;
+  right: 5px;
+  bottom: 0px;
+  text-shadow: 1px 1px white;
+}
+```
+
+```javascript
+const shuboxKey = "[copied from Shubox dashboard]"
+
+const multfiles = new Shubox("#shubox--multiple-files", {
+  key: window.shuboxKey,
+  previewsContainer: '#shubox--multiple-files-preview',
+})
+```
+
+![Demo Multiple Files](https://shubox.io/images/README/shubox_demo_multiple_files.gif)
+
 ## Upload avatar and insert generated transform/variant image
 
 "Transforms" are variants of uploaded images that you define in the Shubox dashboard. If you want a `100x100` sized image generated after an 800x600 photo is uploaded you can define that image transform in the [Image Transforms](https://dashboard.shubox.io/image_transforms) section of the dashboard.
@@ -172,18 +261,18 @@ const shuboxKey = "[copied from Shubox dashboard]"
 const avatar = new Shubox('#avatar', {
   key: window.shuboxKey,
   previewsContainer: false,
-  
+
   // the image transform's name, as defined
   // in the dashboard, is 'test-transform'
   transformName: 'test-transform',
-  
+
   // a hash with N keys corresponding to
   // the versions of the transforms
   transformCallbacks: {
-  
+
     // the image size defined in the dashboard is '144x144#'
     '144x144#': function(shuboxFile) {
-    
+
       // once image is found, insert an `img`
       // tag with that url as the src
       let el = document.getElementById('avatar')
