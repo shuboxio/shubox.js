@@ -45,6 +45,7 @@ const append = new Shubox('#shubox--textarea--append', {
 const replace = new Shubox('#shubox--textarea--replace', {
   key: window.shuboxSandboxKey,
   clickable: null,
+  // used intentionally to display deprecation warning
   s3urlTemplate: 'Replaced with: {{s3url}} ',
   textBehavior: 'replace',
 })

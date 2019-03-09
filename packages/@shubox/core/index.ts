@@ -54,19 +54,17 @@ export default class Shubox {
       let dzOptions = {
         url: 'http://localhost',
         previewsContainer: this.options.previewsContainer,
-        clickable: this.options.clickable,
-        maxFiles: this.options.maxFiles,
-        maxFilesize: this.options.maxFilesize,
-        dictMaxFilesExceeded: this.options.dictMaxFilesExceeded,
         acceptedFiles: this.options.acceptedFiles,
+
+        // callbacks that we need to delegate to. In some cases there's work
+        // needing to be passed through to Shubox's handler, and sometimes
+        // the Dropbox handler, _in addition to_ the callback the user provides.
         accept: this.callbacks.accept,
         addedfile: this.callbacks.addedfile,
         sending: this.callbacks.sending,
         success: this.callbacks.success,
         error: this.callbacks.error,
         uploadprogress: this.callbacks.uploadProgress,
-        totaluploadprogress: this.callbacks.totalUploadProgress,
-        queuecomplete: this.callbacks.queuecomplete,
       }
       let dropzone = new Dropzone(this.element, { ...options, ...dzOptions });
       this.element.addEventListener("paste", ShuboxCallbacks.pasteCallback(dropzone));

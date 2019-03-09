@@ -6,17 +6,14 @@ export interface ShuboxDefaultOptions {
     error?: (file: Dropzone.DropzoneFile, message: string) => void;
     sending?: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: any) => void;
     addedfile?: (file: Dropzone.DropzoneFile) => void;
-    queuecomplete?: () => void;
     textBehavior?: string;
     s3urlTemplate?: string;
     successTemplate?: string;
     acceptedFiles?: string;
-    clickable?: boolean;
     previewsContainer?: null | string | HTMLElement;
-    dictMaxFilesExceeded?: string;
-    maxFiles?: null | number;
     extraParams?: object;
     transformName?: null | string;
+    transformCallbacks?: null | object;
     s3Key?: null | string;
     cdn?: null | string;
 }
@@ -30,11 +27,9 @@ export declare class ShuboxCallbacks {
         accept: (file: any, done: any) => void;
         sending: (file: any, xhr: any, formData: any) => void;
         addedfile: (file: any) => void;
-        queuecomplete: () => void;
         success: (file: any, response: any) => void;
         error: (file: any, message: any) => void;
         uploadProgress: (file: any, progress: any, bytesSent: any) => void;
-        totalUploadProgress: (totalProgress: any, totalBytes: any, totalBytesSent: any) => void;
     };
     _updateFormValue(file: any, templateName: any): void;
     _isFormElement(): boolean;

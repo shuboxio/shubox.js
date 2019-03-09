@@ -13,17 +13,14 @@ export interface ShuboxDefaultOptions {
   error?: (file: Dropzone.DropzoneFile, message: string) => void;
   sending?: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: any) => void;
   addedfile?: (file: Dropzone.DropzoneFile) => void;
-  queuecomplete?: () => void;
   textBehavior?: string;
   s3urlTemplate?: string;
   successTemplate?: string;
   acceptedFiles?: string;
-  clickable?: boolean;
   previewsContainer?: null | string | HTMLElement;
-  dictMaxFilesExceeded?: string;
-  maxFiles?: null | number;
   extraParams?: object;
   transformName?: null | string;
+  transformCallbacks?: null | object;
   s3Key?: null | string;
   cdn?: null | string;
 }
@@ -125,11 +122,6 @@ export class ShuboxCallbacks {
         self.shubox.options.addedfile(file);
       },
 
-      queuecomplete: function() {
-        Dropzone.prototype.defaultOptions.queuecomplete!.apply(this);
-        self.shubox.options.queuecomplete();
-      },
-
       success: function(file, response) {
         self.shubox.element.classList.add('shubox-success');
         self.shubox.element.classList.remove('shubox-uploading');
@@ -182,14 +174,6 @@ export class ShuboxCallbacks {
         Dropzone.prototype.defaultOptions.uploadprogress!.apply(
           this,
           [file, progress, bytesSent]
-        );
-      },
-
-      totalUploadProgress: function(totalProgress, totalBytes, totalBytesSent) {
-        self.shubox.element.dataset.shuboxTotalProgress = String(totalProgress);
-        Dropzone.prototype.defaultOptions.totaluploadprogress!.apply(
-          this,
-          [totalProgress, totalBytes, totalBytesSent]
         );
       },
     };
