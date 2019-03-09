@@ -54,7 +54,6 @@ export default class Shubox {
       let dzOptions = {
         url: 'http://localhost',
         previewsContainer: this.options.previewsContainer,
-        clickable: this.options.clickable,
         maxFiles: this.options.maxFiles,
         maxFilesize: this.options.maxFilesize,
         dictMaxFilesExceeded: this.options.dictMaxFilesExceeded,
@@ -66,7 +65,6 @@ export default class Shubox {
         error: this.callbacks.error,
         uploadprogress: this.callbacks.uploadProgress,
         totaluploadprogress: this.callbacks.totalUploadProgress,
-        queuecomplete: this.callbacks.queuecomplete,
       }
       let dropzone = new Dropzone(this.element, { ...options, ...dzOptions });
       this.element.addEventListener("paste", ShuboxCallbacks.pasteCallback(dropzone));

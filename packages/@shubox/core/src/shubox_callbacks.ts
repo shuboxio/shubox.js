@@ -10,21 +10,16 @@ declare var window: any;
 
 export interface ShuboxDefaultOptions {
   success?: (file: Dropzone.DropzoneFile) => void;
-  error?: (file: Dropzone.DropzoneFile, message: string) => void;
   sending?: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: any) => void;
-  addedfile?: (file: Dropzone.DropzoneFile) => void;
-  queuecomplete?: () => void;
   textBehavior?: string;
-  s3urlTemplate?: string;
   successTemplate?: string;
+  uploadingTemplate?: string;
   acceptedFiles?: string;
-  clickable?: boolean;
-  previewsContainer?: null | string | HTMLElement;
-  dictMaxFilesExceeded?: string;
-  maxFiles?: null | number;
-  extraParams?: object;
-  transformName?: null | string;
   s3Key?: null | string;
+  previewsContainer?: null | string | HTMLElement;
+  transformName?: null | string;
+  dictMaxFilesExceeded?: string;
+  extraParams?: object;
   cdn?: null | string;
 }
 
@@ -120,16 +115,6 @@ export class ShuboxCallbacks {
         self.shubox.options.sending(file, xhr, formData);
       },
 
-      addedfile: function(file) {
-        Dropzone.prototype.defaultOptions.addedfile!.apply(this, [file]);
-        self.shubox.options.addedfile(file);
-      },
-
-      queuecomplete: function() {
-        Dropzone.prototype.defaultOptions.queuecomplete!.apply(this);
-        self.shubox.options.queuecomplete();
-      },
-
       success: function(file, response) {
         self.shubox.element.classList.add('shubox-success');
         self.shubox.element.classList.remove('shubox-uploading');
@@ -162,18 +147,6 @@ export class ShuboxCallbacks {
         // If supplied, run the options callback
         if (self.shubox.options.success) {
           self.shubox.options.success(file);
-        }
-      },
-
-      error: function (file, message) {
-        self.shubox.element.classList.remove('shubox-uploading');
-        self.shubox.element.classList.add('shubox-error');
-
-        let xhr = new XMLHttpRequest(); // bc type signature
-        Dropzone.prototype.defaultOptions.error!.apply(this, [file, message, xhr]);
-
-        if (self.shubox.options.error) {
-          self.shubox.options.error(file, message);
         }
       },
 
