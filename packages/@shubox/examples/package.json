@@ -1,6 +1,6 @@
 {
   "name": "@shubox/examples",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "Shubox Client SDK: Examples/Demos",
   "repository": "https://github.com/shuboxio/shubox.js",
   "author": "joel@shubox.io",
@@ -15,7 +15,7 @@
     "babel-preset-es2015": "^6.24.1",
     "ejs": "^2.5.7",
     "express": "^4.16.1",
-    "shubox": "^0.1.9",
+    "shubox": "^0.2.0",
     "webpack-dev-middleware": "^2.0.3"
   },
   "scripts": {

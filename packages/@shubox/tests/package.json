@@ -1,6 +1,6 @@
 {
   "name": "@shubox/tests",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "Shubox Client SDK: Tests",
   "repository": "https://github.com/shuboxio/shubox.js",
   "author": "joel@shubox.io",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "jsdom-global": "^3.0.2",
-    "shubox": "^0.1.9"
+    "shubox": "^0.2.0"
   },
   "gitHead": "e89d5d8eed9205a7323e59688ccaefc85b89d4be"
 }
