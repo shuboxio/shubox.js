@@ -392,7 +392,265 @@ const append = new Shubox('#shubox--textarea--append', {
 
 # Library Documentation
 
-Current documentation [can be found on the Shubox website](https://shubox.io/docs/#javascript-api). _Updated_ docs are coming soon!
+The following section outlines what the _Shubox specific_ options are for the
+Shubox object instantiation. You might ask - "Isn't it all Shubox specific?"
+Well, the answer is "No" because under the hood is a wonderful little library
+called [Dropzone.js](https://www.dropzonejs.com). Shubox does a tremendous
+amount of heavy lifting in addition to, instead of, on top of, Dropzone.js. You
+can pass any [Dropzone.js](https://www.dropzonejs.com/#configuration-options)
+options to the Shubox instantiation and they will be passed along into
+Dropzone.js in addition to Shubox.
+
+Without further ado, here's what you get out of the box (~~no~~ pun intended) with
+Shubox.
+
+## Event Lifecycle callbacks
+
+These are all piggybacking on the Dropzone events and are also [documented
+there](https://www.dropzonejs.com/#events) but should be called out here
+nevertheless. These are the big-ticket events that would be most often used
+during the lifecycle of uploaded files.
+
+### sending:
+
+The `sending` callback is called immediately before each file is sent. It
+receives `file`\[[1](#type-file)\], `xhr`, and `formData` objects. This allows
+you to modify any or all of these object before they go in flight to your
+endpoint (to add headers, etc).
+
+```javascript
+sending: function(file, xhr, formData) {}
+```
+
+### success:
+
+Assign a function to the success key that accepts a `file` parameter which will
+be run after files are successfully uploaded. More information about the `File`
+type passed into this function [can be found below](#type-file).
+
+```javascript
+success: function(file) {}
+```
+
+### error:
+
+Assign a function to the error key, accepting a [file object](#type-file)
+and error string. This method will be called when errors are incurred with a file
+upload, or during the S3 signature generation process
+
+```javascript
+error: function(file, message) {}
+```
+
+### queuecomplete:
+
+The queuecomplete callback will be called when all files are finished
+uploading.
+
+```javascript
+queuecomplete: function() {}
+```
+
+## File Object
+
+Upon successful upload of an image the Shubox library will pass a file object to all JavaScript callbacks. The format of this file object follows:
+
+```javascript
+{
+  accepted: true,
+  custom_status: "ready",
+  name: "my-upload.jpg",                          // filename w/ext
+  width: 281,                                     // in pixels
+  height: 500,                                    // in pixels
+  size: 15596,                                    // in bytes
+  lastModified: 1446064073000,
+  lastModifiedDate: Sun Jan 1 2016 00:00:01 ...,  // Date Object
+  postData: {
+    AWSAccessKeyId: "...",                        // AWS Key
+    Content-Type: "",
+    acl: "public-read",
+    key: "path/to/file/in/bucket/filename.jpg",
+    policy: "...",                                // policy string
+    signature: "...",                             // signature string
+    success_action_status: "201"                  // HTTP response code
+  },
+  processing: true,
+  s3: "path/to/file/in/bucket/filename.jpg",
+  s3Url: "https://bucket.s3.amazonaws.com/path/to/file...",
+  transforms: {
+    "variantName": {
+      s3Url: "https://s3.amazonaws.com/bucket/variantName_file.jpg"
+    },
+    // ...
+  },
+  status: "success",
+  type: "image/jpeg",
+  upload: {
+    bytesSent: 999,
+    total: 999,
+    progress: 100
+  }
+}
+```
+
+## Shubox-specific Parameters
+
+### `cdn`:
+
+CDN's are ubiquitous and almost a requirement these days. To that end, putting newly uploaded images behind a CDN, or a hostname that lives between a web browser and the S3 bucket, instead of linking directly to the S3 object is something you can with the `cdn` option.
+
+```
+cdn: 'https://cdn.example.com' // will replace "https://s3.amazonaws.com/bucketname"
+```
+
+### `s3Key`:
+
+Do you want any/all files uploaded through one of your Shubox uploaders to have an _exact_ S3 key? The default behavior is for Shubox to send files up to your bucket with the key `/[random string]/filename.ext` so that you will not overwrite previously uploaded files.
+
+Setting the s3Key would be useful if you know that you are not risking an overwrite unless you deliberately mean to. For example, you're logged in as "Sam" and the Shubox uploader for your `avatar` shuttles all images up to `/users/avatars/sam.jpg`. Similarly, if you have a resource/record that needs a single photo associated with it, like `/dealership/:dealership_id/cars/:id/photo.jpg`.
+
+```
+s3Key: '/[random letters and numbers]/filename.extension' // default
+s3Key: '/users/avatars/sam.jpg'
+```
+
+### `transformKey`:
+
+Over in [the Shubox dashboard](https://dashboard.shubox.io/image_transforms) you can set up what we call _Image Transforms_. These are named pipelines of "transformations" you can execute when images are uploaded through your Shubox uploaders. For example - you could name one "userProfilePhoto" and configure it to create a `200x200` image every time an image is run through this pipeline.
+
+By setting `transformKey` to `userProfilePhoto` in your Shubox initializer's options you are telling the Shubox app to run your images through that transformer pipeline and create that `200x200` version of the image.
+
+```
+transformKey: null                  // default
+transformKey: 'myTransformerName'
+```
+
+### `transformCallbacks`:
+
+To tie together the _Image Transform_ you set up on [the Shubox dashboard](https://dashboard.shubox.io/image_transforms) you use the `transformKey` option above. But what about _after_ you upload images that pass through your transform pipeline? What if you want to trigger a callback once one of those files is generated and available? With this option you can. If you've set things up in the dashboard to generate a "200x200" image the following will run once it's available via an OPTION request.
+
+
+```javascript
+transformCallbacks: null // default
+
+transformCallbacks: {
+
+  // for the 200x200 image, trigger this
+  // method when it's available
+  '200x200': function(shuboxFile) {
+    // the `shuboxFile` has a property, `transforms`
+    // that is a hash with the versions of the file
+    // you are waiting for.
+    console.log(shuboxFile.transforms["200x200"].s3url);
+  },
+  
+  '150x150': function(shuboxFile) {
+    console.log(shuboxFile.transforms["150x150"].s3url);
+  }
+  
+}
+```
+
+**NOTE:**
+
+* You can have more than one variant callback per the example.
+* The variant images/files need to be publicly available.
+* If there are many variations in your transform pipeline it _may_ take a long time to get through them, and therefore a long time (or _not at all_) before your callback is triggered.
+
+### `successTemplate`:
+
+*NOTE:* _Formerly `s3urlTemplate`. Will be deprecated with version 1.0._
+
+When uploading to a _form element_, a string containing the URL to your S3
+resource will be placed in your form element's value. By default this is a
+result of a template having placeholder values interpolated before being
+placed in your form element. That template is merely a handlebars-like value of
+`'{{s3Url}}'` to start out with but has several more values that can be used.
+
+This can be changed to any string. For example, to instead insert markdown's
+image pseudo code you would change this to `'![{{name}}]({{s3url}})'`.
+
+Other placeholders you may use:
+
+* `height` - image height
+* `width` - image width
+* `name` - filename
+* `s3` - path of s3 object
+* `s3url` - url to file
+* `size` - file size in bytes
+* `type` - file type
+
+```javascript
+s3urlTemplate: '{{s3Url}}' // just the url
+s3urlTemplate: '![{{name}}]({{s3url}})' // markdown image tag
+s3urlTemplate: '<img src="{{s3Url}} width="{{width}}" height="{{height}}">' // img tag
+```
+
+### `uploadingTemplate`:
+
+Similar to `successTemplate` - this is a string that gets interpolated with the
+following values, however this is added _while_ a file is being uploaded.
+
+* `height` - image height
+* `width` - image width
+* `name` - filename
+* `s3` - path of s3 object
+* `s3url` - url to file
+* `size` - file size in bytes
+* `type` - file type
+
+```javascript
+uploadingTemplate: 'uploading {{size}} byte file: {{name}}'
+uploadingTemplate: '![Uploading {{name}}...]()' // "temp" markdown tag a-la GH
+```
+
+### `textBehavior`:
+
+When uploading through a form element (`<input>`, `<textarea>`, etc) the
+behavior, by default, will be to `'replace'` the contents of the form element
+value with the URL to the newly uploaded file.
+
+The value `'append'` will append the resulting value from the newly uploaded
+file to the form element.
+
+`'insertAtCursor'` will, as I am sure you are shocked to hear, insert the text
+wherever your cursor is placed at the time of the upload.
+
+```javascript
+textBehavior: 'replace' // default value
+textBehavior: 'append'
+textBehavior: 'insertAtCursor'
+```
+
+### `extraParams`:
+
+Shubox provides a mechanism with which to post custom data via a webhook
+to an address of your choosing whenever files are uploaded. This will
+allow you to share any information available during your users' session. The
+information within the `extraParams` hash will be sent to your webhook
+endpoint along with the data from the uploaded file.
+
+As an example, you may want to send data about the uploaded file(s) _**with**_
+a user's ID or email. It's not uncommon to want to know _**who**_ is uploading
+a particular file.
+
+```javascript
+extraParams: {} // default
+extraParams: {  // override with whatever you want
+  userID: 123,
+  userEmail: 'team@shubox.io',
+  reecesPiecesOrPBCups: 'cups, obviously'
+}
+```
+
+### `acceptedFiles`:
+
+If you only want _certain_ file types allowed to be uploaded, you may provide a list of mime types or extensions. The contents of the option may include a comma separated list of mime types or file extensions. Eg.:
+
+```javascript
+acceptedFiles: "image/*"                      // default value
+acceptedFiles: "image/*,application/pdf,.psd" // image, pdfs, psd
+```
 
 # Development Notes
 
