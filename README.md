@@ -578,7 +578,35 @@ transformKey: 'myTransformerName'
 
 ### `transformCallbacks`:
 
-To tie together the _Image Transform_ you set up on [the Shubox dashboard](https://dashboard.shubox.io/image_transforms) you use the `transformKey` option above. But what about _after_ you upload images that pass through your transform pipeline? What if you want to trigger a callback once one of those files is generated and available? With this option you can. If you've set things up in the dashboard to generate a "200x200" image the following will run once it's available via an OPTION request.
+To tie together the _Image Transform_ you set up on [the Shubox
+dashboard](https://dashboard.shubox.io/image_transforms) you use the
+`transformKey` option above. But what about _after_ you upload images that pass
+through your transform pipeline? What if you want to trigger a callback once
+one of those files is generated and available? With this option you can. If
+you've set things up in the dashboard to generate a `"200x200"` image, for
+example, the following will run once it's available via an OPTION HTTP request.
+
+Here are the variants that you can watch for.
+
+The file formats you can convert _to_:
+
+* `'.webp'`
+* `'.webm'`
+* `'.mp4'`
+* `'.jp2'`
+
+The imagemagick geometries/sizes (more [here](https://www.imagemagick.org/script/command-line-processing.php#geometry)):
+
+* `'200'`, _width_ - Width given, height automagically selected to preserve aspect ratio.
+* `'x200'`, _xheight_ - Height given, width automagically selected to preserve aspect ratio.
+* `'200x200'`, _widthxheight_ - Maximum values of height and width given, aspect ratio preserved.
+* `'200x200^'`, _widthxheight^_ - Minimum values of width and height given, aspect ratio preserved.
+* `'200x200!'`, _widthxheight!_ - Width and height emphatically given, original aspect ratio ignored.
+* `'200x200#'`, _widthxheight#_ Width and height emphatically given, cropped to fill.
+
+The extracted animated GIF frame:
+
+* `'frame'`
 
 
 ```javascript
@@ -595,8 +623,17 @@ transformCallbacks: {
     console.log(shuboxFile.transforms["200x200"].s3url);
   },
 
-  '150x150': function(shuboxFile) {
-    console.log(shuboxFile.transforms["150x150"].s3url);
+  // if you ask to convert images to WEBP format, this
+  // will run when it is available
+  '.webp': function(shuboxFile) {
+    console.log("a JPG converted to WEBP");
+    console.log(shuboxFile.transforms[".webp"].s3url);
+  },
+
+  // ... or combine the two
+  '200x200.webp': function(shuboxFile) {
+    console.log("a JPG resized AND converted to WEBP");
+    console.log(shuboxFile.transforms["200x200.webp"].s3url);
   }
 
 }
@@ -604,8 +641,9 @@ transformCallbacks: {
 
 **NOTE:**
 
-* You can have more than one variant callback per the example.
-* The variant images/files need to be publicly available.
+* You _*can*_ have more than one variant callback, like in the above example.
+* You _*can*_ combine a resized variant with a new file format variant (`200x200` + `webp`).
+* The resulting variant images/files need to have publicly readable permissions.
 * If there are many variations in your transform pipeline it _may_ take a long
   time to get through them, and therefore a long time (or _not at all_) before
   your callback is triggered.
