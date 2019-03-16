@@ -17,7 +17,7 @@
     "prerelease": "yarn build",
     "release": "find packages -name \\*.tgz | xargs rm && lerna publish",
     "start": "lerna run --scope @shubox/examples --stream start",
-    "test": "yarn compile && mocha --require babel-polyfill --require babel-register --require jsdom-global/register -R spec dist/modules/@shubox/tests/index.js"
+    "test": "yarn compile && mocha --require babel-polyfill --require babel-register --require jsdom-global/register -R spec dist/modules/@shubox/tests/*_test.js"
   },
   "private": true,
   "workspaces": [

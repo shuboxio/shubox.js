@@ -3,7 +3,6 @@ export interface ShuboxFile {
 }
 
 export class Variant {
-  success: boolean = false
   s3url: string = ""
   variant: string = ""
 
@@ -13,15 +12,34 @@ export class Variant {
   }
 
   url(){
-    let variant = this.variant
-      .replace(/\#$/, "_hash")
-      .replace(/\^$/, "_carat")
-      .replace(/\!$/, "_bang")
-
     let filename = this.s3url.substring(this.s3url.lastIndexOf('/') + 1)
-    let variantFilename = `${variant}_${filename.replace(/\+/g, '%2B')}`
-    let url = this.s3url.replace(filename, variantFilename)
+    let [vPrefix, vExtension] = this.variant.split(".")
+    let newFilename = ""
 
-    return(url)
+    newFilename = this.cleanFilename(filename)
+    newFilename = this.variantPrefix(vPrefix, newFilename)
+    newFilename = this.variantFiletype(vExtension, newFilename)
+
+    return(this.s3url.replace(filename, newFilename))
+  }
+
+  private cleanFilename(filename) {
+    return(filename.replace(/\+/g, '%2B'))
+  }
+
+  private variantPrefix(prefix, filename) {
+    if(!prefix) { return(filename) }
+
+    prefix = prefix.replace(/\#$/, "_hash")
+                   .replace(/\^$/, "_carat")
+                   .replace(/\!$/, "_bang")
+
+    return(`${prefix}_${filename}`)
+  }
+
+  private variantFiletype(extension, filename) {
+    if (!extension) { return(filename) }
+
+    return(`${filename}.${extension}`)
   }
 }
