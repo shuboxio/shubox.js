@@ -16,11 +16,11 @@ const cropped_avatar = new Shubox('#avatar-cropped', {
   previewsContainer: false,
   transformName: 'test-transform',
   transformCallbacks: {
-    '144x144#': function(file) {
+    '144x144#.webp': function(file) {
       let el = document.getElementById('avatar-cropped')
       el.insertAdjacentHTML(
         'beforeend',
-        `<img src='${file.transforms["144x144#"].s3url}'>`
+        `<img src='${file.transforms["144x144#.webp"].s3url}'>`
       )
     }
   }
