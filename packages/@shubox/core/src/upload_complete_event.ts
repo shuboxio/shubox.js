@@ -2,7 +2,7 @@ import Shubox from "shubox";
 import {filenameFromFile} from "./filename_from_file";
 import {objectToFormData} from "./object_to_form_data";
 
-export interface ShuboxFile extends Dropzone.DropzoneFile {
+export interface IShuboxFile extends Dropzone.DropzoneFile {
   width: number;
   height: number;
   lastModified: number;
@@ -14,21 +14,15 @@ export interface ShuboxFile extends Dropzone.DropzoneFile {
 
 export function uploadCompleteEvent(
   shubox: Shubox,
-  file: ShuboxFile,
+  file: IShuboxFile,
   extraParams: object,
   ): void {
 
   fetch(shubox.uploadUrl, {
-    method: "POST",
-    mode: "cors",
     body: objectToFormData({
-      key: shubox.key,
-      transformName: shubox.options.transformName,
-      extraParams,
       bucket: "localhost-4100",
-
+      extraParams,
       file: {
-        width: file.width,
         height: file.height,
         lastModified: file.lastModified,
         lastModifiedDate: file.lastModifiedDate,
@@ -37,10 +31,15 @@ export function uploadCompleteEvent(
         s3Url: file.s3url,
         size: file.size,
         type: file.type,
+        width: file.width,
       },
+      key: shubox.key,
+      transformName: shubox.options.transformName,
     }),
+    method: "POST",
+    mode: "cors",
   })
-  .catch(function(err) {
+  .catch((err) => {
     console.log(`There was a problem with your request: ${err.message}`);
   });
 }

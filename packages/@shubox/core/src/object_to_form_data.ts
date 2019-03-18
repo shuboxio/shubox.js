@@ -3,10 +3,10 @@ export function objectToFormData(
   form?: FormData,
   namespace?: string,
 ) {
-  let formData = form || new (window as any).FormData();
+  const formData = form || new (window as any).FormData();
   let formKey;
 
-  for (let property in obj) {
+  for (const property in obj) {
     if (obj.hasOwnProperty(property)) {
       if (namespace) {
         formKey = namespace + "[" + property + "]";

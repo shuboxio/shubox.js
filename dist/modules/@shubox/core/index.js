@@ -9,59 +9,60 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { ShuboxCallbacks } from './src/shubox_callbacks';
-import { ShuboxOptions } from './src/shubox_options';
-import Dropzone from 'dropzone';
+import Dropzone from "dropzone";
+import { ShuboxCallbacks } from "./src/shubox_callbacks";
+import { ShuboxOptions } from "./src/shubox_options";
 var Shubox = /** @class */ (function () {
     function Shubox(selector, options) {
-        if (selector === void 0) { selector = '.shubox'; }
+        if (selector === void 0) { selector = ".shubox"; }
         if (options === void 0) { options = {}; }
-        this.signatureUrl = 'https://api.shubox.io/signatures';
-        this.uploadUrl = 'https://api.shubox.io/uploads';
-        this.key = '';
+        this.signatureUrl = "https://api.shubox.io/signatures";
+        this.uploadUrl = "https://api.shubox.io/uploads";
+        this.key = "";
         this.options = {};
         this.callbacks = {};
         this.selector = selector;
-        if (options['signatureUrl']) {
-            this.signatureUrl = options['signatureUrl'];
-            delete options['signatureUrl'];
+        if (options.signatureUrl) {
+            this.signatureUrl = options.signatureUrl;
+            delete options.signatureUrl;
         }
-        if (options['uploadUrl']) {
-            this.uploadUrl = options['uploadUrl'];
-            delete options['uploadUrl'];
+        if (options.uploadUrl) {
+            this.uploadUrl = options.uploadUrl;
+            delete options.uploadUrl;
         }
-        if (options['uuid']) {
-            this.key = options['uuid'];
-            delete options['uuid'];
+        if (options.uuid) {
+            this.key = options.uuid;
+            delete options.uuid;
         }
-        if (options['key']) {
-            this.key = options['key'];
-            delete options['key'];
+        if (options.key) {
+            this.key = options.key;
+            delete options.key;
         }
         this.init(options);
     }
     Shubox.prototype.init = function (options) {
         Dropzone.autoDiscover = false;
         var els = document.querySelectorAll(this.selector);
-        for (var i = 0; i < els.length; i++) {
-            this.element = els[i];
+        for (var _i = 0, _a = Array.from(els); _i < _a.length; _i++) {
+            var element = _a[_i];
+            this.element = element;
             this.callbacks = new ShuboxCallbacks(this).toHash();
             this.options = __assign({}, this.options, (new ShuboxOptions(this).toHash()), options);
-            var dzOptions = {
-                url: 'http://localhost',
-                previewsContainer: this.options.previewsContainer,
-                acceptedFiles: this.options.acceptedFiles,
+            var dropzoneOptions = {
                 // callbacks that we need to delegate to. In some cases there's work
                 // needing to be passed through to Shubox's handler, and sometimes
                 // the Dropbox handler, _in addition to_ the callback the user provides.
                 accept: this.callbacks.accept,
+                acceptedFiles: this.options.acceptedFiles,
                 addedfile: this.callbacks.addedfile,
+                error: this.callbacks.error,
+                previewsContainer: this.options.previewsContainer,
                 sending: this.callbacks.sending,
                 success: this.callbacks.success,
-                error: this.callbacks.error,
                 uploadprogress: this.callbacks.uploadProgress,
+                url: "http://localhost",
             };
-            var dropzone = new Dropzone(this.element, __assign({}, options, dzOptions));
+            var dropzone = new Dropzone(this.element, __assign({}, options, dropzoneOptions));
             this.element.addEventListener("paste", ShuboxCallbacks.pasteCallback(dropzone));
             Shubox.instances.push(dropzone);
         }
@@ -70,4 +71,4 @@ var Shubox = /** @class */ (function () {
     return Shubox;
 }());
 export default Shubox;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac2h1Ym94L2NvcmUvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7QUFBQSxPQUFPLEVBQUMsZUFBZSxFQUFDLE1BQU0sd0JBQXdCLENBQUM7QUFDdkQsT0FBTyxFQUFDLGFBQWEsRUFBQyxNQUFNLHNCQUFzQixDQUFDO0FBQ25ELE9BQU8sUUFBUSxNQUFNLFVBQVUsQ0FBQztBQUVoQztJQVVFLGdCQUFZLFFBQTRCLEVBQUUsT0FBb0I7UUFBbEQseUJBQUEsRUFBQSxvQkFBNEI7UUFBRSx3QkFBQSxFQUFBLFlBQW9CO1FBUjlELGlCQUFZLEdBQVcsa0NBQWtDLENBQUM7UUFDMUQsY0FBUyxHQUFXLCtCQUErQixDQUFDO1FBQ3BELFFBQUcsR0FBVyxFQUFFLENBQUM7UUFHakIsWUFBTyxHQUFRLEVBQUUsQ0FBQztRQUNsQixjQUFTLEdBQVEsRUFBRSxDQUFDO1FBR2xCLElBQUksQ0FBQyxRQUFRLEdBQUcsUUFBUSxDQUFDO1FBRXpCLElBQUksT0FBTyxDQUFDLGNBQWMsQ0FBQyxFQUFFO1lBQzNCLElBQUksQ0FBQyxZQUFZLEdBQUcsT0FBTyxDQUFDLGNBQWMsQ0FBQyxDQUFDO1lBQzVDLE9BQU8sT0FBTyxDQUFDLGNBQWMsQ0FBQyxDQUFDO1NBQ2hDO1FBRUQsSUFBSSxPQUFPLENBQUMsV0FBVyxDQUFDLEVBQUU7WUFDeEIsSUFBSSxDQUFDLFNBQVMsR0FBRyxPQUFPLENBQUMsV0FBVyxDQUFDLENBQUM7WUFDdEMsT0FBTyxPQUFPLENBQUMsV0FBVyxDQUFDLENBQUM7U0FDN0I7UUFFRCxJQUFJLE9BQU8sQ0FBQyxNQUFNLENBQUMsRUFBRTtZQUNuQixJQUFJLENBQUMsR0FBRyxHQUFHLE9BQU8sQ0FBQyxNQUFNLENBQUMsQ0FBQztZQUMzQixPQUFPLE9BQU8sQ0FBQyxNQUFNLENBQUMsQ0FBQztTQUN4QjtRQUVELElBQUksT0FBTyxDQUFDLEtBQUssQ0FBQyxFQUFFO1lBQ2xCLElBQUksQ0FBQyxHQUFHLEdBQUcsT0FBTyxDQUFDLEtBQUssQ0FBQyxDQUFDO1lBQzFCLE9BQU8sT0FBTyxDQUFDLEtBQUssQ0FBQyxDQUFDO1NBQ3ZCO1FBRUQsSUFBSSxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUMsQ0FBQztJQUNyQixDQUFDO0lBRUQscUJBQUksR0FBSixVQUFLLE9BQWU7UUFDbEIsUUFBUSxDQUFDLFlBQVksR0FBRyxLQUFLLENBQUM7UUFDOUIsSUFBSSxHQUFHLEdBQUcsUUFBUSxDQUFDLGdCQUFnQixDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsQ0FBQztRQUVuRCxLQUFLLElBQUksQ0FBQyxHQUFHLENBQUMsRUFBRSxDQUFDLEdBQUcsR0FBRyxDQUFDLE1BQU0sRUFBRSxDQUFDLEVBQUUsRUFBRTtZQUNuQyxJQUFJLENBQUMsT0FBTyxHQUFHLEdBQUcsQ0FBQyxDQUFDLENBQWdCLENBQUM7WUFDckMsSUFBSSxDQUFDLFNBQVMsR0FBRyxJQUFJLGVBQWUsQ0FBQyxJQUFJLENBQUMsQ0FBQyxNQUFNLEVBQUUsQ0FBQztZQUNwRCxJQUFJLENBQUMsT0FBTyxnQkFDUCxJQUFJLENBQUMsT0FBTyxFQUNaLENBQUMsSUFBSSxhQUFhLENBQUMsSUFBSSxDQUFDLENBQUMsTUFBTSxFQUFFLENBQUMsRUFDbEMsT0FBTyxDQUNYLENBQUE7WUFFRCxJQUFJLFNBQVMsR0FBRztnQkFDZCxHQUFHLEVBQUUsa0JBQWtCO2dCQUN2QixpQkFBaUIsRUFBRSxJQUFJLENBQUMsT0FBTyxDQUFDLGlCQUFpQjtnQkFDakQsYUFBYSxFQUFFLElBQUksQ0FBQyxPQUFPLENBQUMsYUFBYTtnQkFFekMsb0VBQW9FO2dCQUNwRSxrRUFBa0U7Z0JBQ2xFLHdFQUF3RTtnQkFDeEUsTUFBTSxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsTUFBTTtnQkFDN0IsU0FBUyxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsU0FBUztnQkFDbkMsT0FBTyxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsT0FBTztnQkFDL0IsT0FBTyxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsT0FBTztnQkFDL0IsS0FBSyxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsS0FBSztnQkFDM0IsY0FBYyxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsY0FBYzthQUM5QyxDQUFBO1lBQ0QsSUFBSSxRQUFRLEdBQUcsSUFBSSxRQUFRLENBQUMsSUFBSSxDQUFDLE9BQU8sZUFBTyxPQUFPLEVBQUssU0FBUyxFQUFHLENBQUM7WUFDeEUsSUFBSSxDQUFDLE9BQU8sQ0FBQyxnQkFBZ0IsQ0FBQyxPQUFPLEVBQUUsZUFBZSxDQUFDLGFBQWEsQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDO1lBQ2hGLE1BQU0sQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxDQUFDO1NBQ2pDO0lBQ0gsQ0FBQztJQW5FTSxnQkFBUyxHQUFvQixFQUFFLENBQUM7SUFvRXpDLGFBQUM7Q0FBQSxBQXJFRCxJQXFFQztlQXJFb0IsTUFBTSJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac2h1Ym94L2NvcmUvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7QUFBQSxPQUFPLFFBQVEsTUFBTSxVQUFVLENBQUM7QUFDaEMsT0FBTyxFQUFDLGVBQWUsRUFBQyxNQUFNLHdCQUF3QixDQUFDO0FBQ3ZELE9BQU8sRUFBQyxhQUFhLEVBQUMsTUFBTSxzQkFBc0IsQ0FBQztBQVNuRDtJQVVFLGdCQUFZLFFBQTRCLEVBQUUsT0FBMEI7UUFBeEQseUJBQUEsRUFBQSxvQkFBNEI7UUFBRSx3QkFBQSxFQUFBLFlBQTBCO1FBUjdELGlCQUFZLEdBQVcsa0NBQWtDLENBQUM7UUFDMUQsY0FBUyxHQUFXLCtCQUErQixDQUFDO1FBQ3BELFFBQUcsR0FBVyxFQUFFLENBQUM7UUFHakIsWUFBTyxHQUFRLEVBQUUsQ0FBQztRQUNsQixjQUFTLEdBQVEsRUFBRSxDQUFDO1FBR3pCLElBQUksQ0FBQyxRQUFRLEdBQUcsUUFBUSxDQUFDO1FBRXpCLElBQUksT0FBTyxDQUFDLFlBQVksRUFBRTtZQUN4QixJQUFJLENBQUMsWUFBWSxHQUFHLE9BQU8sQ0FBQyxZQUFZLENBQUM7WUFDekMsT0FBTyxPQUFPLENBQUMsWUFBWSxDQUFDO1NBQzdCO1FBRUQsSUFBSSxPQUFPLENBQUMsU0FBUyxFQUFFO1lBQ3JCLElBQUksQ0FBQyxTQUFTLEdBQUcsT0FBTyxDQUFDLFNBQVMsQ0FBQztZQUNuQyxPQUFPLE9BQU8sQ0FBQyxTQUFTLENBQUM7U0FDMUI7UUFFRCxJQUFJLE9BQU8sQ0FBQyxJQUFJLEVBQUU7WUFDaEIsSUFBSSxDQUFDLEdBQUcsR0FBRyxPQUFPLENBQUMsSUFBSSxDQUFDO1lBQ3hCLE9BQU8sT0FBTyxDQUFDLElBQUksQ0FBQztTQUNyQjtRQUVELElBQUksT0FBTyxDQUFDLEdBQUcsRUFBRTtZQUNmLElBQUksQ0FBQyxHQUFHLEdBQUcsT0FBTyxDQUFDLEdBQUcsQ0FBQztZQUN2QixPQUFPLE9BQU8sQ0FBQyxHQUFHLENBQUM7U0FDcEI7UUFFRCxJQUFJLENBQUMsSUFBSSxDQUFDLE9BQU8sQ0FBQyxDQUFDO0lBQ3JCLENBQUM7SUFFTSxxQkFBSSxHQUFYLFVBQVksT0FBZTtRQUN6QixRQUFRLENBQUMsWUFBWSxHQUFHLEtBQUssQ0FBQztRQUM5QixJQUFNLEdBQUcsR0FBRyxRQUFRLENBQUMsZ0JBQWdCLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxDQUFDO1FBRXJELEtBQXNCLFVBQWUsRUFBZixLQUFBLEtBQUssQ0FBQyxJQUFJLENBQUMsR0FBRyxDQUFDLEVBQWYsY0FBZSxFQUFmLElBQWUsRUFBRTtZQUFsQyxJQUFNLE9BQU8sU0FBQTtZQUNoQixJQUFJLENBQUMsT0FBTyxHQUFHLE9BQXNCLENBQUM7WUFDdEMsSUFBSSxDQUFDLFNBQVMsR0FBRyxJQUFJLGVBQWUsQ0FBQyxJQUFJLENBQUMsQ0FBQyxNQUFNLEVBQUUsQ0FBQztZQUNwRCxJQUFJLENBQUMsT0FBTyxnQkFDUCxJQUFJLENBQUMsT0FBTyxFQUNaLENBQUMsSUFBSSxhQUFhLENBQUMsSUFBSSxDQUFDLENBQUMsTUFBTSxFQUFFLENBQUMsRUFDbEMsT0FBTyxDQUNYLENBQUM7WUFFRixJQUFNLGVBQWUsR0FBRztnQkFDdEIsb0VBQW9FO2dCQUNwRSxrRUFBa0U7Z0JBQ2xFLHdFQUF3RTtnQkFDeEUsTUFBTSxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsTUFBTTtnQkFDN0IsYUFBYSxFQUFFLElBQUksQ0FBQyxPQUFPLENBQUMsYUFBYTtnQkFDekMsU0FBUyxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsU0FBUztnQkFDbkMsS0FBSyxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsS0FBSztnQkFDM0IsaUJBQWlCLEVBQUUsSUFBSSxDQUFDLE9BQU8sQ0FBQyxpQkFBaUI7Z0JBQ2pELE9BQU8sRUFBRSxJQUFJLENBQUMsU0FBUyxDQUFDLE9BQU87Z0JBQy9CLE9BQU8sRUFBRSxJQUFJLENBQUMsU0FBUyxDQUFDLE9BQU87Z0JBQy9CLGNBQWMsRUFBRSxJQUFJLENBQUMsU0FBUyxDQUFDLGNBQWM7Z0JBQzdDLEdBQUcsRUFBRSxrQkFBa0I7YUFDeEIsQ0FBQztZQUNGLElBQU0sUUFBUSxHQUFHLElBQUksUUFBUSxDQUFDLElBQUksQ0FBQyxPQUFPLGVBQU8sT0FBTyxFQUFLLGVBQWUsRUFBRyxDQUFDO1lBQ2hGLElBQUksQ0FBQyxPQUFPLENBQUMsZ0JBQWdCLENBQUMsT0FBTyxFQUFFLGVBQWUsQ0FBQyxhQUFhLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQztZQUNoRixNQUFNLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsQ0FBQztTQUNqQztJQUNILENBQUM7SUFsRWEsZ0JBQVMsR0FBZSxFQUFFLENBQUM7SUFtRTNDLGFBQUM7Q0FBQSxBQXBFRCxJQW9FQztlQXBFb0IsTUFBTSJ9

@@ -3,7 +3,12 @@
     "target": "es5",
     "module": "es2015",
     "moduleResolution": "node",
-    "lib": ["dom", "es2015", "scripthost"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "es2015",
+      "scripthost"
+    ],
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "inlineSourceMap": true,

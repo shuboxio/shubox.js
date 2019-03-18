@@ -2,6 +2,13 @@ import Dropzone from "dropzone";
 import {ShuboxCallbacks} from "./src/shubox_callbacks";
 import {ShuboxOptions} from "./src/shubox_options";
 
+export interface IUserOptions {
+  signatureUrl?: string;
+  uploadUrl?: string;
+  uuid?: string;
+  key?: string;
+}
+
 export default class Shubox {
   public static instances: Dropzone[] = [];
   public signatureUrl: string = "https://api.shubox.io/signatures";
@@ -12,7 +19,7 @@ export default class Shubox {
   public options: any = {};
   public callbacks: any = {};
 
-  constructor(selector: string = ".shubox", options: object = {}) {
+  constructor(selector: string = ".shubox", options: IUserOptions = {}) {
     this.selector = selector;
 
     if (options.signatureUrl) {
@@ -42,8 +49,8 @@ export default class Shubox {
     Dropzone.autoDiscover = false;
     const els = document.querySelectorAll(this.selector);
 
-    for (let i = 0; i < els.length; i++) {
-      this.element = els[i] as HTMLElement;
+    for (const element of Array.from(els)) {
+      this.element = element as HTMLElement;
       this.callbacks = new ShuboxCallbacks(this).toHash();
       this.options = {
         ...this.options,
@@ -51,22 +58,21 @@ export default class Shubox {
         ...options,
       };
 
-      const dzOptions = {
-        url: "http://localhost",
-        previewsContainer: this.options.previewsContainer,
-        acceptedFiles: this.options.acceptedFiles,
-
+      const dropzoneOptions = {
         // callbacks that we need to delegate to. In some cases there's work
         // needing to be passed through to Shubox's handler, and sometimes
         // the Dropbox handler, _in addition to_ the callback the user provides.
         accept: this.callbacks.accept,
+        acceptedFiles: this.options.acceptedFiles,
         addedfile: this.callbacks.addedfile,
+        error: this.callbacks.error,
+        previewsContainer: this.options.previewsContainer,
         sending: this.callbacks.sending,
         success: this.callbacks.success,
-        error: this.callbacks.error,
         uploadprogress: this.callbacks.uploadProgress,
+        url: "http://localhost",
       };
-      const dropzone = new Dropzone(this.element, { ...options, ...dzOptions });
+      const dropzone = new Dropzone(this.element, { ...options, ...dropzoneOptions });
       this.element.addEventListener("paste", ShuboxCallbacks.pasteCallback(dropzone));
       Shubox.instances.push(dropzone);
     }

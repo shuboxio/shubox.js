@@ -8,7 +8,7 @@ import {uploadCompleteEvent} from "./upload_complete_event";
 
 declare var window: any;
 
-export interface ShuboxDefaultOptions {
+export interface IShuboxDefaultOptions {
   success?: (file: Dropzone.DropzoneFile) => void;
   error?: (file: Dropzone.DropzoneFile, message: string) => void;
   sending?: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: any) => void;
@@ -28,7 +28,7 @@ export interface ShuboxDefaultOptions {
 export class ShuboxCallbacks {
 
   public static pasteCallback(dz: Dropzone) {
-    return(function(event) {
+    return((event) => {
       const items = (
         event.clipboardData || event.originalEvent.clipboardData
       ).items;
@@ -51,7 +51,7 @@ export class ShuboxCallbacks {
     "size",
     "type",
   ];
-  private options: ShuboxDefaultOptions;
+  private options: IShuboxDefaultOptions;
 
   constructor(shubox: Shubox) {
     this.shubox = shubox;
@@ -63,20 +63,20 @@ export class ShuboxCallbacks {
     // instance of Dropzone that fires the function.
     const self = this;
 
-    const _hash = {
+    const hash = {
       accept(file, done) {
         fetch(self.shubox.signatureUrl, {
-          method: "post",
-          mode: "cors",
           body: objectToFormData({
             file: {
               name: filenameFromFile(file),
-              type: file.type,
               size: file.size,
+              type: file.type,
             },
             key: self.shubox.key,
             s3Key: self.shubox.options.s3Key,
           }),
+          method: "post",
+          mode: "cors",
         })
           .then((response) => {
             return response.json();
@@ -108,7 +108,7 @@ export class ShuboxCallbacks {
         }
 
         const keys = Object.keys(file.postData);
-        keys.forEach(function(key) {
+        keys.forEach((key) => {
           const val = file.postData[key];
           formData.append(key, val);
         });
@@ -145,7 +145,7 @@ export class ShuboxCallbacks {
         if (self.shubox.options.transformCallbacks) {
           const callbacks = self.shubox.options.transformCallbacks;
 
-          for (const variant in callbacks) {
+          for (const variant of callbacks) {
             const callback = callbacks[variant];
             new TransformCallback(file, variant, callback).run();
           }
@@ -178,7 +178,7 @@ export class ShuboxCallbacks {
       },
     };
 
-    return _hash;
+    return hash;
   }
 
   // Private
@@ -190,8 +190,8 @@ export class ShuboxCallbacks {
     // If we're processing the successTemplate, and the user instead used
     // the deprecated "s3urlTemplate" option, then rename the template name
     // to use that one as the key.
-    if (templateName == "successTemplate" && this.shubox.options.s3urlTemplate) {
-      window.console && window.console.warn(
+    if (templateName === "successTemplate" && this.shubox.options.s3urlTemplate) {
+      window.console!.warn(
         `DEPRECATION: The "s3urlTemplate" will be deprecated by version 1.0. Please update to "successTemplate".`,
       );
 
@@ -222,13 +222,13 @@ export class ShuboxCallbacks {
   }
 
   public _isAppendingText(): boolean {
-    return(this.shubox.options.textBehavior == "append");
+    return(this.shubox.options.textBehavior === "append");
   }
 
   public _insertableAtCursor(el: HTMLInputElement): boolean {
     return (
-      el.tagName == "TEXTAREA" &&
-        this.shubox.options.textBehavior == "insertAtCursor"
+      el.tagName === "TEXTAREA" &&
+        this.shubox.options.textBehavior === "insertAtCursor"
     );
   }
 }

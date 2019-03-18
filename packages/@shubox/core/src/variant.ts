@@ -1,4 +1,4 @@
-export interface ShuboxFile {
+export interface IShuboxFile {
   s3url: string;
 }
 
@@ -6,7 +6,7 @@ export class Variant {
   public s3url: string = "";
   public variant: string = "";
 
-  constructor(file: ShuboxFile, variant: string = "") {
+  constructor(file: IShuboxFile, variant: string = "") {
     this.s3url = file.s3url;
     this.variant = variant;
   }

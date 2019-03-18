@@ -17,7 +17,7 @@ export function insertAtCursor(el: HTMLInputElement, myValue: string): void {
 
     el.focus();
     el.setSelectionRange(pos, pos);
-  } else if (el.selectionStart || el.selectionStart == 0) {
+  } else if (el.selectionStart || el.selectionStart === 0) {
     const startPos = el.selectionStart || 0;
     const endPos = el.selectionEnd || 0;
     el.value =

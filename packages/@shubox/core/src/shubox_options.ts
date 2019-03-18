@@ -9,19 +9,19 @@ export class ShuboxOptions {
 
   public toHash() {
     return {
-      cdn: null,
+      acceptedFiles: "image/*",
       addedfile(file) {},
+      cdn: null,
       error(file, message) {},
+      extraParams: {},
+      previewsContainer: ["INPUT", "TEXTAREA"].indexOf(this.shubox.element.tagName) >= 0 ? false : null,
+      s3Key: null,
       sending(file, xhr, formData) {},
       success(file) {},
-      textBehavior: "replace",
       successTemplate: "{{s3url}}",
-      uploadingTemplate: "",
-      acceptedFiles: "image/*",
-      s3Key: null,
-      previewsContainer: ["INPUT", "TEXTAREA"].indexOf(this.shubox.element.tagName) >= 0 ? false : null,
+      textBehavior: "replace",
       transformName: null,
-      extraParams: {},
+      uploadingTemplate: "",
     };
   }
 }

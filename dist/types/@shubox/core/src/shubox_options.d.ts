@@ -1,20 +1,20 @@
-import Shubox from 'shubox';
+import Shubox from "shubox";
 export declare class ShuboxOptions {
     shubox: Shubox;
     constructor(shubox: Shubox);
     toHash(): {
-        cdn: null;
-        addedfile: (file: any) => void;
-        error: (file: any, message: any) => void;
-        sending: (file: any, xhr: any, formData: any) => void;
-        success: (file: any) => void;
-        textBehavior: string;
-        successTemplate: string;
-        uploadingTemplate: string;
         acceptedFiles: string;
-        s3Key: null;
-        previewsContainer: boolean | null;
-        transformName: null;
+        addedfile(file: any): void;
+        cdn: null;
+        error(file: any, message: any): void;
         extraParams: {};
+        previewsContainer: boolean | null;
+        s3Key: null;
+        sending(file: any, xhr: any, formData: any): void;
+        success(file: any): void;
+        successTemplate: string;
+        textBehavior: string;
+        transformName: null;
+        uploadingTemplate: string;
     };
 }

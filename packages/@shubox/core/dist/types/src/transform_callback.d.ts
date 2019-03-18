@@ -1,16 +1,16 @@
-export interface ShuboxFile {
+export interface IShuboxFile {
     s3url: string;
     transforms: any;
 }
 export declare class TransformCallback {
-    file: ShuboxFile;
+    file: IShuboxFile;
     variant: string;
     variantUrl: string;
-    callback: (file: ShuboxFile) => void;
+    callback: (file: IShuboxFile) => void;
     retry: number;
     success: boolean;
-    constructor(file: ShuboxFile, variant: string | undefined, callback: (file: ShuboxFile) => void);
+    constructor(file: IShuboxFile, variant: string | undefined, callback: (file: IShuboxFile) => void);
     run: (error?: any) => void;
     validateResponse: (response: any) => any;
-    _cacheBustedUrl: () => string;
+    private cacheBustedUrl;
 }

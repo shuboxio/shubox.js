@@ -1,7 +1,7 @@
-export interface File {
+export interface IFile {
     name: string;
 }
-export interface PastedFile {
+export interface IPastedFile {
     name: string;
 }
-export declare function filenameFromFile(file: File | PastedFile, date?: Date): string;
+export declare function filenameFromFile(file: IFile | IPastedFile, date?: Date): string;

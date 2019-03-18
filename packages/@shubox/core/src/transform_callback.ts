@@ -1,19 +1,19 @@
 import {Variant} from "./variant";
 
-export interface ShuboxFile {
+export interface IShuboxFile {
   s3url: string;
   transforms: any;
 }
 
 export class TransformCallback {
-  public file: ShuboxFile;
+  public file: IShuboxFile;
   public variant: string = "";
   public variantUrl: string = "";
-  public callback: (file: ShuboxFile) => void;
+  public callback: (file: IShuboxFile) => void;
   public retry: number = 10;
   public success: boolean = false;
 
-  constructor(file: ShuboxFile, variant: string = "", callback: (file: ShuboxFile) => void) {
+  constructor(file: IShuboxFile, variant: string = "", callback: (file: IShuboxFile) => void) {
     this.file = file;
     this.variant = variant;
     this.variantUrl = new Variant(file, variant).url();
@@ -27,7 +27,7 @@ export class TransformCallback {
       this.retry -= 1;
 
       setTimeout(() => {
-        fetch(this._cacheBustedUrl(), { method: "HEAD" })
+        fetch(this.cacheBustedUrl(), { method: "HEAD" })
           .then(this.validateResponse)
           .catch(this.run);
       }, delay);
@@ -45,7 +45,7 @@ export class TransformCallback {
     return response;
   }
 
-  public _cacheBustedUrl = () => {
+  private cacheBustedUrl = () => {
     const rand = Math.floor(Math.random() * Math.floor(10000000000));
 
     return `${this.variantUrl}?q=${rand}`;
