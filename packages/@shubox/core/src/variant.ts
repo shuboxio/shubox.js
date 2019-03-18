@@ -11,7 +11,7 @@ export class Variant {
     this.variant = variant
   }
 
-  url(){
+  url(): string {
     let filename = this.s3url.substring(this.s3url.lastIndexOf('/') + 1)
     let [vPrefix, vExtension] = this.variant.split(".")
     let newFilename = ""
@@ -23,11 +23,11 @@ export class Variant {
     return(this.s3url.replace(filename, newFilename))
   }
 
-  private cleanFilename(filename) {
+  private cleanFilename(filename: string): string {
     return(filename.replace(/\+/g, '%2B'))
   }
 
-  private variantPrefix(prefix, filename) {
+  private variantPrefix(prefix: string, filename: string): string {
     if(!prefix) { return(filename) }
 
     prefix = prefix.replace(/\#$/, "_hash")
@@ -37,7 +37,7 @@ export class Variant {
     return(`${prefix}_${filename}`)
   }
 
-  private variantFiletype(extension, filename) {
+  private variantFiletype(extension: string, filename: string): string {
     if (!extension) { return(filename) }
 
     return(`${filename}.${extension}`)
