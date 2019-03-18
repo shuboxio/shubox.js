@@ -1,4 +1,4 @@
-import * as jsdom from 'jsdom/lib/old-api.js';
+import * as jsdom from "jsdom/lib/old-api.js";
 
 declare const global: {
   window: any;
@@ -7,6 +7,20 @@ declare const global: {
 
 function setupJsDom(onInit?) {
   jsdom.env({
+    done: (err, window) => {
+      global.window = window;
+      global.document = window.document;
+
+      if (onInit) {
+        onInit();
+      }
+    },
+    features: {
+      FetchExternalResources: ["script"],
+      MutationEvents: "2.0",
+      ProcessExternalResources: ["script"],
+      QuerySelector: false,
+    },
     html: `
       <!DOCTYPE html>
       <html>
@@ -19,20 +33,6 @@ function setupJsDom(onInit?) {
         </body>
       </html>
     `,
-    features: {
-      FetchExternalResources: ['script'],
-      ProcessExternalResources: ['script'],
-      MutationEvents: '2.0',
-      QuerySelector: false,
-    },
-    done: (err, window) => {
-      global.window = window;
-      global.document = window.document;
-
-      if (onInit) {
-        onInit();
-      }
-    },
   });
 }
 

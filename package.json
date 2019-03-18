@@ -12,7 +12,7 @@
     "predist": "yarn compile",
     "dev": "webpack --mode development",
     "lint": "tslint --project tsconfig.json",
-    "prebuild": "yarn lint && yarn dist",
+    "prebuild": "yarn dist",
     "build": "lerna run build",
     "prerelease": "yarn build",
     "release": "find packages -name \\*.tgz | xargs rm && lerna publish",
@@ -26,16 +26,16 @@
     "packages/@types/*"
   ],
   "devDependencies": {
-    "@types/webpack-env": "^1.13.5",
+    "@types/webpack-env": "^1.13.9",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
     "lerna": "^3.13.1",
-    "rimraf": "^2.6.2",
-    "ts-loader": "^4.1.0",
-    "tslint": "^5.9.1",
-    "typescript": "^2.8.1",
-    "webpack": "^4.3.0",
-    "webpack-cli": "^2.0.13"
+    "rimraf": "^2.6.3",
+    "ts-loader": "^5.3.3",
+    "tslint": "^5.14.0",
+    "typescript": "^3.3.3333",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
   }
 }

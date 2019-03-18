@@ -1,4 +1,3 @@
-/// <reference types="dropzone" />
 import Dropzone from 'dropzone';
 import Shubox from 'shubox';
 export interface ShuboxDefaultOptions {

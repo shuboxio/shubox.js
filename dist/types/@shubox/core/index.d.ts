@@ -1,4 +1,3 @@
-/// <reference types="dropzone" />
 import Dropzone from 'dropzone';
 export default class Shubox {
     static instances: Array<Dropzone>;

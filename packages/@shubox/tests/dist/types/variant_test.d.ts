@@ -1,3 +1,3 @@
-export interface ShuboxFile {
+export interface IShuboxFile {
     s3url: string;
 }

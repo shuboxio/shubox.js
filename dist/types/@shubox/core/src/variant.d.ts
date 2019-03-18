@@ -6,7 +6,7 @@ export declare class Variant {
     variant: string;
     constructor(file: ShuboxFile, variant?: string);
     url(): string;
-    private cleanFilename(filename);
-    private variantPrefix(prefix, filename);
-    private variantFiletype(extension, filename);
+    private cleanFilename;
+    private variantPrefix;
+    private variantFiletype;
 }

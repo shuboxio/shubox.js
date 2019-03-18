@@ -1,12 +1,12 @@
-import * as Chai from 'chai';
-import {setupJsDom, teardownJsDom} from './test_helper';
-import Shubox from 'shubox';
+import * as Chai from "chai";
+import Shubox from "shubox";
+import {setupJsDom, teardownJsDom} from "./test_helper";
 
 const expect = Chai.expect;
 
-describe('Shubox', () => {
-  describe('.instances', () => {
-    beforeEach(done => {
+describe("Shubox", () => {
+  describe(".instances", () => {
+    beforeEach((done) => {
       setupJsDom(() => {
         done();
       });
@@ -16,8 +16,8 @@ describe('Shubox', () => {
       teardownJsDom();
     });
 
-    it('holds onto all instances of shubox on a page', () => {
-      new Shubox('.upload');
+    it("holds onto all instances of shubox on a page", () => {
+      let _noop = new Shubox(".upload");
       expect(Shubox.instances.length).to.equal(2);
     });
   });
