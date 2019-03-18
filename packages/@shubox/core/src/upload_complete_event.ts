@@ -1,6 +1,6 @@
-import {objectToFormData} from './object_to_form_data';
-import {filenameFromFile} from './filename_from_file';
-import Shubox from 'shubox';
+import Shubox from "shubox";
+import {filenameFromFile} from "./filename_from_file";
+import {objectToFormData} from "./object_to_form_data";
 
 export interface ShuboxFile extends Dropzone.DropzoneFile {
   width: number;
@@ -19,13 +19,13 @@ export function uploadCompleteEvent(
   ): void {
 
   fetch(shubox.uploadUrl, {
-    method: 'POST',
-    mode: 'cors',
+    method: "POST",
+    mode: "cors",
     body: objectToFormData({
       key: shubox.key,
       transformName: shubox.options.transformName,
-      extraParams: extraParams,
-      bucket: 'localhost-4100',
+      extraParams,
+      bucket: "localhost-4100",
 
       file: {
         width: file.width,

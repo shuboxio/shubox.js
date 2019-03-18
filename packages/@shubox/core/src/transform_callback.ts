@@ -1,53 +1,53 @@
-import {Variant} from './variant';
+import {Variant} from "./variant";
 
 export interface ShuboxFile {
-  s3url: string
-  transforms: any
+  s3url: string;
+  transforms: any;
 }
 
 export class TransformCallback {
-  file: ShuboxFile
-  variant: string = ""
-  variantUrl: string = ""
-  callback: (file: ShuboxFile) => void
-  retry: number = 10
-  success: boolean = false
+  public file: ShuboxFile;
+  public variant: string = "";
+  public variantUrl: string = "";
+  public callback: (file: ShuboxFile) => void;
+  public retry: number = 10;
+  public success: boolean = false;
 
   constructor(file: ShuboxFile, variant: string = "", callback: (file: ShuboxFile) => void) {
-    this.file = file
-    this.variant = variant
-    this.variantUrl = new Variant(file, variant).url()
-    this.callback = callback
+    this.file = file;
+    this.variant = variant;
+    this.variantUrl = new Variant(file, variant).url();
+    this.callback = callback;
   }
 
-  run = (error: any = null) => {
-    let delay = Math.pow(2, 19 - this.retry) // 512, 1024, 2048, 4096 ...
+  public run = (error: any = null) => {
+    const delay = Math.pow(2, 19 - this.retry); // 512, 1024, 2048, 4096 ...
 
-    if(this.retry && !this.success) {
-      this.retry -= 1
+    if (this.retry && !this.success) {
+      this.retry -= 1;
 
       setTimeout(() => {
-        fetch(this._cacheBustedUrl(), { method: 'HEAD' })
+        fetch(this._cacheBustedUrl(), { method: "HEAD" })
           .then(this.validateResponse)
-          .catch(this.run)
-      }, delay)
+          .catch(this.run);
+      }, delay);
     }
   }
 
-  validateResponse = (response: any) => {
-    if (!response.ok) { throw Error(response.statusText) }
+  public validateResponse = (response: any) => {
+    if (!response.ok) { throw Error(response.statusText); }
 
-    this.success = true
-    this.file.transforms = this.file.transforms ? this.file.transforms : {}
-    this.file.transforms[this.variant] = { s3url: this.variantUrl }
-    this.callback(this.file)
+    this.success = true;
+    this.file.transforms = this.file.transforms ? this.file.transforms : {};
+    this.file.transforms[this.variant] = { s3url: this.variantUrl };
+    this.callback(this.file);
 
-    return response
+    return response;
   }
 
-  _cacheBustedUrl = () => {
-    let rand = Math.floor(Math.random() * Math.floor(10000000000))
+  public _cacheBustedUrl = () => {
+    const rand = Math.floor(Math.random() * Math.floor(10000000000));
 
-    return `${this.variantUrl}?q=${rand}`
+    return `${this.variantUrl}?q=${rand}`;
   }
 }

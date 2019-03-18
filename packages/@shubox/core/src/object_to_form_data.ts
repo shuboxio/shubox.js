@@ -3,21 +3,21 @@ export function objectToFormData(
   form?: FormData,
   namespace?: string,
 ) {
-  var formData = form || new (<any>window).FormData();
-  var formKey;
+  let formData = form || new (window as any).FormData();
+  let formKey;
 
-  for (var property in obj) {
+  for (let property in obj) {
     if (obj.hasOwnProperty(property)) {
       if (namespace) {
-        formKey = namespace + '[' + property + ']';
+        formKey = namespace + "[" + property + "]";
       } else {
         formKey = property;
       }
 
       // if the property is an object/hash, and not a File,
       if (
-        typeof obj[property] === 'object' &&
-        !(obj[property] instanceof (<any>window).File)
+        typeof obj[property] === "object" &&
+        !(obj[property] instanceof (window as any).File)
       ) {
         objectToFormData(obj[property], formData, property);
       } else {

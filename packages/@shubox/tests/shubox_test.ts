@@ -17,7 +17,7 @@ describe("Shubox", () => {
     });
 
     it("holds onto all instances of shubox on a page", () => {
-      let _noop = new Shubox(".upload");
+      const _noop = new Shubox(".upload");
       expect(Shubox.instances.length).to.equal(2);
     });
   });
