@@ -145,7 +145,7 @@ export class ShuboxCallbacks {
         if (self.shubox.options.transformCallbacks) {
           const callbacks = self.shubox.options.transformCallbacks;
 
-          for (const variant of callbacks) {
+          for (const variant of Object.keys(callbacks)) {
             const callback = callbacks[variant];
             new TransformCallback(file, variant, callback).run();
           }
