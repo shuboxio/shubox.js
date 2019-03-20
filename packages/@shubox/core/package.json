@@ -1,6 +1,6 @@
 {
   "name": "@shubox/core",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Shubox Client SDK: Core library",
   "repository": "https://github.com/shuboxio/shubox.js",
   "author": "joel@shubox.io",
