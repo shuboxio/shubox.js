@@ -447,9 +447,9 @@ during the lifecycle of uploaded files.
 ### sending:
 
 The `sending` callback is called immediately before each file is sent. It
-receives `file`\[[1](#type-file)\], `xhr`, and `formData` objects. This allows
-you to modify any or all of these object before they go in flight to your
-endpoint (to add headers, etc).
+receives `file`\[[1](#file-object)\], `xhr`, and `formData` objects. This
+allows you to modify any or all of these object before they go in flight to
+your endpoint (to add headers, etc).
 
 ```javascript
 sending: function(file, xhr, formData) {}
@@ -459,7 +459,7 @@ sending: function(file, xhr, formData) {}
 
 Assign a function to the success key that accepts a `file` parameter which will
 be run after files are successfully uploaded. More information about the `File`
-type passed into this function [can be found below](#type-file).
+type passed into this function [can be found below](#file-object).
 
 ```javascript
 success: function(file) {}
@@ -467,8 +467,8 @@ success: function(file) {}
 
 ### error:
 
-Assign a function to the error key, accepting a [file object](#type-file)
-and error string. This method will be called when errors are incurred with a file
+Assign a function to the error key, accepting a [file object](#file-object) and
+error string. This method will be called when errors are incurred with a file
 upload, or during the S3 signature generation process
 
 ```javascript
