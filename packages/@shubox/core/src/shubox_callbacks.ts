@@ -164,6 +164,21 @@ export class ShuboxCallbacks {
         const xhr = new XMLHttpRequest(); // bc type signature
         Dropzone.prototype.defaultOptions.error!.apply(this, [file, message, xhr]);
 
+        if (message.includes("Referring domain not permitted") && window.location.hostname === "localhost") {
+          console.log(`%cOOPS!`, "font-size: 14px; color:#7c5cd1; font-weight: bold;");
+          console.log(
+`%cIt looks like you're attempting to test Shubox on localhost but are running into an issue.
+You should check to make sure you're using your %c"Sandbox" %ckey while you test as it will
+work with localhost.
+
+%cFor more information and instructions: https://dashboard.shubox.io/domains/sandbox`,
+            "font-size: 12px; color:#7c5cd1;",
+            "font-size: 12px; color:#7c5cd1; font-weight:bold",
+            "font-size: 12px; color:#7c5cd1;",
+            "font-size: 13px; color:#7c5cd1; font-weight:bold;",
+          );
+        }
+
         if (self.shubox.options.error) {
           self.shubox.options.error(file, message);
         }
