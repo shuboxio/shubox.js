@@ -19,7 +19,7 @@
     "@types/mocha": "^5.2.0",
     "chai": "^4.1.2",
     "jsdom": "^11.10.0",
-    "mocha": "^5.1.1"
+    "mocha": "^6.2.1"
   },
   "dependencies": {
     "jsdom-global": "^3.0.2",
