@@ -6,6 +6,7 @@
     "jsRules": {},
     "rules": {
       "no-console": false,
+      "no-debugger": false,
       "no-empty": [true, "allow-empty-functions"]
     },
     "rulesDirectory": []

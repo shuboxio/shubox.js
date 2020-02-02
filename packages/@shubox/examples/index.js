@@ -1,5 +1,30 @@
 import Shubox from 'shubox'
 
+window.Shubox = Shubox;
+
+const webcamPhoto = new Shubox('#webcam-photo', {
+  key: window.shuboxSandboxKey,
+  webcam: 'photo',
+  success: function(file) {
+    console.log(`File ${file.name} successfully uploaded!`)
+    console.log(file.s3url)
+  },
+})
+
+const webcamOptions = new Shubox('#webcam-with-options', {
+  key: window.shuboxSandboxKey,
+  webcam: {
+    type: 'photo',
+    startCamera: '#webcam-start',
+    stopCamera: '#webcam-stop',
+    startCapture: '#webcam-capture'
+  },
+  success: function(file) {
+    console.log(`File ${file.name} successfully uploaded!`)
+    console.log(file.s3url)
+  },
+})
+
 const avatar = new Shubox('#avatar', {
   key: window.shuboxSandboxKey,
   previewsContainer: false,

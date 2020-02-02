@@ -775,7 +775,7 @@ your local dev/example server to use your sandbox key.
 cp packages/@shubox/examples/public/shubox_config_sample.js \
   ./packages/@shubox/examples/public/shubox_config.js
 
-echo "var shuboxSandboxUUID = '[SANDBOX KEY GOES HERE]';" > \
+echo "var shuboxSandboxKey = '[SANDBOX KEY GOES HERE]';" > \
   ./packages/@shubox/examples/public/shubox_config.js
 ```
 
