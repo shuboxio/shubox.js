@@ -11,7 +11,7 @@
     "dist": "node scripts/dist-to-packages.js",
     "predist": "yarn compile",
     "dev": "webpack --mode development",
-    "lint": "tslint -c tslint.json --project .",
+    "lint": "tslint --fix -c tslint.json --project .",
     "prebuild": "yarn lint && yarn dist",
     "build": "lerna run build",
     "prerelease": "yarn build",

@@ -15,6 +15,7 @@ export interface IShuboxDefaultOptions {
     transformCallbacks?: null | object;
     s3Key?: null | string;
     cdn?: null | string;
+    webcam?: null | string;
 }
 export declare class ShuboxCallbacks {
     static pasteCallback(dz: Dropzone): (event: any) => void;
