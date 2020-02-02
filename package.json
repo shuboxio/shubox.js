@@ -33,7 +33,7 @@
     "lerna": "^3.13.1",
     "rimraf": "^2.6.3",
     "ts-loader": "^5.3.3",
-    "tslint": "^5.14.0",
+    "tslint": "^6.0.0",
     "typescript": "^3.3.3333",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
