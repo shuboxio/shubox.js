@@ -23,6 +23,7 @@ export interface IShuboxDefaultOptions {
   transformCallbacks?: null | object;
   s3Key?: null | string;
   cdn?: null | string;
+  webcam?: null | string;
 }
 
 export class ShuboxCallbacks {

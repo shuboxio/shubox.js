@@ -22,6 +22,7 @@ export class ShuboxOptions {
       textBehavior: "replace",
       transformName: null,
       uploadingTemplate: "",
+      webcam: null,
     };
   }
 }

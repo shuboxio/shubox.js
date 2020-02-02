@@ -16,5 +16,6 @@ export declare class ShuboxOptions {
         textBehavior: string;
         transformName: null;
         uploadingTemplate: string;
+        webcam: null;
     };
 }

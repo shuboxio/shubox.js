@@ -42,6 +42,10 @@ const pages = [
     path: '/events',
     title: 'Event Handlers',
   },
+  {
+    path: '/webcam-photo',
+    title: 'Webcam Photo',
+  },
 ]
 
 app.get('/', (req, res) => {
