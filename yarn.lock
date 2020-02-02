@@ -6126,9 +6126,9 @@ quick-lru@^1.0.0:
   integrity sha1-Q2CxfGETatOAeDl/8RQW4Ybc+7g=
 
 randomatic@^3.0.0:
-  version "3.1.1"
-  resolved "https://ezcater.jfrog.io/ezcater/api/npm/npm/randomatic/-/randomatic-3.1.1.tgz#b776efc59375984e36c537b2f51a1f0aff0da1ed"
-  integrity sha1-t3bvxZN1mE42xTey9RofCv8Noe0=
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/randomatic/-/randomatic-3.0.0.tgz#d35490030eb4f7578de292ce6dfb04a91a128923"
+  integrity sha512-VdxFOIEY3mNO5PtSRkkle/hPJDHvQhK21oa73K4yAc9qmp6N429gAyF1gZMOTMeS0/AYzaV/2Trcef+NaIonSA==
   dependencies:
     is-number "^4.0.0"
     kind-of "^6.0.0"
