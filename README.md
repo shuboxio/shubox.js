@@ -423,6 +423,56 @@ const append = new Shubox('#shubox--textarea--append', {
 
 ![](https://shubox.io/images/README/shubox_demo_append_after.gif)
 
+## Capture a photo with your webcam
+
+```html
+<div id="webcam-photo" class="webcam"></div>
+```
+
+```javascript
+const webcamPhoto = new Shubox('#webcam-photo', {
+  key: window.shuboxSandboxKey,
+  webcam: 'photo',
+  success: function(file) {
+    console.log(`File ${file.name} successfully uploaded!`)
+    console.log(file.s3url)
+  },
+})
+```
+
+![](https://shubox.io/images/README/shubox_demo_camera_01.gif)
+
+### ... Webcam capture with controls for start, stop, & capture
+
+```html
+<div id="webcam-with-options" class="webcam"></div>
+<ul>
+  <li><a href="#" id="webcam-start">Start Camera 📷</a></li>
+  <li><a href="#" id="webcam-stop">Stop Camera 🚫</a></li>
+  <li><a href="#" id="webcam-capture">Take Photo ✨</a></li>
+</ul>
+```
+
+```javascript
+const webcamOptions = new Shubox('#webcam-with-options', {
+  key: window.shuboxSandboxKey,
+  webcam: {
+    type: 'photo',
+    startCamera: '#webcam-start',
+    stopCamera: '#webcam-stop',
+    startCapture: '#webcam-capture'
+  },
+  success: function(file) {
+    console.log(`File ${file.name} successfully uploaded!`)
+    console.log(file.s3url)
+  },
+})
+```
+
+![](https://shubox.io/images/README/shubox_demo_camera_02.gif)
+
+
+
 # Library Documentation
 
 The following section outlines what the _Shubox specific_ options are for the
@@ -743,6 +793,30 @@ comma separated list of mime types or file extensions. Eg.:
 ```javascript
 acceptedFiles: "image/*"                      // default value
 acceptedFiles: "image/*,application/pdf,.psd" // image, pdfs, psd
+```
+
+### `webcam`:
+
+You can capture a photo via your webcam and have it sent right up to S3. The
+most straightforward approach is to initialize Shubox by pointing to an element
+(usually a div) sized to how large you would like the video element to be. The
+`webcam` key accepts a string `"photo"`, or an object with a required key of
+`type`, and optional `startCamera`, `stopCamera`, or `startCapture` keys with
+values containing the selectors to the elements that will start and stop the
+camera, and capture the photo. *NOTE:* "photo" as a value for webcam/type
+implies that there will be a "video" option in the future. And there will be!
+
+```javascript
+// let shubox handle everything in the context of your target el
+webcam: 'photo'
+
+// allow a little more control during the camera lifecycle
+webcam: {
+  type: 'photo',
+  startCamera: '#webcam-start',
+  stopCamera: '#webcam-stop',
+  startCapture: '#webcam-capture'
+}
 ```
 
 # Development Notes
