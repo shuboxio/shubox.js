@@ -2,7 +2,7 @@ import Shubox from 'shubox'
 
 window.Shubox = Shubox;
 
-const webcamPhoto = new Shubox('#webcam-photo', {
+new Shubox('#webcam-photo', {
   key: window.shuboxSandboxKey,
   webcam: 'photo',
   success: function(file) {
@@ -11,7 +11,7 @@ const webcamPhoto = new Shubox('#webcam-photo', {
   },
 })
 
-const webcamOptions = new Shubox('#webcam-with-options', {
+new Shubox('#webcam-with-options', {
   key: window.shuboxSandboxKey,
   webcam: {
     type: 'photo',
@@ -25,7 +25,23 @@ const webcamOptions = new Shubox('#webcam-with-options', {
   },
 })
 
-const avatar = new Shubox('#avatar', {
+new Shubox('#webcam-video', {
+  key: window.shuboxSandboxKey,
+  acceptedFiles: "video/webm",
+  webcam: {
+    type: 'video',
+    startCamera: '#video-start',
+    stopCamera: '#video-stop',
+    startRecording: '#video-record-start',
+    stopRecording: '#video-record-stop'
+  },
+  success: function(file) {
+    console.log(`File ${file.name} successfully uploaded!`)
+    console.log(file.s3url)
+  },
+})
+
+new Shubox('#avatar', {
   key: window.shuboxSandboxKey,
   previewsContainer: false,
   success: function(file) {
@@ -38,7 +54,7 @@ const avatar = new Shubox('#avatar', {
   },
 })
 
-const multfiles = new Shubox("#shubox--multiple-files", {
+new Shubox("#shubox--multiple-files", {
   key: window.shuboxSandboxKey,
   previewsContainer: '#shubox--multiple-files-preview',
   addedfile: () => { console.log('added') },
@@ -46,28 +62,28 @@ const multfiles = new Shubox("#shubox--multiple-files", {
   queuecomplete: () => { console.log('done') }
 })
 
-const githubForm = new Shubox('#shubox--textarea', {
+new Shubox('#shubox--textarea', {
   key: window.shuboxSandboxKey,
   clickable: '#shubox--click-to-upload',
   uploadingTemplate: '![Uploading {{name}}...]()',
   successTemplate: '![{{name}}]({{s3url}})',
 })
 
-const atCursor = new Shubox('#shubox--textarea--cursor', {
+new Shubox('#shubox--textarea--cursor', {
   key: window.shuboxSandboxKey,
   clickable: null,
   successTemplate: ' {{s3url}} ',
   textBehavior: 'insertAtCursor',
 })
 
-const append = new Shubox('#shubox--textarea--append', {
+new Shubox('#shubox--textarea--append', {
   key: window.shuboxSandboxKey,
   clickable: null,
   successTemplate: ' See? Told you. Right after --> {{s3url}}',
   textBehavior: 'append',
 })
 
-const replace = new Shubox('#shubox--textarea--replace', {
+new Shubox('#shubox--textarea--replace', {
   key: window.shuboxSandboxKey,
   clickable: null,
   // used intentionally to display deprecation warning
@@ -75,19 +91,19 @@ const replace = new Shubox('#shubox--textarea--replace', {
   textBehavior: 'replace',
 })
 
-const logEvent = function(e){
-  let eventsEl = document.getElementById("events")
-  eventsEl.innerHTML = ` ${eventsEl.innerHTML}\n<li>${e}</li>`
-}
-
-const events = new Shubox('#avatar-events', {
+new Shubox('#avatar-events', {
   key: window.shuboxSandboxKey,
   previewsContainer: false,
   maxFiles: 1,
 
-  addedfile: function(file) { logEvent('Added file!') },
-  error: function (file, message) { logEvent('Oops. Error: ' + message) },
+  addedfile: function(_file) { logEvent('Added file!') },
+  error: function (_file, message) { logEvent('Oops. Error: ' + message) },
   queuecomplete: function() { logEvent('Queue complete!') },
-  sending: function (file, xhr, formData) { logEvent('Sending file!') },
-  success: function(file, responseText, e) { logEvent('File sent!') },
+  sending: function (_file, _xhr, _formData) { logEvent('Sending file!') },
+  success: function(_file, _responseText, _e) { logEvent('File sent!') },
 })
+
+const logEvent = function(e){
+  let eventsEl = document.getElementById("events")
+  eventsEl.innerHTML = ` ${eventsEl.innerHTML}\n<li>${e}</li>`
+}

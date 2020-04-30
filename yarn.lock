@@ -895,6 +895,11 @@
   resolved "https://ezcater.jfrog.io/ezcater/api/npm/npm/@types/chai/-/chai-4.2.8.tgz#c8d645506db0d15f4aafd4dfa873f443ad87ea59"
   integrity sha1-yNZFUG2w0V9Kr9TfqHP0Q62H6lk=
 
+"@types/dom-mediacapture-record@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@types/dom-mediacapture-record/-/dom-mediacapture-record-1.0.5.tgz#63abc431b95e6af31d3c2c4392e1f31fd0b753c8"
+  integrity sha512-15z4KlDUIm1AZmfCw0qK5ejIRSAvRpsr27X7ybiD+6EQlBWCF7BueYI+PPwqK/1jXaNkFQoK2gTByN0V7X+FEg==
+
 "@types/dropzone@^5.0.4":
   version "5.5.2"
   resolved "https://ezcater.jfrog.io/ezcater/api/npm/npm/@types/dropzone/-/dropzone-5.5.2.tgz#2450ae1adda24d19a8f99bfd47fa400ce5810dc6"

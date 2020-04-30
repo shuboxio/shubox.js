@@ -36,6 +36,10 @@
   cursor: pointer;
 }
 
+.shubox-webcam-uninitialized video {
+  display: none;
+}
+
 .shubox-webcam-uninitialized::before {
   display: block;
   content: "Click to start webcam 📷";

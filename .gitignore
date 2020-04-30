@@ -1,4 +1,5 @@
 node_modules
 *.log
-packages/@shubox/examples/public/shubox_config.js
 *.tgz
+packages/@shubox/**/*.js
+!packages/@shubox/examples/index.js

@@ -1,13 +1,18 @@
 import Dropzone from "dropzone";
 import {ShuboxCallbacks} from "./src/shubox_callbacks";
 import {ShuboxOptions} from "./src/shubox_options";
-import {ShuboxWebcam} from "./src/shubox_webcam";
+import {Webcam} from "./src/webcam";
 
 export interface IWebcamOptions {
   type: string;
   startCamera?: string;
   stopCamera?: string;
   startCapture?: string;
+  takePhoto?: string;
+  startRecording ?: string;
+  stopRecording ?: string;
+  photoTemplate?: string;
+  videoTemplate?: string;
 }
 
 export interface IUserOptions {
@@ -15,13 +20,13 @@ export interface IUserOptions {
   uploadUrl?: string;
   uuid?: string;
   key?: string;
-  webcam?: string | IWebcamOptions;
+  webcam?: "photo" | "video" | IWebcamOptions;
 }
 
 export default class Shubox {
   public static instances: Dropzone[] = [];
 
-  public static stopVideo: () => void = ShuboxWebcam.stopVideo;
+  public static stopCamera: () => void = Webcam.stopCamera;
   public signatureUrl: string = "https://api.shubox.io/signatures";
   public uploadUrl: string = "https://api.shubox.io/uploads";
   public key: string = "";
@@ -29,6 +34,7 @@ export default class Shubox {
   public element: HTMLElement | HTMLInputElement;
   public options: any = {};
   public callbacks: any = {};
+  public webcam?: Webcam;
 
   constructor(selector: string = ".shubox", options: IUserOptions = {}) {
     this.selector = selector;
@@ -94,12 +100,7 @@ export default class Shubox {
       });
 
       if (this.options.webcam) {
-        const webcam = new ShuboxWebcam(
-          dropzone,
-          this.element,
-          this.options.webcam,
-        );
-        webcam.init();
+        this.webcam = new Webcam(dropzone, this.element, this.options.webcam);
       }
 
       this.element.addEventListener("paste", ShuboxCallbacks.pasteCallback(dropzone));
