@@ -30,22 +30,24 @@ export class PhotoEvents {
       .catch(() => {});
 
     this.webcam.dom.toggleStarted();
+    this.webcam.webcamOptions.cameraStarted?.call(this, this.webcam);
   }
 
   public takePhoto = (event?: Event) => {
     event?.preventDefault();
     if (!this.webcam.dom.alreadyStarted()) { return; }
 
+    let file: any;
     this.webcam.dom.canvas?.getContext("2d")!.drawImage(this.webcam.dom.video, 0, 0);
     this.webcam.dom.canvas?.toBlob((blob: Blob) => {
-      const file: any = blob || new Blob();
       const dateTime = (new Date()).toISOString();
+      file = blob || new Blob();
       file.name = `webcam-${dateTime}.png`;
       this.webcam.dropzone.addFile(file);
     });
 
     this.webcam.dom.finalize(null);
-    this.stopCamera(event);
+    this.webcam.webcamOptions.photoTaken?.call(this, this.webcam, file as Blob);
   }
 
   public stopCamera = (event?: Event) => {
@@ -56,6 +58,7 @@ export class PhotoEvents {
 
     this.webcam.element.addEventListener("click", this.startCamera);
     this.webcam.dom.toggleStopped();
+    this.webcam.webcamOptions.cameraStopped?.call(this, this.webcam);
   }
 
   private wireUpSelectorsAndEvents() {

@@ -31,6 +31,7 @@ export class VideoEvents {
       .catch(() => {});
 
     this.webcam.dom.toggleStarted();
+    this.webcam.webcamOptions.cameraStarted?.call(this, this.webcam);
   }
 
   public stopCamera = (event?: Event) => {
@@ -41,6 +42,7 @@ export class VideoEvents {
 
     this.webcam.element.addEventListener("click", this.startCamera);
     this.webcam.dom.toggleStopped();
+    this.webcam.webcamOptions.cameraStopped?.call(this, this.webcam);
   }
 
   public startRecording = (event?: Event) => {
@@ -53,6 +55,7 @@ export class VideoEvents {
     );
     this.mediaRecorder.ondataavailable = this.videoDataAvailable;
     this.mediaRecorder.start(10);
+    this.webcam.webcamOptions.recordingStarted?.call(this, this.webcam);
   }
 
   public stopRecording = (event?: Event) => {
@@ -63,8 +66,8 @@ export class VideoEvents {
     file.name = `webcam-video-${dateTime}.webm`;
 
     this.mediaRecorder.stop();
+    this.webcam.webcamOptions.recordingStopped?.call(this, this.webcam, file);
     this.webcam.dropzone.addFile(file);
-    this.stopCamera(event);
     this.webcam.dom.finalize(file);
   }
 

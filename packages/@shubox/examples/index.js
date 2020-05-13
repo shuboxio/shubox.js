@@ -17,7 +17,16 @@ new Shubox('#webcam-with-options', {
     type: 'photo',
     startCamera: '#webcam-start',
     stopCamera: '#webcam-stop',
-    startCapture: '#webcam-capture'
+    startCapture: '#webcam-capture',
+    cameraStarted: function(webcam) {
+      console.log("camera started");
+    },
+    cameraStopped: function(webcam) {
+      console.log("camera stopped");
+    },
+    photoTaken: function(webcam, file) {
+      console.log("photo taken");
+    }
   },
   success: function(file) {
     console.log(`File ${file.name} successfully uploaded!`)
@@ -33,7 +42,19 @@ new Shubox('#webcam-video', {
     startCamera: '#video-start',
     stopCamera: '#video-stop',
     startRecording: '#video-record-start',
-    stopRecording: '#video-record-stop'
+    stopRecording: '#video-record-stop',
+    cameraStarted: function(webcam) {
+      console.log("camera started");
+    },
+    cameraStopped: function(webcam) {
+      console.log("camera stopped");
+    },
+    recordingStarted: function(webcam) {
+      console.log("recording started");
+    },
+    recordingStopped: function(webcam, file) {
+      console.log("recording stopped");
+    }
   },
   success: function(file) {
     console.log(`File ${file.name} successfully uploaded!`)

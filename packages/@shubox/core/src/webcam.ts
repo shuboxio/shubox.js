@@ -24,7 +24,7 @@ export class Webcam {
 
   constructor(dropzone: Dropzone, element: HTMLElement, webcamOptions: string | IWebcamOptions) {
     this.dropzone = dropzone;
-    this.webcamOptions = typeof(webcamOptions) === "string" ? { type: webcamOptions } : webcamOptions,
+    this.webcamOptions = typeof(webcamOptions) === "string" ? { type: webcamOptions } : webcamOptions;
     this.element = element;
 
     // `this.dom` must be initialized and assigned before events. This is so

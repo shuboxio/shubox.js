@@ -13,6 +13,11 @@ export interface IWebcamOptions {
   stopRecording ?: string;
   photoTemplate?: string;
   videoTemplate?: string;
+  cameraStarted?: (webcam: Webcam) => void;
+  cameraStopped?: (webcam: Webcam) => void;
+  photoTaken?: (webcam: Webcam, file: Blob) => void;
+  recordingStarted?: (webcam: Webcam) => void;
+  recordingStopped?: (webcam: Webcam, file: Blob) => void;
 }
 
 export interface IUserOptions {
