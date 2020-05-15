@@ -43,6 +43,11 @@ new Shubox('#webcam-video', {
     stopCamera: '#video-stop',
     startRecording: '#video-record-start',
     stopRecording: '#video-record-stop',
+    videoTemplate: `
+      <video muted autoplay></video>
+      <select class="shubox-audioinput"></select>
+      <select class="shubox-videoinput"></select>
+    `,
     cameraStarted: function(webcam) {
       console.log("camera started");
     },

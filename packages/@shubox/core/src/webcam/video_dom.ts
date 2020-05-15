@@ -1,5 +1,6 @@
 import {IWebcamOptions} from "../../index";
 import {Webcam} from "../webcam";
+import {DeviceSelection} from "./device_selection";
 
 export class VideoDom {
   public webcam: Webcam;
@@ -7,11 +8,12 @@ export class VideoDom {
   public video: HTMLVideoElement;
   public image?: HTMLImageElement;
   public canvas?: HTMLCanvasElement;
+  public deviceSelection?: DeviceSelection;
 
   constructor(webcam: Webcam) {
     this.webcam = webcam;
     this.options = {
-      ...{videoTemplate: `<video muted autoplay />`},
+      ...{videoTemplate: `<video muted autoplay></video>`},
       ...webcam.webcamOptions,
     };
     this.webcam.element.classList.add(
@@ -25,6 +27,10 @@ export class VideoDom {
     this.video = this.findOrCreate("video") as HTMLVideoElement;
     this.video.width = this.webcam.element.offsetWidth;
     this.video.height = this.webcam.element.offsetHeight;
+
+    if (this.options.videoTemplate!.indexOf("<select")) {
+      this.deviceSelection = new DeviceSelection(this);
+    }
   }
 
   public alreadyStarted(): boolean {
@@ -52,6 +58,7 @@ export class VideoDom {
       "shubox-webcam-stopped",
       "shubox-webcam-uninitialized",
     );
+    this.deviceSelection?.toggleStopped();
   }
 
   public finalize(videoFile) {

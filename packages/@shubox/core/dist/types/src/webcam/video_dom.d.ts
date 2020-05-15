@@ -1,11 +1,13 @@
 import { IWebcamOptions } from "../../index";
 import { Webcam } from "../webcam";
+import { DeviceSelection } from "./device_selection";
 export declare class VideoDom {
     webcam: Webcam;
     options: IWebcamOptions;
     video: HTMLVideoElement;
     image?: HTMLImageElement;
     canvas?: HTMLCanvasElement;
+    deviceSelection?: DeviceSelection;
     constructor(webcam: Webcam);
     init(): void;
     alreadyStarted(): boolean;

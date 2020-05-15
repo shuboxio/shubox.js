@@ -6,7 +6,6 @@ export declare class PhotoDom {
     video: HTMLVideoElement;
     canvas: HTMLCanvasElement;
     image: HTMLImageElement;
-    p: any;
     constructor(webcam: Webcam);
     init(): void;
     toggleStarted(): void;

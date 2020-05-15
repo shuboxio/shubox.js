@@ -8,8 +8,6 @@ export class PhotoDom {
   public canvas: HTMLCanvasElement;
   public image: HTMLImageElement;
 
-  public p;
-
   constructor(webcam: Webcam) {
     this.webcam = webcam;
     this.options = {
@@ -17,7 +15,7 @@ export class PhotoDom {
         photoTemplate: `
         <video class="shubox-video" muted autoplay></video>
         <canvas style="display: none"></canvas>
-        <img style="display: none" />
+        <img style="display: none">
         `,
       },
       ...webcam.webcamOptions,
