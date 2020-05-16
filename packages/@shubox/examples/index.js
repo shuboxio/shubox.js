@@ -18,13 +18,13 @@ new Shubox('#webcam-with-options', {
     startCamera: '#webcam-start',
     stopCamera: '#webcam-stop',
     startCapture: '#webcam-capture',
-    cameraStarted: function(webcam) {
+    cameraStarted: function(_webcam) {
       console.log("camera started");
     },
-    cameraStopped: function(webcam) {
+    cameraStopped: function(_webcam) {
       console.log("camera stopped");
     },
-    photoTaken: function(webcam, file) {
+    photoTaken: function(_webcam, _file) {
       console.log("photo taken");
     }
   },
@@ -43,21 +43,17 @@ new Shubox('#webcam-video', {
     stopCamera: '#video-stop',
     startRecording: '#video-record-start',
     stopRecording: '#video-record-stop',
-    videoTemplate: `
-      <video muted autoplay></video>
-      <select class="shubox-audioinput"></select>
-      <select class="shubox-videoinput"></select>
-    `,
-    cameraStarted: function(webcam) {
+    videoTemplate: `<video muted autoplay></video>`,
+    cameraStarted: function(_webcam) {
       console.log("camera started");
     },
-    cameraStopped: function(webcam) {
+    cameraStopped: function(_webcam) {
       console.log("camera stopped");
     },
-    recordingStarted: function(webcam) {
+    recordingStarted: function(_webcam) {
       console.log("recording started");
     },
-    recordingStopped: function(webcam, file) {
+    recordingStopped: function(_webcam, _file) {
       console.log("recording stopped");
     }
   },

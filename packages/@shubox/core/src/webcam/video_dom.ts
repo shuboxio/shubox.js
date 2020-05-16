@@ -9,6 +9,7 @@ export class VideoDom {
   public image?: HTMLImageElement;
   public canvas?: HTMLCanvasElement;
   public deviceSelection?: DeviceSelection;
+  public initialized: boolean = false;
 
   constructor(webcam: Webcam) {
     this.webcam = webcam;
@@ -23,14 +24,13 @@ export class VideoDom {
   }
 
   public init() {
+    if (this.initialized) { return; }
     this.webcam.element.innerHTML = this.options.videoTemplate || "";
     this.video = this.findOrCreate("video") as HTMLVideoElement;
     this.video.width = this.webcam.element.offsetWidth;
     this.video.height = this.webcam.element.offsetHeight;
-
-    if (this.options.videoTemplate!.indexOf("<select")) {
-      this.deviceSelection = new DeviceSelection(this);
-    }
+    this.deviceSelection = new DeviceSelection(this);
+    this.initialized = true;
   }
 
   public alreadyStarted(): boolean {
@@ -58,15 +58,12 @@ export class VideoDom {
       "shubox-webcam-stopped",
       "shubox-webcam-uninitialized",
     );
-    this.deviceSelection?.toggleStopped();
   }
 
   public finalize(videoFile) {
     this.video.src = "";
     this.video.srcObject = null;
     this.video.src = window.URL.createObjectURL(videoFile);
-    this.video.controls = true;
-    this.video.play();
   }
 
   public findOrCreate(element: string): HTMLElement {

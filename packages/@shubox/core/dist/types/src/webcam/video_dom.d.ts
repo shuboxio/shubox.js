@@ -8,6 +8,7 @@ export declare class VideoDom {
     image?: HTMLImageElement;
     canvas?: HTMLCanvasElement;
     deviceSelection?: DeviceSelection;
+    initialized: boolean;
     constructor(webcam: Webcam);
     init(): void;
     alreadyStarted(): boolean;

@@ -11,22 +11,30 @@ export class VideoEvents {
     this.wireUpSelectorsAndEvents();
   }
 
-  public startCamera = (event?: Event) => {
+  public startCamera = (event?: Event, constraints: any = {}) => {
     event?.preventDefault();
     if (this.webcam.dom.alreadyStarted()) { return; }
 
     this.webcam.dom.init();
     this.webcam.element.removeEventListener("click", this.startCamera);
 
-    navigator
-      .mediaDevices
-      .getUserMedia({
-        audio: { echoCancellation: {exact: true} },
-        video: {
+    constraints = {
+      audio: {
+        ... { echoCancellation: {exact: true} },
+        ... constraints.audio,
+      },
+      video: {
+        ... {
           height: this.webcam.element.offsetHeight,
           width: this.webcam.element.offsetWidth,
         },
-      })
+        ...constraints.video,
+      },
+    };
+
+    navigator
+      .mediaDevices
+      .getUserMedia(constraints)
       .then((stream) => { this.webcam.dom.video.srcObject = stream; })
       .catch(() => {});
 
