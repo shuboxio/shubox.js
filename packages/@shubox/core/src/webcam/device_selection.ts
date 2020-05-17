@@ -1,21 +1,27 @@
-import {VideoDom} from "./video_dom";
+import {IWebcamOptions} from "../webcam";
+import {PhotoEvents} from "./photo_events";
+import {VideoEvents} from "./video_events";
 
 export class DeviceSelection {
-  public dom: VideoDom;
+  public events: VideoEvents | PhotoEvents;
+  public webcamOptions: IWebcamOptions;
   public audioinput?: HTMLSelectElement;
   public videoinput?: HTMLSelectElement;
+  public initialized: boolean = false;
 
-  constructor(dom: VideoDom) {
-    this.dom = dom;
-    this.audioinput = document.querySelector("select.shubox-audioinput") as HTMLSelectElement | undefined;
-    this.videoinput = document.querySelector("select.shubox-videoinput") as HTMLSelectElement | undefined;
+  constructor(events: VideoEvents | PhotoEvents, webcamOptions: IWebcamOptions) {
+    this.events = events;
+    this.webcamOptions = webcamOptions;
+    this.audioinput = document.querySelector(webcamOptions.audioInput as string) as HTMLSelectElement | undefined;
+    this.videoinput = document.querySelector(webcamOptions.videoInput as string) as HTMLSelectElement | undefined;
     this.audioinput?.addEventListener("change", this.updateAudioIn);
     this.videoinput?.addEventListener("change", this.updateVideoIn);
     this.populateSelects();
+    this.initialized = true;
   }
 
   private populateSelects() {
-    if (!this.audioinput && !this.videoinput) { return; }
+    if (this.initialized || (!this.audioinput && !this.videoinput)) { return; }
 
     navigator
     .mediaDevices
@@ -42,9 +48,9 @@ export class DeviceSelection {
   }
 
   private updateAudioIn = (event: Event) => {
-    this.dom.webcam.events.stopCamera(event);
+    this.events.stopCamera(event);
 
-    this.dom.webcam.events.startCamera(event, {
+    this.events.startCamera(event, {
       audio: {
         deviceId: this.audioinput?.value ? {exact: this.audioinput?.value} : undefined,
       },
@@ -52,9 +58,9 @@ export class DeviceSelection {
   }
 
   private updateVideoIn = (event: Event) => {
-    this.dom.webcam.events.stopCamera(event);
+    this.events.stopCamera(event);
 
-    this.dom.webcam.events.startCamera(event, {
+    this.events.startCamera(event, {
       video: {
         deviceId: this.videoinput?.value ? {exact: this.videoinput?.value} : undefined,
       },

@@ -1,9 +1,28 @@
 import Dropzone from "dropzone";
-import {IWebcamOptions} from "../index";
+import {DeviceSelection} from "./webcam/device_selection";
 import {PhotoDom} from "./webcam/photo_dom";
 import {PhotoEvents} from "./webcam/photo_events";
 import {VideoDom} from "./webcam/video_dom";
 import {VideoEvents} from "./webcam/video_events";
+
+export interface IWebcamOptions {
+  type: string;
+  startCamera?: string;
+  stopCamera?: string;
+  startCapture?: string;
+  takePhoto?: string;
+  startRecording ?: string;
+  stopRecording ?: string;
+  photoTemplate?: string;
+  videoTemplate?: string;
+  audioInput?: string;
+  videoInput?: string;
+  cameraStarted?: (webcam: Webcam) => void;
+  cameraStopped?: (webcam: Webcam) => void;
+  photoTaken?: (webcam: Webcam, file: Blob) => void;
+  recordingStarted?: (webcam: Webcam) => void;
+  recordingStopped?: (webcam: Webcam, file: Blob) => void;
+}
 
 export class Webcam {
 
@@ -21,6 +40,7 @@ export class Webcam {
   public dom: PhotoDom | VideoDom;
   public events: PhotoEvents | VideoEvents;
   public element: HTMLElement;
+  public deviceSelection: DeviceSelection;
 
   constructor(dropzone: Dropzone, element: HTMLElement, webcamOptions: string | IWebcamOptions) {
     this.dropzone = dropzone;
@@ -32,6 +52,7 @@ export class Webcam {
     // passed in.
     this.dom = this.domFactory();
     this.events = this.eventsFactory();
+    this.deviceSelection = new DeviceSelection(this.events, this.webcamOptions);
   }
 
   public domFactory(): PhotoDom | VideoDom {

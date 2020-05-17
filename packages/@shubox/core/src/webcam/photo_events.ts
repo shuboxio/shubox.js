@@ -26,7 +26,10 @@ export class PhotoEvents {
           width: this.webcam.element.offsetWidth,
         },
       })
-      .then((stream) => { this.webcam.dom.video.srcObject = stream; })
+      .then((stream) => {
+        if (!this.webcam.dom.video) { return; }
+        this.webcam.dom.video.srcObject = stream;
+      })
       .catch(() => {});
 
     this.webcam.dom.toggleStarted();
@@ -52,6 +55,7 @@ export class PhotoEvents {
 
   public stopCamera = (event?: Event) => {
     event?.preventDefault();
+    if (!this.webcam.dom.video) { return; }
 
     const src = (this.webcam.dom.video.srcObject as MediaStream);
     src?.getTracks().forEach((track) => { track.stop(); });

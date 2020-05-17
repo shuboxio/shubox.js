@@ -1,21 +1,5 @@
 import Dropzone from "dropzone";
-import { Webcam } from "./src/webcam";
-export interface IWebcamOptions {
-    type: string;
-    startCamera?: string;
-    stopCamera?: string;
-    startCapture?: string;
-    takePhoto?: string;
-    startRecording?: string;
-    stopRecording?: string;
-    photoTemplate?: string;
-    videoTemplate?: string;
-    cameraStarted?: (webcam: Webcam) => void;
-    cameraStopped?: (webcam: Webcam) => void;
-    photoTaken?: (webcam: Webcam, file: Blob) => void;
-    recordingStarted?: (webcam: Webcam) => void;
-    recordingStopped?: (webcam: Webcam, file: Blob) => void;
-}
+import { IWebcamOptions, Webcam } from "./src/webcam";
 export interface IUserOptions {
     signatureUrl?: string;
     uploadUrl?: string;

@@ -1,5 +1,4 @@
-import {IWebcamOptions} from "../../index";
-import {Webcam} from "../webcam";
+import {IWebcamOptions, Webcam} from "../webcam";
 
 export class PhotoDom {
   public webcam: Webcam;

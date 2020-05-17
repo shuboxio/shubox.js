@@ -1,6 +1,4 @@
-import {IWebcamOptions} from "../../index";
-import {Webcam} from "../webcam";
-import {DeviceSelection} from "./device_selection";
+import {IWebcamOptions, Webcam} from "../webcam";
 
 export class VideoDom {
   public webcam: Webcam;
@@ -8,7 +6,6 @@ export class VideoDom {
   public video: HTMLVideoElement;
   public image?: HTMLImageElement;
   public canvas?: HTMLCanvasElement;
-  public deviceSelection?: DeviceSelection;
   public initialized: boolean = false;
 
   constructor(webcam: Webcam) {
@@ -29,7 +26,6 @@ export class VideoDom {
     this.video = this.findOrCreate("video") as HTMLVideoElement;
     this.video.width = this.webcam.element.offsetWidth;
     this.video.height = this.webcam.element.offsetHeight;
-    this.deviceSelection = new DeviceSelection(this);
     this.initialized = true;
   }
 

@@ -1,5 +1,3 @@
-
-
 <p width="100%" bgcolor="#f9f2ff" align="center">
   <img src="https://shubox.io/assets/blog/shubox.svg" width="150" height="150">
 </p>
@@ -13,8 +11,8 @@
 
 # Shubox
 
->  Simple. Fast. _Customizable._
->  Upload images from your web app directly to Amazon S3.
+> Simple. Fast. _Customizable._
+> Upload images from your web app directly to Amazon S3.
 
 ## What does this do?
 

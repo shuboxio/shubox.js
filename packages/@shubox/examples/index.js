@@ -5,7 +5,7 @@ window.Shubox = Shubox;
 new Shubox('#webcam-photo', {
   key: window.shuboxSandboxKey,
   webcam: 'photo',
-  success: function(file) {
+  success: (file) => {
     console.log(`File ${file.name} successfully uploaded!`)
     console.log(file.s3url)
   },
@@ -18,17 +18,11 @@ new Shubox('#webcam-with-options', {
     startCamera: '#webcam-start',
     stopCamera: '#webcam-stop',
     startCapture: '#webcam-capture',
-    cameraStarted: function(_webcam) {
-      console.log("camera started");
-    },
-    cameraStopped: function(_webcam) {
-      console.log("camera stopped");
-    },
-    photoTaken: function(_webcam, _file) {
-      console.log("photo taken");
-    }
+    cameraStarted: (_webcam) => { console.log("camera started") },
+    cameraStopped: (_webcam) => { console.log("camera stopped") },
+    photoTaken: (_webcam, _file) => { console.log("photo taken") }
   },
-  success: function(file) {
+  success: file => {
     console.log(`File ${file.name} successfully uploaded!`)
     console.log(file.s3url)
   },
@@ -44,20 +38,14 @@ new Shubox('#webcam-video', {
     startRecording: '#video-record-start',
     stopRecording: '#video-record-stop',
     videoTemplate: `<video muted autoplay></video>`,
-    cameraStarted: function(_webcam) {
-      console.log("camera started");
-    },
-    cameraStopped: function(_webcam) {
-      console.log("camera stopped");
-    },
-    recordingStarted: function(_webcam) {
-      console.log("recording started");
-    },
-    recordingStopped: function(_webcam, _file) {
-      console.log("recording stopped");
-    }
+    audioInput: '.shubox-audioinput',
+    videoInput: '.shubox-videoinput',
+    cameraStarted: (_webcam) => { console.log("camera started") },
+    cameraStopped: (_webcam) => { console.log("camera stopped") },
+    recordingStarted: (_webcam) => { console.log("recording started") },
+    recordingStopped: (_webcam, _file) => { console.log("recording stopped") }
   },
-  success: function(file) {
+  success: file => {
     console.log(`File ${file.name} successfully uploaded!`)
     console.log(file.s3url)
   },
@@ -66,9 +54,9 @@ new Shubox('#webcam-video', {
 new Shubox('#avatar', {
   key: window.shuboxSandboxKey,
   previewsContainer: false,
-  success: function(file) {
+  success: file => {
     let img = new Image()
-    img.onload = function() {
+    img.onload = () => {
       let el = document.getElementById('avatar')
       el.insertAdjacentHTML('beforeend', '<img src="' + file.s3url + '">')
     }
@@ -118,14 +106,14 @@ new Shubox('#avatar-events', {
   previewsContainer: false,
   maxFiles: 1,
 
-  addedfile: function(_file) { logEvent('Added file!') },
-  error: function (_file, message) { logEvent('Oops. Error: ' + message) },
-  queuecomplete: function() { logEvent('Queue complete!') },
-  sending: function (_file, _xhr, _formData) { logEvent('Sending file!') },
-  success: function(_file, _responseText, _e) { logEvent('File sent!') },
+  addedfile: _file => { logEvent('Added file!') },
+  error: (_file, message) => { logEvent('Oops. Error: ' + message) },
+  queuecomplete: () => { logEvent('Queue complete!') },
+  sending: (_file, _xhr, _formData) => { logEvent('Sending file!') },
+  success: (_file, _responseText, _e) => { logEvent('File sent!') },
 })
 
-const logEvent = function(e){
+const logEvent = e =>{
   let eventsEl = document.getElementById("events")
   eventsEl.innerHTML = ` ${eventsEl.innerHTML}\n<li>${e}</li>`
 }

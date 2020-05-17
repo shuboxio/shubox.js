@@ -1,9 +1,13 @@
-import { VideoDom } from "./video_dom";
+import { IWebcamOptions } from "../webcam";
+import { PhotoEvents } from "./photo_events";
+import { VideoEvents } from "./video_events";
 export declare class DeviceSelection {
-    dom: VideoDom;
+    events: VideoEvents | PhotoEvents;
+    webcamOptions: IWebcamOptions;
     audioinput?: HTMLSelectElement;
     videoinput?: HTMLSelectElement;
-    constructor(dom: VideoDom);
+    initialized: boolean;
+    constructor(events: VideoEvents | PhotoEvents, webcamOptions: IWebcamOptions);
     private populateSelects;
     private gotDevices;
     private handleError;
