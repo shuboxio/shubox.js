@@ -2,8 +2,8 @@ import {Webcam} from "../webcam";
 
 export class VideoEvents {
   public webcam: Webcam;
-  private recordedBlobs: Blob[] = [];
-  private mediaRecorder: MediaRecorder;
+  public recordedBlobs: Blob[] = [];
+  public mediaRecorder: MediaRecorder;
 
   constructor(webcam: Webcam) {
     this.webcam = webcam;
@@ -86,7 +86,7 @@ export class VideoEvents {
     this.webcam.dom.finalize(file as Blob);
   }
 
-  private wireUpSelectorsAndEvents() {
+  public wireUpSelectorsAndEvents() {
     this.webcam.element.addEventListener("click", this.startCamera);
     this.wireUp("startCamera");
     this.wireUp("stopCamera");
@@ -94,7 +94,7 @@ export class VideoEvents {
     this.wireUp("stopRecording");
   }
 
-  private wireUp(eventName: string, selector?: string) {
+  public wireUp(eventName: string, selector?: string) {
     try {
       const el = document.querySelector(selector || this.webcam.webcamOptions[eventName]);
       el?.addEventListener("click", (this[eventName]));
@@ -103,13 +103,13 @@ export class VideoEvents {
     }
   }
 
-  private videoDataAvailable = (event: BlobEvent) => {
+  public videoDataAvailable = (event: BlobEvent) => {
     if (event?.data.size > 0) {
       this.recordedBlobs.push(event.data);
     }
   }
 
-  private mediaRecorderOptions = (): object => {
+  public mediaRecorderOptions = (): object => {
     let mimeType = "";
 
     if (MediaRecorder.isTypeSupported("video/webm;codecs=vp9")) {

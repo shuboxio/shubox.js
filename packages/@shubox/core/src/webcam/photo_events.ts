@@ -70,7 +70,7 @@ export class PhotoEvents {
     this.webcam.webcamOptions.cameraStopped?.call(this, this.webcam);
   }
 
-  private wireUpSelectorsAndEvents() {
+  public wireUpSelectorsAndEvents() {
     this.wireUp("startCamera");
     this.wireUp("stopCamera");
     this.wireUp("takePhoto");
@@ -83,7 +83,7 @@ export class PhotoEvents {
     }
   }
 
-  private wireUp(eventName: string, selector?: string) {
+  public wireUp(eventName: string, selector?: string) {
     try {
       const el = document.querySelector(selector || this.webcam.webcamOptions[eventName]);
       el?.addEventListener("click", (this[eventName]));

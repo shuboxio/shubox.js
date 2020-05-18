@@ -56,10 +56,10 @@ export default class Shubox {
 
     for (const element of Array.from(els)) {
       this.element = element as HTMLElement;
-      this.callbacks = new ShuboxCallbacks(this).toHash();
+      this.callbacks = new ShuboxCallbacks(this as Shubox).toHash();
       this.options = {
         ...this.options,
-        ...(new ShuboxOptions(this).toHash()),
+        ...(new ShuboxOptions(this as Shubox).toHash()),
         ...options,
       };
 

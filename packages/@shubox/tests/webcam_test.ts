@@ -27,7 +27,7 @@ describe("Shubox", () => {
       const shubox = new Shubox("#webcam", { webcam: "photo" });
       const shuboxEl = document.querySelector("#webcam");
 
-      expect(shuboxEl).to.have.class("webcam-uninitialized");
+      expect(shuboxEl).to.have.class("shubox-webcam-uninitialized");
     });
   });
 });

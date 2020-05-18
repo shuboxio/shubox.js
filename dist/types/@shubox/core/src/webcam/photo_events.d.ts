@@ -5,6 +5,6 @@ export declare class PhotoEvents {
     startCamera: (event?: Event | undefined, constraints?: any) => void;
     takePhoto: (event?: Event | undefined) => void;
     stopCamera: (event?: Event | undefined) => void;
-    private wireUpSelectorsAndEvents;
-    private wireUp;
+    wireUpSelectorsAndEvents(): void;
+    wireUp(eventName: string, selector?: string): void;
 }

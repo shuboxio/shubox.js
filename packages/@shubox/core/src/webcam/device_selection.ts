@@ -20,7 +20,7 @@ export class DeviceSelection {
     this.initialized = true;
   }
 
-  private populateSelects() {
+  public populateSelects() {
     if (this.initialized || (!this.audioinput && !this.videoinput)) { return; }
 
     navigator
@@ -30,7 +30,7 @@ export class DeviceSelection {
     .catch(this.handleError);
   }
 
-  private gotDevices = (deviceInfos: MediaDeviceInfo[]) => {
+  public gotDevices = (deviceInfos: MediaDeviceInfo[]) => {
     deviceInfos.forEach((deviceInfo) => {
       const option = document.createElement("option");
       option.value = deviceInfo.deviceId;
@@ -43,11 +43,11 @@ export class DeviceSelection {
     });
   }
 
-  private handleError(error: Error) {
+  public handleError(error: Error) {
     console.log("navigator.MediaDevices.getUserMedia error: ", error.message, error.name);
   }
 
-  private updateAudioIn = (event: Event) => {
+  public updateAudioIn = (event: Event) => {
     this.events.stopCamera(event);
 
     this.events.startCamera(event, {
@@ -57,7 +57,7 @@ export class DeviceSelection {
     });
   }
 
-  private updateVideoIn = (event: Event) => {
+  public updateVideoIn = (event: Event) => {
     this.events.stopCamera(event);
 
     this.events.startCamera(event, {

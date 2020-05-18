@@ -8,9 +8,9 @@ export declare class DeviceSelection {
     videoinput?: HTMLSelectElement;
     initialized: boolean;
     constructor(events: VideoEvents | PhotoEvents, webcamOptions: IWebcamOptions);
-    private populateSelects;
-    private gotDevices;
-    private handleError;
-    private updateAudioIn;
-    private updateVideoIn;
+    populateSelects(): void;
+    gotDevices: (deviceInfos: MediaDeviceInfo[]) => void;
+    handleError(error: Error): void;
+    updateAudioIn: (event: Event) => void;
+    updateVideoIn: (event: Event) => void;
 }
