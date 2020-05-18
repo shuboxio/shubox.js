@@ -17,6 +17,7 @@ export class VideoEvents {
 
     this.webcam.dom.init();
     this.webcam.element.removeEventListener("click", this.startCamera);
+    this.webcam.dom.video.addEventListener("click", this.startRecording);
 
     constraints = {
       audio: {
@@ -63,6 +64,9 @@ export class VideoEvents {
     );
     this.mediaRecorder.ondataavailable = this.videoDataAvailable;
     this.mediaRecorder.start(10);
+
+    this.webcam.dom.video.removeEventListener("click", this.startRecording);
+    this.webcam.dom.video.addEventListener("click", this.stopRecording);
     this.webcam.dom.recordingStarted();
     this.webcam.webcamOptions.recordingStarted?.call(this, this.webcam);
   }
@@ -76,6 +80,7 @@ export class VideoEvents {
     file.name = `webcam-video-${dateTime}.webm`;
 
     this.mediaRecorder.stop();
+    this.webcam.dom.video.removeEventListener("click", this.stopRecording);
     this.webcam.webcamOptions.recordingStopped?.call(this, this.webcam, file);
     this.webcam.dropzone.addFile(file);
     this.webcam.dom.finalize(file as Blob);
