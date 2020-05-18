@@ -469,8 +469,6 @@ const webcamOptions = new Shubox('#webcam-with-options', {
 
 ![](https://shubox.io/images/README/shubox_demo_camera_02.gif)
 
-
-
 # Library Documentation
 
 The following section outlines what the _Shubox specific_ options are for the

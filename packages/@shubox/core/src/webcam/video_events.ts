@@ -63,6 +63,7 @@ export class VideoEvents {
     );
     this.mediaRecorder.ondataavailable = this.videoDataAvailable;
     this.mediaRecorder.start(10);
+    this.webcam.dom.recordingStarted();
     this.webcam.webcamOptions.recordingStarted?.call(this, this.webcam);
   }
 
@@ -76,7 +77,7 @@ export class VideoEvents {
     this.mediaRecorder.stop();
     this.webcam.webcamOptions.recordingStopped?.call(this, this.webcam, file);
     this.webcam.dropzone.addFile(file);
-    this.webcam.dom.finalize(file);
+    this.webcam.dom.finalize(file as Blob);
   }
 
   private wireUpSelectorsAndEvents() {

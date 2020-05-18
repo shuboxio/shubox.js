@@ -1,9 +1,35 @@
+@keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}
+
+@-webkit-keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}
+
 .shubox-webcam {
   width: 640px;
   height: 360px;
   margin: auto;
   margin-top: 20px;
   position: relative;
+}
+
+.shubox-webcam-video-recording::after {
+  background: red;
+  display: block;
+  content: "";
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  animation: blink 2s step-start 0s infinite;
+  -webkit-animation: blink 2s step-start 0s infinite;
 }
 
 .shubox-webcam .dz-preview {

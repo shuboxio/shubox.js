@@ -11,5 +11,6 @@ export declare class PhotoDom {
     toggleStopped(): void;
     findOrCreate(element: string): HTMLElement;
     alreadyStarted(): boolean;
-    finalize(): void;
+    recordingStarted(): void;
+    finalize(_: Blob): void;
 }

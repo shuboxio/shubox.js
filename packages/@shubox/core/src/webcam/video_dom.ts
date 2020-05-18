@@ -20,7 +20,7 @@ export class VideoDom {
     );
   }
 
-  public init() {
+  public init(): void {
     if (this.initialized) { return; }
     this.webcam.element.innerHTML = this.options.videoTemplate || "";
     this.video = this.findOrCreate("video") as HTMLVideoElement;
@@ -33,7 +33,7 @@ export class VideoDom {
     return this.webcam.element.classList.contains("shubox-webcam-started");
   }
 
-  public toggleStarted() {
+  public toggleStarted(): void {
     this.webcam.element.classList.remove(
       "shubox-webcam-stopped",
       "shubox-webcam-captured",
@@ -45,7 +45,7 @@ export class VideoDom {
     );
   }
 
-  public toggleStopped() {
+  public toggleStopped(): void {
     this.webcam.element.classList.remove(
       "shubox-webcam-started",
       "shubox-webcam-video-started",
@@ -56,7 +56,19 @@ export class VideoDom {
     );
   }
 
-  public finalize(videoFile) {
+  public recordingStarted(): void {
+    this.webcam.element.classList.add(
+      "shubox-webcam-video-recording",
+    );
+  }
+
+  public finalize(videoFile: Blob): void {
+    this.webcam.element.classList.remove(
+      "shubox-webcam-video-recording",
+    );
+    this.webcam.element.classList.add(
+      "shubox-webcam-video-recorded",
+    );
     this.video.src = "";
     this.video.srcObject = null;
     this.video.src = window.URL.createObjectURL(videoFile);

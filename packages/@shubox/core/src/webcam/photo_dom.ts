@@ -68,7 +68,11 @@ export class PhotoDom {
     return this.webcam.element.classList.contains("shubox-webcam-started");
   }
 
-  public finalize() {
+  public recordingStarted(): void {
+    // no-op
+  }
+
+  public finalize(_: Blob): void {
     this.image.src = this.canvas.toDataURL("image/png");
     this.image.style.display = "inline";
     this.webcam.element.removeChild(this.canvas);

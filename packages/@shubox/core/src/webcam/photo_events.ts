@@ -49,7 +49,7 @@ export class PhotoEvents {
       this.webcam.dropzone.addFile(file);
     });
 
-    this.webcam.dom.finalize(null);
+    this.webcam.dom.finalize(file as Blob);
     this.webcam.webcamOptions.photoTaken?.call(this, this.webcam, file as Blob);
   }
 

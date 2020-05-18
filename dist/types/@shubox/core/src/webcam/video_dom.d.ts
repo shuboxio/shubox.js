@@ -11,6 +11,7 @@ export declare class VideoDom {
     alreadyStarted(): boolean;
     toggleStarted(): void;
     toggleStopped(): void;
-    finalize(videoFile: any): void;
+    recordingStarted(): void;
+    finalize(videoFile: Blob): void;
     findOrCreate(element: string): HTMLElement;
 }
