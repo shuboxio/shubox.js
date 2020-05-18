@@ -18,6 +18,7 @@ new Shubox('#webcam-with-options', {
     startCamera: '#webcam-start',
     stopCamera: '#webcam-stop',
     startCapture: '#webcam-capture',
+    videoInput: '.photo-videoinput',
     cameraStarted: (_webcam) => { console.log("camera started") },
     cameraStopped: (_webcam) => { console.log("camera stopped") },
     photoTaken: (_webcam, _file) => { console.log("photo taken") }

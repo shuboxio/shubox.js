@@ -9,7 +9,7 @@ export class PhotoEvents {
     this.wireUpSelectorsAndEvents();
   }
 
-  public startCamera = (event?: Event) => {
+  public startCamera = (event?: Event, constraints: any = {}) => {
     event?.preventDefault();
     if (this.webcam.dom.alreadyStarted()) { return; }
 
@@ -17,15 +17,20 @@ export class PhotoEvents {
     this.webcam.element.removeEventListener("click", this.startCamera);
     this.webcam.dom.video.addEventListener("click", this.takePhoto);
 
-    navigator
-      .mediaDevices
-      .getUserMedia({
-        audio: false,
-        video: {
+    constraints = {
+      audio: false,
+      video: {
+        ... {
           height: this.webcam.element.offsetHeight,
           width: this.webcam.element.offsetWidth,
         },
-      })
+        ...constraints.video,
+      },
+    };
+
+    navigator
+      .mediaDevices
+      .getUserMedia(constraints)
       .then((stream) => {
         if (!this.webcam.dom.video) { return; }
         this.webcam.dom.video.srcObject = stream;
