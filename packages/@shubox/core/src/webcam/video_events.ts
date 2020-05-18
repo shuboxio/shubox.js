@@ -45,8 +45,8 @@ export class VideoEvents {
   public stopCamera = (event?: Event) => {
     event?.preventDefault();
 
-    const src = (this.webcam.dom.video.srcObject as MediaStream);
-    src?.getTracks().forEach((track) => { track.stop(); });
+    const src = (this.webcam.dom.video?.srcObject as MediaStream);
+    src?.getTracks().forEach((track) => { track?.stop(); });
 
     this.webcam.element.addEventListener("click", this.startCamera);
     this.webcam.dom.toggleStopped();
@@ -58,7 +58,7 @@ export class VideoEvents {
 
     this.recordedBlobs = [];
     this.mediaRecorder = new MediaRecorder(
-      this.webcam.dom.video.srcObject as MediaStream,
+      this.webcam.dom.video?.srcObject as MediaStream,
       this.mediaRecorderOptions(),
     );
     this.mediaRecorder.ondataavailable = this.videoDataAvailable;
@@ -69,6 +69,7 @@ export class VideoEvents {
 
   public stopRecording = (event?: Event) => {
     event?.preventDefault();
+    if (!this.mediaRecorder) { return; }
 
     const file: any = new Blob(this.recordedBlobs, {type: "video/webm"});
     const dateTime = (new Date()).toISOString();
