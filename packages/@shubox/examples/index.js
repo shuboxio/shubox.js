@@ -31,7 +31,6 @@ new Shubox('#webcam-with-options', {
 
 new Shubox('#webcam-video', {
   key: window.shuboxSandboxKey,
-  acceptedFiles: "video/webm",
   webcam: {
     type: 'video',
     startCamera: '#video-start',

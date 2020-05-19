@@ -59,6 +59,7 @@ announcements, or the occasional pithy tweet.
 * [Set Up Your Own S3 Bucket](#set-up-your-own-s3-bucket)
 * [Examples &amp; Ideas](#examples--ideas)
 * [Library Documentation](#library-documentation)
+	* [Webcam Configuration](#webcam-configuration)
 * [Development Notes](#development-notes)
 	* [Setup](#development-setup)
 	* [Lerna](#lerna)
@@ -458,7 +459,7 @@ const webcamOptions = new Shubox('#webcam-with-options', {
     type: 'photo',
     startCamera: '#webcam-start',
     stopCamera: '#webcam-stop',
-    startCapture: '#webcam-capture'
+    takePhoto: '#webcam-capture'
   },
   success: function(file) {
     console.log(`File ${file.name} successfully uploaded!`)
@@ -468,6 +469,63 @@ const webcamOptions = new Shubox('#webcam-with-options', {
 ```
 
 ![](https://shubox.io/images/README/shubox_demo_camera_02.gif)
+
+### Record a _video_ with your webcam!
+
+```html
+<div id="webcam-video" class="webcam"></div>
+```
+
+```javascript
+const video = new Shubox('#webcam-video', {
+  key: window.shuboxSandboxKey,
+  webcam: 'video',
+  success: function(file) {
+    console.log(`File ${file.name} successfully uploaded!`)
+    console.log(file.s3url)
+  },
+})
+```
+
+### Record a video with controls, and camera and microphone selection
+
+```html
+<div id="webcam-video" class="webcam"></div>
+<ul>
+  <li><a href="#" id="video-start">Start Camera 📹</a></li>
+  <li><a href="#" id="video-stop">Stop Camera 🚫</a></li>
+  <li><a href="#" id="video-record-start">Start Recording 🔴</a></li>
+  <li><a href="#" id="video-record-stop">Stop Recording ⏹ </a></li>
+  <li><select class="shubox-audioinput">
+    <option>Select Mic</option>
+  </select></li>
+  <li><select class="shubox-videoinput">
+    <option>Select Camera</option>
+  </select></li>
+</ul>
+```
+
+```javascript
+const videoWithOptions = new Shubox('#webcam-video', {
+  key: window.shuboxSandboxKey,
+  webcam: 'video',
+    startCamera: '#video-start',
+    stopCamera: '#video-stop',
+    startRecording: '#video-record-start',
+    stopRecording: '#video-record-stop',
+    audioInput: '.shubox-audioinput',
+    videoInput: '.shubox-videoinput',
+    cameraStarted: (_webcam) => { console.log("camera started") },
+    cameraStopped: (_webcam) => { console.log("camera stopped") },
+    recordingStarted: (_webcam) => { console.log("recording started") },
+    recordingStopped: (_webcam, _file) => { console.log("recording stopped") }
+  },
+  success: file => {
+    console.log(`File ${file.name} successfully uploaded!`)
+    console.log(file.s3url)
+  },
+})
+```
 
 # Library Documentation
 
@@ -791,27 +849,94 @@ acceptedFiles: "image/*"                      // default value
 acceptedFiles: "image/*,application/pdf,.psd" // image, pdfs, psd
 ```
 
-### `webcam`:
+## Webcam Configuration
 
-You can capture a photo via your webcam and have it sent right up to S3. The
-most straightforward approach is to initialize Shubox by pointing to an element
-(usually a div) sized to how large you would like the video element to be. The
-`webcam` key accepts a string `"photo"`, or an object with a required key of
-`type`, and optional `startCamera`, `stopCamera`, or `startCapture` keys with
-values containing the selectors to the elements that will start and stop the
-camera, and capture the photo. *NOTE:* "photo" as a value for webcam/type
-implies that there will be a "video" option in the future. And there will be!
+The webcam option(s) for the library support two modes of capture: `"photo"`,
+and `"video"`.
+
+### `webcam`: basic capture
+
+You can capture a photo or record a video via your webcam and have it sent
+right up to S3. The most straightforward approach is to initialize Shubox by
+pointing to an element (usually a div) sized to how large you would like the
+video element to be. The `webcam` key accepts a string `"photo"` or `"video"`,
+or an object with a required key of `type`, and optional keys that are detailed
+below. To start:
 
 ```javascript
 // let shubox handle everything in the context of your target el
-webcam: 'photo'
 
-// allow a little more control during the camera lifecycle
+// for a photo, set the root-level key of "webcam" to "photo"
+webcam: 'photo',
+
+// for a video, set the root-level key of "webcam" to "video"
+webcam: 'video',
+```
+
+The above will wire up the video elements to trigger the steps in the  lifecyle
+by clicking on the element. Eg: `start camera -> take photo`, or
+`start camera -> start record -> stop record`.
+
+## `webcam`: with extended options for `type: "photo"`
+
+The options you can pass to the nested hash in `webcam:` are as follows:
+
+```javascript
 webcam: {
   type: 'photo',
-  startCamera: '#webcam-start',
-  stopCamera: '#webcam-stop',
-  startCapture: '#webcam-capture'
+  startCamera: '#webcam-start',    // selector to element to start camera
+  stopCamera: '#webcam-stop',      // selector to element that stops camera
+  takePhoto: '#webcam-take',       // selector to element that takes the photo
+  // startCapture: '#webcam-take', // deprecated. same as `takePhoto
+
+  // the template that gets inserted into the shubox element div. You may
+  // customize this but do make sure the video, canvas, and img are in there
+  photoTemplate: `
+    <video class="shubox-video" muted autoplay></video>
+    <canvas style="display: none"></canvas>
+    <img style="display: none">
+  `,
+
+  // selector to a <select> element that will be populated with all camera
+  // devices. When changed that will change the video input stream
+  videoInput: '#select-camera',
+
+  // Callbacks that get triggered during the photo-taking lifecycle. `webcam`
+  // is an instance of the Webcam class. `file` is of type `Blob`.
+  cameraStarted: (webcam) => ();
+  cameraStopped: (webcam) => ();
+  photoTaken: (webcam, file) => ();
+}
+```
+
+## `webcam`: with extended options for `type: "video"`
+
+The options you can pass to the nested hash in `webcam:` are as follows:
+
+```javascript
+webcam: {
+  type: 'video',
+  startCamera: '#webcam-start',    // selector to element to start camera
+  stopCamera: '#webcam-stop',      // selector to element that stops camera
+  startRecording: '#video-start',  // selector to element that starts recording
+  stopRecording: '#video-stop',    // selector to element that stops recording
+
+  // the template that gets inserted into the shubox element div. You may
+  // customize this but do make sure the video is in there.
+  videoTemplate: `<video class="shubox-video" muted autoplay></video>`,
+
+  // selector to <select> elements that will be populated with all camera and
+  // and microphone devices. When changed, each will change the video or audio
+  // input stream
+  videoInput: '#select-camera',
+  audioInput: '#select-mic',
+
+  // Callbacks that get triggered during the photo-taking lifecycle. `webcam`
+  // is an instance of the Webcam class. `file` is of type `Blob`.
+  cameraStarted: (webcam) => ();
+  cameraStopped: (webcam) => ();
+  recordingStarted: (webcam) => ();
+  recordingStopped: (webcam, file) => ();
 }
 ```
 
