@@ -65,7 +65,7 @@ export default class Shubox {
 
       if (this.options.webcam) {
         this.options.clickable = false;
-        this.options.acceptedFiles = "video/webm";
+        this.options.acceptedFiles = "video/webm,image/png";
       }
 
       const dropzoneOptions = {
