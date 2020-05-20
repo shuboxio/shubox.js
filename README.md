@@ -920,9 +920,11 @@ webcam: {
   stopCamera: '#webcam-stop',      // selector to element that stops camera
   startRecording: '#video-start',  // selector to element that starts recording
   stopRecording: '#video-stop',    // selector to element that stops recording
+  timeLimit: 5,                    // default: undefined. video recording time limit
 
   // the template that gets inserted into the shubox element div. You may
   // customize this but do make sure the video is in there.
+  // the following is the default:
   videoTemplate: `<video class="shubox-video" muted autoplay></video>`,
 
   // selector to <select> elements that will be populated with all camera and

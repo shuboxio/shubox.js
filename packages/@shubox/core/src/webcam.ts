@@ -17,6 +17,7 @@ export interface IWebcamOptions {
   videoTemplate?: string;
   audioInput?: string;
   videoInput?: string;
+  timeLimit?: number;
   cameraStarted?: (webcam: Webcam) => void;
   cameraStopped?: (webcam: Webcam) => void;
   photoTaken?: (webcam: Webcam, file: Blob) => void;

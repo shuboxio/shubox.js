@@ -49,6 +49,7 @@ new Shubox('#webcam-video-with-options', {
     videoTemplate: `<video muted autoplay></video>`,
     audioInput: '.shubox-audioinput',
     videoInput: '.shubox-videoinput',
+    timeLimit: 4,
     cameraStarted: (_webcam) => { console.log("camera started") },
     cameraStopped: (_webcam) => { console.log("camera stopped") },
     recordingStarted: (_webcam) => { console.log("recording started") },

@@ -65,6 +65,11 @@ export class VideoEvents {
     this.mediaRecorder.ondataavailable = this.videoDataAvailable;
     this.mediaRecorder.start(10);
 
+    if (this.webcam.webcamOptions.timeLimit) {
+      const timeout = this.webcam.webcamOptions.timeLimit * 1000;
+      setTimeout(this.stopRecording, timeout);
+    }
+
     this.webcam.dom.video.removeEventListener("click", this.startRecording);
     this.webcam.dom.video.addEventListener("click", this.stopRecording);
     this.webcam.dom.recordingStarted();
