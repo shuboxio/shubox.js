@@ -1,0 +1,30 @@
+<% include layout/head %>
+
+<div class="header">
+  <h1>Upload Video Taken From Webcam</h1>
+</div>
+
+<div class="content">
+  <div class="webcam-container">
+    <div id="webcam-video" class="webcam"></div>
+
+    <div id="webcam-video-with-options" class="webcam"></div>
+    <ul>
+      <li><a href="#" id="video-start">Start Camera 📹</a></li>
+      <li><a href="#" id="video-stop">Stop Camera 🚫</a></li>
+      <li><a href="#" id="video-record-start">Start Recording 🔴</a></li>
+      <li><a href="#" id="video-record-stop">Stop Recording ⏹ </a></li>
+      <li><select class="shubox-audioinput">
+        <option>Select Mic</option>
+      </select></li>
+      <li><select class="shubox-videoinput">
+        <option>Select Camera</option>
+      </select></li>
+    </ul>
+  </div>
+</div>
+
+<script src="/main.js" defer></script>
+
+<% include layout/tail %>
+

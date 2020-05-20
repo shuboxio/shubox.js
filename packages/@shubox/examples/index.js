@@ -31,6 +31,15 @@ new Shubox('#webcam-with-options', {
 
 new Shubox('#webcam-video', {
   key: window.shuboxSandboxKey,
+  webcam: 'video',
+  success: file => {
+    console.log(`File ${file.name} successfully uploaded!`)
+    console.log(file.s3url)
+  },
+})
+
+new Shubox('#webcam-video-with-options', {
+  key: window.shuboxSandboxKey,
   webcam: {
     type: 'video',
     startCamera: '#video-start',

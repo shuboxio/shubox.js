@@ -46,6 +46,10 @@ const pages = [
     path: '/webcam-photo',
     title: 'Webcam Photo',
   },
+  {
+    path: '/webcam-video',
+    title: 'Webcam Video',
+  },
 ]
 
 app.get('/', (req, res) => {
