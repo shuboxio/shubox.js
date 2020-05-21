@@ -4,6 +4,7 @@ export class VideoEvents {
   public webcam: Webcam;
   public recordedBlobs: Blob[] = [];
   public mediaRecorder: MediaRecorder;
+  public alreadyStopped: boolean = false;
 
   constructor(webcam: Webcam) {
     this.webcam = webcam;
@@ -78,13 +79,19 @@ export class VideoEvents {
 
   public stopRecording = (event?: Event) => {
     event?.preventDefault();
-    if (!this.mediaRecorder) { return; }
+    if (!this.mediaRecorder || this.alreadyStopped) { return; }
 
     const file: any = new Blob(this.recordedBlobs, {type: "video/webm"});
     const dateTime = (new Date()).toISOString();
     file.name = `webcam-video-${dateTime}.webm`;
 
-    this.mediaRecorder.stop();
+    try {
+      this.mediaRecorder.stop();
+    } catch (_) {
+      /* no-op */
+    }
+
+    this.alreadyStopped = true;
     this.webcam.dom.video.removeEventListener("click", this.stopRecording);
     this.webcam.webcamOptions.recordingStopped?.call(this, this.webcam, file);
     this.webcam.dropzone.addFile(file);
