@@ -3095,9 +3095,9 @@ dot-prop@^4.2.0:
     is-obj "^1.0.0"
 
 dropzone@^5.5.1:
-  version "5.5.1"
-  resolved "https://ezcater.jfrog.io/ezcater/api/npm/npm/dropzone/-/dropzone-5.5.1.tgz#06e2f513e61d6aa363d4b556f18574f47cf7ba26"
-  integrity sha1-BuL1E+YdaqNj1LVW8YV09Hz3uiY=
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/dropzone/-/dropzone-5.7.0.tgz#8d1007f3ebcc6e6d64096823f854d898f7564ef2"
+  integrity sha512-kOltiZXH5cO/72I22JjE+w6BoT6uaVLfWdFMsi1PMKFkU6BZWpqRwjnsRm0o6ANGTBuZar5Piu7m/CbKqRPiYg==
 
 duplexer@^0.1.1:
   version "0.1.1"
