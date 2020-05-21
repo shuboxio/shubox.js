@@ -1,6 +1,6 @@
 {
   "name": "shubox",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Shubox client SDK",
   "repository": "https://github.com/shubox.io/shubox.js",
   "author": "joel@shubox.io",
@@ -8,7 +8,7 @@
   "module": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@shubox/core": "^0.3.0"
+    "@shubox/core": "^0.4.0"
   },
   "scripts": {
     "prepack": "cp ../../README.md .",
