@@ -57,6 +57,7 @@ export class VideoEvents {
 
   public startRecording = (event?: Event) => {
     event?.preventDefault();
+    if (!this.webcam.dom.video?.srcObject) { return; }
 
     this.recordedBlobs = [];
     this.mediaRecorder = new MediaRecorder(
