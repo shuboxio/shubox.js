@@ -8,7 +8,8 @@
   "module": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@shubox/core": "^0.4.2"
+    "@shubox/core": "^0.4.2",
+    "dropzone": "^5.7.1"
   },
   "scripts": {
     "prepack": "cp ../../README.md .",

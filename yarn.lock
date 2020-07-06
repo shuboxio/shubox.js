@@ -3099,6 +3099,11 @@ dropzone@^5.5.1:
   resolved "https://ezcater.jfrog.io/ezcater/api/npm/npm/dropzone/-/dropzone-5.5.1.tgz#06e2f513e61d6aa363d4b556f18574f47cf7ba26"
   integrity sha1-BuL1E+YdaqNj1LVW8YV09Hz3uiY=
 
+dropzone@^5.7.1:
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/dropzone/-/dropzone-5.7.1.tgz#8e41a85879ff145562e8fcce39c6ff619dce81be"
+  integrity sha512-eqcJafupMKRlVUihZtsLkzLn02WTPUMHeImP5ZtWm3ERObC/dv15te0qqn/X2rEKaSqRC0pNTHUBPgrPWcP52w==
+
 duplexer@^0.1.1:
   version "0.1.1"
   resolved "https://ezcater.jfrog.io/ezcater/api/npm/npm/duplexer/-/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
