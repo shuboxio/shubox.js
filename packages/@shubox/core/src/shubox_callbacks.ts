@@ -43,6 +43,7 @@ export class ShuboxCallbacks {
     });
   }
   public shubox: Shubox;
+  public instances: Dropzone[];
   public readonly replaceable: string[] = [
     "height",
     "width",
@@ -54,8 +55,9 @@ export class ShuboxCallbacks {
   ];
   private options: IShuboxDefaultOptions;
 
-  constructor(shubox: Shubox) {
+  constructor(shubox: Shubox, instances: Dropzone[]) {
     this.shubox = shubox;
+    this.instances = instances;
   }
 
   public toHash() {
@@ -86,7 +88,7 @@ export class ShuboxCallbacks {
             if (json.error) {
               self.shubox.callbacks.error(file, json.error);
             } else {
-              Shubox.instances.forEach((dz) => {
+              self.instances.forEach((dz) => {
                 (dz as any).options.url = json.aws_endpoint;
               });
 

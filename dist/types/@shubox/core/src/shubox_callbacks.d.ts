@@ -20,9 +20,10 @@ export interface IShuboxDefaultOptions {
 export declare class ShuboxCallbacks {
     static pasteCallback(dz: Dropzone): (event: any) => void;
     shubox: Shubox;
+    instances: Dropzone[];
     readonly replaceable: string[];
     private options;
-    constructor(shubox: Shubox);
+    constructor(shubox: Shubox, instances: Dropzone[]);
     toHash(): {
         accept(file: any, done: any): void;
         sending(file: any, xhr: any, formData: any): void;

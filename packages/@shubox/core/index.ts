@@ -56,7 +56,7 @@ export default class Shubox {
 
     for (const element of Array.from(els)) {
       this.element = element as HTMLElement;
-      this.callbacks = new ShuboxCallbacks(this as Shubox).toHash();
+      this.callbacks = new ShuboxCallbacks(this as Shubox, Shubox.instances).toHash();
       this.options = {
         ...this.options,
         ...(new ShuboxOptions(this as Shubox).toHash()),

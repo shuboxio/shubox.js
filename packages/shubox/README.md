@@ -508,7 +508,8 @@ const video = new Shubox('#webcam-video', {
 ```javascript
 const videoWithOptions = new Shubox('#webcam-video', {
   key: window.shuboxSandboxKey,
-  webcam: 'video',
+  webcam: {
+    type: 'video',
     startCamera: '#video-start',
     stopCamera: '#video-stop',
     startRecording: '#video-record-start',
