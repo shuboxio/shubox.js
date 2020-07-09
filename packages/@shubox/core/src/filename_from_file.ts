@@ -1,9 +1,9 @@
 export interface IFile {
-  name: string;
+  name: string | null | undefined;
 }
 
 export interface IPastedFile {
-  name: string;
+  name: string | null | undefined;
 }
 
 export function filenameFromFile(file: IFile | IPastedFile, date?: Date): string {
@@ -29,5 +29,7 @@ export function filenameFromFile(file: IFile | IPastedFile, date?: Date): string
     file.name = `paste-${datetime}.jpg`;
   }
 
-  return file.name;
+  return file.name
+    .replace(/^.*(\\\\|\/)/g, "")
+    .replace(/[^0-9A-Za-z.\-_]/g, "_");
 }

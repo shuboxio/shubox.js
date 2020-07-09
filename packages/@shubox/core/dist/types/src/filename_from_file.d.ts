@@ -1,7 +1,7 @@
 export interface IFile {
-    name: string;
+    name: string | null | undefined;
 }
 export interface IPastedFile {
-    name: string;
+    name: string | null | undefined;
 }
 export declare function filenameFromFile(file: IFile | IPastedFile, date?: Date): string;
