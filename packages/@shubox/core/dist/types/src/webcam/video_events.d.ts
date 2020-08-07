@@ -10,8 +10,10 @@ export declare class VideoEvents {
     stopCamera: (event?: Event | undefined) => void;
     startRecording: (event?: Event | undefined) => void;
     stopRecording: (event?: Event | undefined) => void;
+    recordingStopped: (event?: Event | undefined) => void;
     wireUpSelectorsAndEvents(): void;
     wireUp(eventName: string, selector?: string): void;
     videoDataAvailable: (event: BlobEvent) => void;
     mediaRecorderOptions: () => object;
+    isSafari: () => boolean;
 }

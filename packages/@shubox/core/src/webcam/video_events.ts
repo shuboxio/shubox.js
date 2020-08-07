@@ -58,13 +58,23 @@ export class VideoEvents {
   public startRecording = (event?: Event) => {
     event?.preventDefault();
     if (!this.webcam.dom.video?.srcObject) { return; }
+    if (typeof MediaRecorder === "undefined" && this.isSafari()) {
+      window.console!.warn(
+        `WARNING: Your web browser, Safari, does not have MediaRecorder enabled.
+         You may enable it in the application menu under:
+         Develop > Experimental Features > MediaRecorder`,
+      );
+      return;
+    }
 
     this.recordedBlobs = [];
     this.mediaRecorder = new MediaRecorder(
       this.webcam.dom.video?.srcObject as MediaStream,
       this.mediaRecorderOptions(),
     );
+
     this.mediaRecorder.ondataavailable = this.videoDataAvailable;
+    this.mediaRecorder.onstop = this.recordingStopped;
     this.mediaRecorder.start(10);
 
     if (this.webcam.webcamOptions.timeLimit) {
@@ -80,21 +90,19 @@ export class VideoEvents {
 
   public stopRecording = (event?: Event) => {
     event?.preventDefault();
-    if (!this.mediaRecorder || this.alreadyStopped) { return; }
+    if (!this.mediaRecorder || this.mediaRecorder.state !== "recording" || this.alreadyStopped) { return; }
 
-    const file: any = new Blob(this.recordedBlobs, {type: "video/webm"});
+    this.mediaRecorder.stop();
+  }
+
+  public recordingStopped = (event?: Event) => {
+    event?.preventDefault();
+
+    const extension = this.isSafari() ? "mp4" : "webm";
+    const file: any = new Blob(this.recordedBlobs, {type: `video/${extension}`});
     const dateTime = (new Date()).toISOString();
-    file.name = `webcam-video-${dateTime}.webm`;
-
-    try {
-      this.mediaRecorder.stop();
-    } catch (_) {
-      /* no-op */
-    }
-
-    this.alreadyStopped = true;
+    file.name = `webcam-video-${dateTime}.${extension}`;
     this.webcam.dom.video.removeEventListener("click", this.stopRecording);
-    this.webcam.webcamOptions.recordingStopped?.call(this, this.webcam, file);
     this.webcam.dropzone.addFile(file);
     this.webcam.dom.finalize(file as Blob);
   }
@@ -125,7 +133,10 @@ export class VideoEvents {
   public mediaRecorderOptions = (): object => {
     let mimeType = "";
 
-    if (MediaRecorder.isTypeSupported("video/webm;codecs=vp9")) {
+    if (typeof(MediaRecorder.isTypeSupported) === "undefined" && this.isSafari()) {
+      mimeType = "video/mp4";
+
+    } else if (MediaRecorder.isTypeSupported("video/webm;codecs=vp9")) {
       mimeType = "video/webm;codecs=vp9";
 
     } else if (MediaRecorder.isTypeSupported('video/webm;codecs="vp8,opus"')) {
@@ -139,5 +150,10 @@ export class VideoEvents {
     }
 
     return { mimeType };
+  }
+
+  public isSafari = () => {
+    const ua = navigator.userAgent.toLowerCase();
+    return ua.indexOf("safari/") > -1 && ua.indexOf("chrome/") < 0;
   }
 }

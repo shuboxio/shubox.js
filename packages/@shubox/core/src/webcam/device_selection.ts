@@ -44,7 +44,9 @@ export class DeviceSelection {
   }
 
   public handleError(error: Error) {
-    console.log("navigator.MediaDevices.getUserMedia error: ", error.message, error.name);
+    window.console!.log(
+      "navigator.MediaDevices.getUserMedia error: ", error.message, error.name,
+    );
   }
 
   public updateAudioIn = (event: Event) => {

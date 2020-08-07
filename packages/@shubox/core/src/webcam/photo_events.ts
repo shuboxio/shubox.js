@@ -76,7 +76,7 @@ export class PhotoEvents {
     this.wireUp("takePhoto");
 
     if (this.webcam.webcamOptions?.startCapture) {
-      console.warn(
+      window.console!.warn(
         "`startCapture` is being deprecated in favor of `takePhoto`. Use `takePhoto` instead.",
       );
       this.wireUp("takePhoto", this.webcam.webcamOptions.startCapture);
