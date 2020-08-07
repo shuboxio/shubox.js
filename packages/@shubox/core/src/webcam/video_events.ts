@@ -128,6 +128,9 @@ export class VideoEvents {
     if (MediaRecorder.isTypeSupported("video/webm;codecs=vp9")) {
       mimeType = "video/webm;codecs=vp9";
 
+    } else if (MediaRecorder.isTypeSupported('video/webm;codecs="vp8,opus"')) {
+      mimeType = 'video/webm;codecs="vp8,opus"';
+
     } else if (MediaRecorder.isTypeSupported("video/webm;codecs=vp8")) {
       mimeType = "video/webm;codecs=vp8";
 
