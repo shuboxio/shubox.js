@@ -33,6 +33,7 @@ export declare class ShuboxCallbacks {
         uploadProgress(file: any, progress: any, bytesSent: any): void;
     };
     _updateFormValue(file: any, templateName: any): void;
+    _placeCursorAfterText(el: HTMLInputElement, text: string): void;
     _isFormElement(): boolean;
     _isAppendingText(): boolean;
     _insertableAtCursor(el: HTMLInputElement): boolean;

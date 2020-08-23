@@ -204,6 +204,7 @@ work with localhost.
   public _updateFormValue(file, templateName) {
     const el = this.shubox.element as HTMLInputElement;
     let interpolatedText = "";
+    let uploadingText = "";
 
     // If we're processing the successTemplate, and the user instead used
     // the deprecated "s3urlTemplate" option, then rename the template name
@@ -224,8 +225,27 @@ work with localhost.
       interpolatedText = interpolatedText.replace(`{{${key}}}`, file[key]);
     }
 
-    if (this._insertableAtCursor(el)) {
+    if (this.shubox.options.uploadingTemplate) {
+      uploadingText = this.shubox.options.uploadingTemplate;
+
+      for (const key of this.replaceable) {
+        uploadingText = uploadingText.replace(`{{${key}}}`, file[key]);
+      }
+    }
+
+    // Determine where to place the uploaded file; Replacing the
+    // uploadingTemplate, at cursor, at the end, or replace the
+    // whole field.
+    if (
+      (templateName === "successTemplate" || templateName === "s3urlTemplate")
+      && !!this.shubox.options.uploadingTemplate
+    ) {
+      el.value = el.value.replace(uploadingText, interpolatedText);
+      this._placeCursorAfterText(el, interpolatedText);
+
+    } else if (this._insertableAtCursor(el)) {
       insertAtCursor(el, interpolatedText);
+      this._placeCursorAfterText(el, interpolatedText);
 
     } else if (this._isAppendingText()) {
       el.value = el.value + interpolatedText;
@@ -233,6 +253,13 @@ work with localhost.
     } else {
       el.value = interpolatedText;
     }
+  }
+
+  public _placeCursorAfterText(el: HTMLInputElement, text: string): void {
+    let pos = el.value.indexOf(text);
+    pos = pos + text.length;
+    el.setSelectionRange(pos, pos);
+    el.focus();
   }
 
   public _isFormElement(): boolean {

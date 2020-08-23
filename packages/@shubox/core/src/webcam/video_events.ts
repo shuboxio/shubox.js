@@ -105,6 +105,7 @@ export class VideoEvents {
     this.webcam.dom.video.removeEventListener("click", this.stopRecording);
     this.webcam.dropzone.addFile(file);
     this.webcam.dom.finalize(file as Blob);
+    this.webcam.webcamOptions.recordingStopped?.call(this, this.webcam);
   }
 
   public wireUpSelectorsAndEvents() {

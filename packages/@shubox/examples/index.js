@@ -92,15 +92,17 @@ new Shubox('#shubox--textarea', {
 new Shubox('#shubox--textarea--cursor', {
   key: window.shuboxSandboxKey,
   clickable: null,
-  successTemplate: ' {{s3url}} ',
+  uploadingTemplate: "![Uploading {{name}}...]()",
+  successTemplate: "![{{name}}]({{s3url}})",
   textBehavior: 'insertAtCursor',
 })
 
 new Shubox('#shubox--textarea--append', {
   key: window.shuboxSandboxKey,
   clickable: null,
-  successTemplate: ' See? Told you. Right after --> {{s3url}}',
   textBehavior: 'append',
+  uploadingTemplate: "![Uploading {{name}}...]()",
+  successTemplate: "![{{name}}]({{s3url}})",
 })
 
 new Shubox('#shubox--textarea--replace', {
@@ -109,6 +111,8 @@ new Shubox('#shubox--textarea--replace', {
   // used intentionally to display deprecation warning
   s3urlTemplate: 'Replaced with: {{s3url}} ',
   textBehavior: 'replace',
+  uploadingTemplate: "![Uploading {{name}}...]()",
+  successTemplate: "![{{name}}]({{s3url}})",
 })
 
 new Shubox('#avatar-events', {
