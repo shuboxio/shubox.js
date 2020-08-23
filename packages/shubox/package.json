@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "cryptiles": "^4.1.2",
-    "deep-extend": "^0.5.1",
+    "deep-extend": "^0.6.0",
     "lodash": "^4.17.11",
     "randomatic": "^3.0.0",
     "webpack": "^4.3.0",
