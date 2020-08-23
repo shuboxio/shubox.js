@@ -4,6 +4,8 @@ Shubox.js Changes
 Master
 ------
 
+* Turn off the camera's streams when finished recording in addition to explicitly stopping the camera
+
 v0.5.0
 ------
 

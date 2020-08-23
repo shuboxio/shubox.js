@@ -47,9 +47,7 @@ export class VideoEvents {
   public stopCamera = (event?: Event) => {
     event?.preventDefault();
 
-    const src = (this.webcam.dom.video?.srcObject as MediaStream);
-    src?.getTracks().forEach((track) => { track?.stop(); });
-
+    this._stopTracks();
     this.webcam.element.addEventListener("click", this.startCamera);
     this.webcam.dom.toggleStopped();
     this.webcam.webcamOptions.cameraStopped?.call(this, this.webcam);
@@ -92,7 +90,13 @@ export class VideoEvents {
     event?.preventDefault();
     if (!this.mediaRecorder || this.mediaRecorder.state !== "recording" || this.alreadyStopped) { return; }
 
+    this._stopTracks();
     this.mediaRecorder.stop();
+  }
+
+  public _stopTracks = () => {
+    const src = (this.webcam.dom.video?.srcObject as MediaStream);
+    src?.getTracks().forEach((track) => { track?.stop(); });
   }
 
   public recordingStopped = (event?: Event) => {

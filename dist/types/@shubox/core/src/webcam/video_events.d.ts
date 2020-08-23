@@ -10,6 +10,7 @@ export declare class VideoEvents {
     stopCamera: (event?: Event | undefined) => void;
     startRecording: (event?: Event | undefined) => void;
     stopRecording: (event?: Event | undefined) => void;
+    _stopTracks: () => void;
     recordingStopped: (event?: Event | undefined) => void;
     wireUpSelectorsAndEvents(): void;
     wireUp(eventName: string, selector?: string): void;
