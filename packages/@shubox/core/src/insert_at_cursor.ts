@@ -5,6 +5,7 @@ export function insertAtCursor(el: HTMLInputElement, myValue: string): void {
     el.focus();
     const sel = document.selection.createRange();
     sel.text = myValue;
+
   } else if (window.navigator.userAgent.indexOf("Edge") > -1) {
     const startPos = el.selectionStart || 0;
     const endPos = el.selectionEnd || 0;
@@ -17,6 +18,7 @@ export function insertAtCursor(el: HTMLInputElement, myValue: string): void {
 
     el.focus();
     el.setSelectionRange(pos, pos);
+
   } else if (el.selectionStart || el.selectionStart === 0) {
     const startPos = el.selectionStart || 0;
     const endPos = el.selectionEnd || 0;
@@ -24,6 +26,7 @@ export function insertAtCursor(el: HTMLInputElement, myValue: string): void {
       el.value.substring(0, startPos) +
       myValue +
       el.value.substring(endPos, el.value.length);
+
   } else {
     el.value += myValue;
   }
