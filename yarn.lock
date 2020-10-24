@@ -901,9 +901,9 @@
   integrity sha512-15z4KlDUIm1AZmfCw0qK5ejIRSAvRpsr27X7ybiD+6EQlBWCF7BueYI+PPwqK/1jXaNkFQoK2gTByN0V7X+FEg==
 
 "@types/dropzone@^5.0.4":
-  version "5.5.2"
-  resolved "https://registry.yarnpkg.com/@types/dropzone/-/dropzone-5.5.2.tgz#2450ae1adda24d19a8f99bfd47fa400ce5810dc6"
-  integrity sha1-JFCuGt2iTRmo+Zv9R/pADOWBDcY=
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/@types/dropzone/-/dropzone-5.7.2.tgz#64d2dc5f151897bddb26bc096c0a568a58e92a59"
+  integrity sha512-UJfGsb+8riJy1kkckxiOi9clzTt/sq9HNZsXLqb5Pl3vSFrV3QoYsY7MR7dCjII7JuOONmWWWfghiEQa3SnuKg==
   dependencies:
     "@types/jquery" "*"
 
