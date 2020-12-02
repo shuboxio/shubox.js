@@ -20,4 +20,5 @@ export default class Shubox {
     webcam?: Webcam;
     constructor(selector?: string, options?: IUserOptions);
     init(options: object): void;
+    upload(file: Dropzone.DropzoneFile): void;
 }
