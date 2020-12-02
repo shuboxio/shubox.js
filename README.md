@@ -528,6 +528,20 @@ const videoWithOptions = new Shubox('#webcam-video', {
 })
 ```
 
+### Uploading a file directly from javascript
+
+There are some cases where you might have a file object programmatically
+generated for you and all you want to do is upload it to S3 yourself. Using any
+combination of the options we provide to you, you can accomplish this by
+explicitly calling `upload` on the instantiated Shubox object. Example:
+
+```javascript
+const shuboxObject = new Shubox('#element', { key: window.shuboxSandboxKey })
+const file = new File(["contents"], "file.png", { type: "image/png" })
+
+shuboxObject.upload(file)
+```
+
 # Library Documentation
 
 The following section outlines what the _Shubox specific_ options are for the
