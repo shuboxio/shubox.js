@@ -98,9 +98,6 @@ export default class Shubox {
   }
 
   public upload(file: Dropzone.DropzoneFile) {
-    const instance = Shubox.instances[0];
-    if(!instance) { return }
-
-    instance.addFile(file);
+    this.element.dropzone.addFile(file);
   }
 }
