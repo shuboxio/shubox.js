@@ -24,7 +24,7 @@
     "deep-extend": "^0.6.0",
     "lodash": "^4.17.11",
     "randomatic": "^3.0.0",
-    "webpack": "^4.3.0",
+    "webpack": "^5.12.3",
     "webpack-cli": "^3.1.1"
   },
   "gitHead": "e89d5d8eed9205a7323e59688ccaefc85b89d4be"
