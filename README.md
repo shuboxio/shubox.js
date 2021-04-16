@@ -106,7 +106,7 @@ import Shubox from 'shubox'
 Download and embed the shubox js file directly in your html
 
 ```sh
-$ curl -O https://unpkg.com/shubox
+$ curl -L https://unpkg.com/shubox -o public/shubox.umd.js
 ```
 
 In your HTML:
