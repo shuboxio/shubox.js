@@ -106,7 +106,7 @@ import Shubox from 'shubox'
 Download and embed the shubox js file directly in your html
 
 ```sh
-$ curl -O https://unpkg.com/shubox
+$ curl -L https://unpkg.com/shubox -o public/shubox.umd.js
 ```
 
 In your HTML:
@@ -528,6 +528,20 @@ const videoWithOptions = new Shubox('#webcam-video', {
 })
 ```
 
+### Uploading a file directly from javascript
+
+There are some cases where you might have a file object programmatically
+generated for you and all you want to do is upload it to S3 yourself. Using any
+combination of the options we provide to you, you can accomplish this by
+explicitly calling `upload` on the instantiated Shubox object. Example:
+
+```javascript
+const shuboxObject = new Shubox('#element', { key: window.shuboxSandboxKey })
+const file = new File(["contents"], "file.png", { type: "image/png" })
+
+shuboxObject.upload(file)
+```
+
 # Library Documentation
 
 The following section outlines what the _Shubox specific_ options are for the
@@ -647,6 +661,9 @@ cdn: 'https://cdn.example.com' // will replace "https://s3.amazonaws.com/bucketn
 
 ### `s3Key`:
 
+(**NOTE:** the `s3Key` option is not permitted when using the
+[sandbox](#using-the-sandbox))
+
 Do you want any/all files uploaded through one of your Shubox uploaders to have
 an _exact_ S3 key? The default behavior is for Shubox to send files up to your
 bucket with the key `/[random string]/filename.ext` so that you will not
@@ -659,9 +676,21 @@ overwrite unless you deliberately mean to. For example, you're logged in as
 single photo associated with it, like
 `/dealership/:dealership_id/cars/:id/photo.jpg`.
 
+If you are looking to customize _part_ of the s3Key, but want to use some values
+that are determined at the time a file is uploaded -- like the filename -- then
+you can interpolate some values with representations in the string like:
+
+* `{{domainSlug}}` - the domain slug
+* `{{uuid}}` - uuid (the random generated string)
+* `{{filename}}` - file name (duh)
+* `{{fileExtension}}` - file extension (the "jpg" part of "hello.jpg")
+* `{{baseFilename}}` - base filename (the "hello" part of "hello.jpg")
+
+
 ```javascript
 s3Key: '/[random letters and numbers]/filename.extension' // default
 s3Key: '/users/avatars/sam.jpg'
+s3Key: '/client-name/project-name/{{filename}}'
 ```
 
 ### `transformKey`:

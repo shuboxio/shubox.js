@@ -9,7 +9,7 @@
   "license": "MIT",
   "dependencies": {
     "@shubox/core": "^0.5.1",
-    "dropzone": "^5.7.1"
+    "dropzone": "5.7.1"
   },
   "scripts": {
     "prepack": "cp ../../README.md .",
