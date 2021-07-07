@@ -901,9 +901,9 @@
   integrity sha512-15z4KlDUIm1AZmfCw0qK5ejIRSAvRpsr27X7ybiD+6EQlBWCF7BueYI+PPwqK/1jXaNkFQoK2gTByN0V7X+FEg==
 
 "@types/dropzone@^5.0.4":
-  version "5.5.2"
-  resolved "https://registry.yarnpkg.com/@types/dropzone/-/dropzone-5.5.2.tgz#2450ae1adda24d19a8f99bfd47fa400ce5810dc6"
-  integrity sha1-JFCuGt2iTRmo+Zv9R/pADOWBDcY=
+  version "5.7.4"
+  resolved "https://registry.yarnpkg.com/@types/dropzone/-/dropzone-5.7.4.tgz#667e6f22fac6428db7553663fd1e31547d994161"
+  integrity sha512-9kLJ2YAmVRWYrHvDoa95pQzHF0HUMKcznsS7FM1Mht5Yieec+HMB6Ybfm+ocvLjvFCvgyYGFTp4nzNFxhZmo3g==
   dependencies:
     "@types/jquery" "*"
 
@@ -3101,7 +3101,7 @@ dropzone@5.5.1:
   resolved "https://registry.yarnpkg.com/dropzone/-/dropzone-5.5.1.tgz#06e2f513e61d6aa363d4b556f18574f47cf7ba26"
   integrity sha512-3VduRWLxx9hbVr42QieQN25mx/I61/mRdUSuxAmDGdDqZIN8qtP7tcKMa3KfpJjuGjOJGYYUzzeq6eGDnkzesA==
 
-dropzone@^5.7.1:
+dropzone@5.7.1:
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/dropzone/-/dropzone-5.7.1.tgz#8e41a85879ff145562e8fcce39c6ff619dce81be"
   integrity sha512-eqcJafupMKRlVUihZtsLkzLn02WTPUMHeImP5ZtWm3ERObC/dv15te0qqn/X2rEKaSqRC0pNTHUBPgrPWcP52w==
