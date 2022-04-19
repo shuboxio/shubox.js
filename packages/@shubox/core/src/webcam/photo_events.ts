@@ -21,8 +21,8 @@ export class PhotoEvents {
       audio: false,
       video: {
         ... {
-          height: this.webcam.element.offsetHeight,
-          width: this.webcam.element.offsetWidth,
+          height: this.webcam.webcamOptions.portraitMode ? this.webcam.element.offsetWidth : this.webcam.element.offsetHeight,
+          width: this.webcam.webcamOptions.portraitMode ? this.webcam.element.offsetHeight : this.webcam.element.offsetWidth
         },
         ...constraints.video,
       },
