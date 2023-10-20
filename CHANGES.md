@@ -4,6 +4,7 @@ Shubox.js Changes
 Master
 ------
 
+* Upgrade lerna (7.4.1)
 * Update logic to detect and set codec(s) when capturing video/audio.
 * Upgrade typescript to `3.9.7` (yes. it's behind).
 * Add .tool-versions file to specify versions of nodejs and python to use in building.
