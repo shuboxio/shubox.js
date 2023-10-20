@@ -138,20 +138,23 @@ export class VideoEvents {
   public mediaRecorderOptions = (): object => {
     let mimeType = "";
 
-    if (typeof(MediaRecorder.isTypeSupported) === "undefined" && this.isSafari()) {
-      mimeType = "video/mp4";
+    if (MediaRecorder.isTypeSupported("video/webm;codecs=vp9,opus")) {
+      mimeType = "video/webm;codecs=vp9,opus";
+
+    } else if (MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus")) {
+      mimeType = "video/webm;codecs=vp8,opus";
 
     } else if (MediaRecorder.isTypeSupported("video/webm;codecs=vp9")) {
       mimeType = "video/webm;codecs=vp9";
-
-    } else if (MediaRecorder.isTypeSupported('video/webm;codecs="vp8,opus"')) {
-      mimeType = 'video/webm;codecs="vp8,opus"';
 
     } else if (MediaRecorder.isTypeSupported("video/webm;codecs=vp8")) {
       mimeType = "video/webm;codecs=vp8";
 
     } else if (MediaRecorder.isTypeSupported("video/webm")) {
       mimeType = "video/webm";
+
+    } else if (MediaRecorder.isTypeSupported("video/mp4;codecs=avc1,mp4a")) {
+      mimeType = "video/mp4;codecs=avc1,mp4a";
     }
 
     return { mimeType };
