@@ -4,6 +4,20 @@ Shubox.js Changes
 Master
 ------
 
+* Upgrade typescript to `3.9.7` (yes. it's behind)
+* Add .tool-versions file to specify versions of nodejs and python to use in building
+* Update scripts to fall back to legacy ssl provider
+
+v0.5.2
+------
+
+* Lock Dropzone to 5.7.1
+
+v0.5.1
+-------
+
+* Add method to directly upload generated file objects. See [README](https://github.com/shuboxio/shubox.js#uploading-a-file-directly-from-javascript).
+* Lock Dropzone to 5.5.1
 * Turn off the camera's streams when finished recording in addition to explicitly stopping the camera
 
 v0.5.0
