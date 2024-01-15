@@ -1021,22 +1021,13 @@ yarn start
 
 ![](https://shubox.io/images/README/localhost-9001.png)
 
-## Lerna
+## Setup
 
 ```sh
-$ lerna bootstrap
+yarn install
+yarn prebuild
+yarn build
 ```
-
-Bootstrap the packages in the current Lerna repo.
-Installs all of their dependencies and links any cross-dependencies. Including
-all local dependencies
-
-When run, this command will:
-
-1. `yarn install` all external dependencies of each package.
-2. Symlink together all Lerna `packages` that are dependencies of each other.
-3. `npm run prepublish` in all bootstrapped packages.
-4. `npm run prepare` in all bootstrapped packages.
 
 # Code of Conduct
 
