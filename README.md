@@ -986,6 +986,7 @@ cd ./shubox.js
 *Install dependencies*
 
 ```sh
+npm install --global yarn
 yarn install
 ```
 
