@@ -467,9 +467,9 @@
   integrity sha1-yNZFUG2w0V9Kr9TfqHP0Q62H6lk=
 
 "@types/dom-mediacapture-record@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@types/dom-mediacapture-record/-/dom-mediacapture-record-1.0.5.tgz#63abc431b95e6af31d3c2c4392e1f31fd0b753c8"
-  integrity sha512-15z4KlDUIm1AZmfCw0qK5ejIRSAvRpsr27X7ybiD+6EQlBWCF7BueYI+PPwqK/1jXaNkFQoK2gTByN0V7X+FEg==
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/@types/dom-mediacapture-record/-/dom-mediacapture-record-1.0.19.tgz#27ade00734877fc83323b9b0550f259b08903841"
+  integrity sha512-Cz/85z3YTuUPnXrOp5MvSZZSgDkWTWvj1HgE7MWc5C8d/w/soJBXjnAoYDl4P5gmenDNNZkhXzNylGqxS1FzOw==
 
 "@types/dropzone@^5.0.4":
   version "5.5.2"
