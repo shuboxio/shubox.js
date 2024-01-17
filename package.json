@@ -1,42 +1,14 @@
 {
   "name": "shubox.js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Shubox javascript SDK",
   "main": "index.js",
   "author": "joel@shubox.io",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf dist packages/**/dist; find ./packages/@shubox -type f -not -path './packages/@shubox/examples/*' -name '*.js' -delete",
-    "compile": "tsc",
-    "dist": "node scripts/dist-to-packages.js",
-    "predist": "yarn compile",
-    "dev": "webpack --mode development",
-    "lint": "tslint --fix -c tslint.json --project .",
-    "prebuild": "yarn clean && yarn lint && yarn dist",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider lerna run build",
-    "prerelease": "yarn build",
-    "release": "find packages -name \\*.tgz | xargs rm && lerna publish",
-    "start": "NODE_OPTIONS=--openssl-legacy-provider lerna run --scope @shubox/examples --stream start",
-    "test": "yarn compile && mocha --require babel-polyfill --require babel-register --require jsdom-global/register -R spec dist/modules/@shubox/tests/*_test.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "private": true,
+  "keywords": [],
   "workspaces": [
-    "packages/*",
-    "packages/@shubox/*",
-    "packages/@types/*"
-  ],
-  "devDependencies": {
-    "@types/webpack-env": "^1.13.9",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0",
-    "express": "4.17.3",
-    "lerna": "^7.4.1",
-    "rimraf": "^5.0.5",
-    "ts-loader": "^5.3.3",
-    "tslint": "^6.1.3",
-    "typescript": "^3.9.7",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
-  }
+  ]
 }
