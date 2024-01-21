@@ -1,32 +1,8 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "es2015",
-    "moduleResolution": "node",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "es2015",
-      "scripthost"
-    ],
-    "allowSyntheticDefaultImports": true,
-    "declaration": true,
-    "inlineSourceMap": true,
-    "pretty": true,
-    "strictNullChecks": true,
-    "rootDir": "packages",
-    "baseUrl": "packages",
-    "outDir": "dist/modules",
-    "declarationDir": "dist/types",
-    "paths": {
-      "*": ["*"]
-    }
-  },
-  "include": [
-    "packages/*/src/**/*.ts",
-    "packages/*/index.ts",
-    "packages/@shubox/*/src/**/*.ts",
-    "packages/@shubox/*/index.ts",
-    "packages/@shubox/tests/*.ts"
+  "files": [],
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/examples" },
+    { "path": "packages/tests" }
   ]
 }

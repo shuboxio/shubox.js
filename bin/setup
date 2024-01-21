@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+# Exit if any subcommand fails
+set -e
+
+npm install -w @shubox/core
+npm install -w @shubox/tests
+npm install -w @shubox/examples
+npm install

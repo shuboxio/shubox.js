@@ -1,0 +1,41 @@
+{
+  "name": "@shubox/tests",
+  "version": "0.5.2",
+  "description": "Shubox Client SDK: Tests",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shuboxio/shubox.js.git"
+  },
+  "author": "joel@shubox.io",
+  "main": "dist/module/index.js",
+  "types": "dist/types/index.d.ts",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.11",
+    "@types/chai-dom": "^1.11.3",
+    "@types/jsdom": "^21.1.6",
+    "@types/mocha": "^10.0.6",
+    "chai": "^5.0.0",
+    "chai-dom": "^1.12.0",
+    "jsdom": "^24.0.0",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^10.2.0"
+  },
+  "dependencies": {
+    "@shubox/core": "^0.5.1"
+  },
+  "bugs": {
+    "url": "https://github.com/shuboxio/shubox.js/issues"
+  },
+  "homepage": "https://github.com/shuboxio/shubox.js#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": []
+}
