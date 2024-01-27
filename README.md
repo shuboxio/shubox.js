@@ -1007,12 +1007,6 @@ echo "var shuboxSandboxKey = '[SANDBOX KEY GOES HERE]';" > \
   ./packages/@shubox/examples/public/shubox_config.js
 ```
 
-*Run the tests*
-
-```sh
-yarn test
-```
-
 *Run local example server*
 
 ```sh

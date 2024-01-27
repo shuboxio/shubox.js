@@ -6,7 +6,6 @@
   },
   "references": [
     { "path": "packages/core" },
-    { "path": "packages/examples" },
-    { "path": "packages/tests" }
+    { "path": "packages/examples" }
   ]
 }

@@ -4,6 +4,5 @@
 set -e
 
 npm install -w @shubox/core
-npm install -w @shubox/tests
 npm install -w @shubox/examples
 npm install
