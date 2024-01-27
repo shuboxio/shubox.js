@@ -1,5 +1,5 @@
 import * as Chai from "chai";
-import {filenameFromFile} from "../core/src/filename_from_file";
+import { filenameFromFile } from "../../core/src/filename_from_file";
 
 const expect = Chai.expect;
 
@@ -17,8 +17,8 @@ describe("filenameFromFile", () => {
 
   it("sanitizes file name", () => {
     const spaces = { name: "photo with spaces.jpg" };
-    const randomChars =  { name: 'file-.webm_; echo "hello";.jpg'};
-    const slashes = { name: `.//file\\name.jpg`};
+    const randomChars = { name: 'file-.webm_; echo "hello";.jpg' };
+    const slashes = { name: `.//file\\name.jpg` };
 
     expect(filenameFromFile(spaces)).to.equal("photo_with_spaces.jpg");
     expect(filenameFromFile(randomChars)).to.equal("file-.webm___echo__hello__.jpg");

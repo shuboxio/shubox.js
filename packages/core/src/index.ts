@@ -1,7 +1,7 @@
 import Dropzone from "dropzone";
-import { ShuboxCallbacks } from "./src/shubox_callbacks";
-import { ShuboxOptions } from "./src/shubox_options";
-import { IWebcamOptions, Webcam } from "./src/webcam";
+import { ShuboxCallbacks } from "./shubox_callbacks";
+import { ShuboxOptions } from "./shubox_options";
+import { IWebcamOptions, Webcam } from "./webcam";
 
 export interface IUserOptions {
   signatureUrl?: string;

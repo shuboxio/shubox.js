@@ -1,5 +1,9 @@
 {
   "files": [],
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist"
+  },
   "references": [
     { "path": "packages/core" },
     { "path": "packages/examples" },

@@ -2,7 +2,7 @@
   "name": "shubox.js",
   "version": "0.2.0",
   "description": "Shubox javascript SDK",
-  "main": "index.js",
+  "main": "dist/index.js",
   "author": "joel@shubox.io",
   "license": "MIT",
   "scripts": {

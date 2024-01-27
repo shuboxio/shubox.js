@@ -7,6 +7,7 @@
     "url": "git+https://github.com/shuboxio/shubox.js.git"
   },
   "author": "joel@shubox.io",
+  "main": "dist/index.js",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -21,6 +22,5 @@
     "url": "https://github.com/shuboxio/shubox.js/issues"
   },
   "homepage": "https://github.com/shuboxio/shubox.js#readme",
-  "main": "index.js",
   "keywords": []
 }

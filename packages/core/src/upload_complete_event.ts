@@ -1,4 +1,4 @@
-import Shubox from "@shubox/core";
+import Shubox from "@shubox/core/src";
 import { filenameFromFile } from "./filename_from_file";
 import { objectToFormData } from "./object_to_form_data";
 

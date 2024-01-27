@@ -1,5 +1,5 @@
 import * as Chai from "chai";
-import {Variant} from "../core/src/variant";
+import { Variant } from "../../core/src/variant";
 
 const expect = Chai.expect;
 

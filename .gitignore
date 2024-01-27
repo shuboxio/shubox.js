@@ -1,5 +1,6 @@
 node_modules
 *.log
 *.tgz
-packages/@shubox/**/*.js
-!packages/@shubox/examples/index.js
+*.tsbuildinfo
+packages/**/*.js
+**/dist
