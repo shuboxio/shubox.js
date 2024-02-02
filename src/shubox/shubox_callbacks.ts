@@ -1,5 +1,5 @@
 import Dropzone from "dropzone";
-import Shubox from "@shubox/core/src";
+import Shubox from "./index";
 import { filenameFromFile } from "./filename_from_file";
 import { insertAtCursor } from "./insert_at_cursor";
 import { objectToFormData } from "./object_to_form_data";

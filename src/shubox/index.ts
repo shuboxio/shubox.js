@@ -26,7 +26,7 @@ export default class Shubox {
 
   constructor(selector: string = ".shubox", options: IUserOptions = {}) {
     this.selector = selector;
-    this.element = new HTMLElement;
+    this.element = document.createElement('div') as HTMLDivElement;
 
     if (options.signatureUrl) {
       this.signatureUrl = options.signatureUrl;

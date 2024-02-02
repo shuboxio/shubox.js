@@ -7,7 +7,8 @@
     "rules": {
       "no-console": false,
       "no-debugger": false,
-      "no-empty": [true, "allow-empty-functions"]
+      "no-empty": [true, "allow-empty-functions"],
+      "no-unused-variable": false
     },
     "rulesDirectory": []
 }

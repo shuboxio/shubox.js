@@ -1,4 +1,4 @@
-import Shubox from "@shubox/core/src";
+import Shubox from "./index";
 
 export class ShuboxOptions {
   public shubox: Shubox;

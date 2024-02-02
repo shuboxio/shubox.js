@@ -1,2 +1,9 @@
-import Shubox from '@shubox/core';
-export default Shubox;
+import Shubox from './shubox/index';
+
+declare global {
+  interface Window {
+    Shubox: any;
+  }
+}
+
+window.Shubox = Shubox;
