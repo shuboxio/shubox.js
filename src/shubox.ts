@@ -7,3 +7,5 @@ declare global {
 }
 
 window.Shubox = Shubox;
+
+export default Shubox;
