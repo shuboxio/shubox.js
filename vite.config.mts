@@ -1,5 +1,4 @@
 import { defineConfig } from "vite";
-
 import typescript from "@rollup/plugin-typescript";
 import path from "path";
 import { typescriptPaths } from "rollup-plugin-typescript-paths";
@@ -22,9 +21,7 @@ export default defineConfig({
     minify: true,
     reportCompressedSize: true,
     lib: {
-      entry: path.resolve(__dirname, "src/shubox.ts"),
-      fileName: "shubox",
-      formats: ["es", "cjs"],
+      entry: path.resolve(__dirname, "src/shubox.ts")
     },
     rollupOptions: {
       external: [],
@@ -38,6 +35,17 @@ export default defineConfig({
           outDir: "dist",
         }),
       ],
+      output: [
+        {
+          format: "es",
+          entryFileNames: "[name].[format].js",
+        },
+        {
+          format: "umd",
+          name: "Shubox",
+          entryFileNames: "[name].[format].js",
+        },
+      ]
     },
   },
 });

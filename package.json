@@ -1,17 +1,14 @@
 {
-  "name": "Shubox",
+  "name": "shubox",
   "version": "1.0.0",
   "description": "Shubox javascript SDK",
   "author": "joel@shubox.io",
   "license": "MIT",
   "keywords": [],
-  "exports": {
-    ".": {
-      "import": "./dist/shubox.es.js"
-    }
-  },
+  "main": "./dist/shubox.umd.js",
   "module": "./dist/shubox.es.js",
   "typings": "./dist/shubox.d.ts",
+  "type": "module",
   "files": [
     "dist"
   ],
