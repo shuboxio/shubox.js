@@ -2,5 +2,5 @@ node_modules
 *.log
 *.tgz
 *.tsbuildinfo
-packages/**/*.js
 **/dist
+demo/shubox_config.js

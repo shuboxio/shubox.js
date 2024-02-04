@@ -3,6 +3,22 @@
 # Exit if any subcommand fails
 set -e
 
-npm install -w @shubox/core
-npm install -w @shubox/examples
+# Install dependencies
 npm install
+
+# Build HTML files for the demo
+./bin/build_html.rb
+
+# Create config file that the demo pages pulls in
+if [ ! -f ./demo/javascript/shubox_config.js ]; then
+	cp \
+		./demo/javascript/shubox_config_sample.js \
+		./demo/javascript/shubox_config.js
+	echo ""
+	echo "Don't forget to place your sandbox key in ./demo/javascript/shubox_config.js."
+	echo ""
+	echo "Get that sandbox key at:"
+	echo ""
+	echo "	https://dashboard.shubox.io/domains/sandbox/key.txt"
+	echo ""
+fi
