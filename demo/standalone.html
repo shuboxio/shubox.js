@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Shubox -->
+  <script src="javascript/shubox_config.js"></script>
+  <script src="javascript/demo.js"></script>
+  <script type="module" src="../src/shubox.ts"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/side-menu.css">
+  <link rel="stylesheet" href="css/demos.css">
+  <link rel="stylesheet"
+    href="https://unpkg.com/purecss@1.0.0/build/pure-min.css"
+    integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w"
+    crossorigin="anonymous">
+
+  <!-- Everything else :) -->
+  <title>Shubox Demo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  <div id="layout">
+    <a href="#menu" id="menuLink" class="menu-link">
+      <span></span>
+    </a>
+
+    <div id="menu">
+      <div class="pure-menu">
+        <a class="pure-menu-heading" href="#">Shubox.js</a>
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item"><a href="/demo/index.html" class="pure-menu-link">Avatar Demo</a></li>
+          <li class="pure-menu-item"><a href="/demo/multiple-files.html" class="pure-menu-link">Multiple File Previews</a></li>
+          <li class="pure-menu-item"><a href="/demo/standalone.html" class="pure-menu-link">Standalone Script</a></li>
+          <li class="pure-menu-item"><a href="/demo/github.html" class="pure-menu-link">GitHub Textarea</a></li>
+          <li class="pure-menu-item"><a href="/demo/form-insert-at.html" class="pure-menu-link">Inserting Text</a></li>
+          <li class="pure-menu-item"><a href="/demo/events.html" class="pure-menu-link">Event Handlers</a></li>
+          <li class="pure-menu-item"><a href="/demo/webcam-photo.html" class="pure-menu-link">Webcam Photo</a></li>
+          <li class="pure-menu-item"><a href="/demo/webcam-video.html" class="pure-menu-link">Webcam Video</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="main">
+
+<!-- head -->
+
+<div class="header">
+  <h1>Directly Embedding JS File</h1>
+  <h2>
+    Instead of using a build toolchain like webpack you may directly embed
+    the script.
+  </h2>
+</div>
+
+<div class="content">
+  <p>
+    First, click the avatar below and select an image to upload and then view it.
+    Go for it - it'll be fun!
+  </p>
+
+  <p>
+    Second, this demo has the Shubox code embedded with a <code>script</code>
+    tag instead of using webpack, or any build tools. View source to get a look.
+  </p>
+
+  <div class="avatar-container">
+   <div id="avatar" class="avatar"></div>
+  </div>
+</div>
+
+
+<script src="/shubox.umd.js"></script>
+<script>
+new Shubox("#avatar", {
+  key: shuboxSandboxKey,
+  previewsContainer: false,
+  success: function(file) {
+    img = new Image();
+    img.onload = function() {
+      el = document.getElementById('avatar')
+      el.insertAdjacentHTML('beforeend', '<img src="'+file.s3url+'">')
+    }
+    img.src = file.s3url
+  }
+})
+</script>
+
+<!-- tail -->
+    </div>
+  </div>
+</body>
+</html>
