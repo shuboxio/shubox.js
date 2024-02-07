@@ -5,7 +5,14 @@ head = File.read('./demo/partials/head.html')
 tail = File.read('./demo/partials/tail.html')
 
 Dir.glob('./demo/*.html').each do |file|
-  contents = File.read(file).match(/(<!-- head -->\n(.*)\n<!-- tail -->)/m)[1]
+  match = File
+          .read(file)
+          .match(/(<!-- head ([a-zA-Z ]*) -->\n(.*)\n<!-- tail -->)/m)
+  contents   = match[1]
+  title      = match[2]
+  body_class = title.downcase.gsub(' ', '-')
+  head       = head.gsub(%r{<title>.*</title>}, "<title>#{title}</title>")
+  head       = head.gsub(/<body.*>/, %(<body class="#{body_class}">))
 
   File.open(file, 'w') do |f|
     f.write "#{head}\n#{contents}\n#{tail}"

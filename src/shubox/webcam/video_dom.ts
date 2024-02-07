@@ -9,7 +9,7 @@ export class VideoDom {
   public initialized: boolean = false;
 
   constructor(webcam: Webcam) {
-    this.video = new HTMLVideoElement;
+    this.video = document.createElement("video") as HTMLVideoElement;
     this.webcam = webcam;
     this.options = {
       ...{ videoTemplate: `<video muted autoplay></video>` },

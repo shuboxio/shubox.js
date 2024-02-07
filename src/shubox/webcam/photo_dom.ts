@@ -8,9 +8,9 @@ export class PhotoDom {
   public image: HTMLImageElement;
 
   constructor(webcam: Webcam) {
-    this.video = new HTMLVideoElement;
-    this.canvas = new HTMLCanvasElement;
-    this.image = new HTMLImageElement;
+    this.video = document.createElement("video") as HTMLVideoElement;
+    this.canvas = document.createElement("canvas") as HTMLCanvasElement;
+    this.image = document.createElement("img") as HTMLImageElement;
     this.webcam = webcam;
     this.options = {
       ...{

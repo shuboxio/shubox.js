@@ -4,24 +4,21 @@
 <head>
   <!-- Shubox -->
   <script src="javascript/shubox_config.js"></script>
-  <script src="javascript/demo.js"></script>
-  <script type="module" src="../src/shubox.ts"></script>
+  <script type="module" src="javascript/demo.js"></script>
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/side-menu.css">
   <link rel="stylesheet" href="css/demos.css">
-  <link rel="stylesheet"
-    href="https://unpkg.com/purecss@1.0.0/build/pure-min.css"
-    integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w"
-    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@latest/build/pure-min.css" crossorigin="anonymous">
 
   <!-- Everything else :) -->
-  <title>Shubox Demo</title>
+  <title>GitHub Textarea</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="images/favicon.ico" />
 </head>
 
-<body>
+<body class="github-textarea">
   <div id="layout">
     <a href="#menu" id="menuLink" class="menu-link">
       <span></span>
@@ -29,23 +26,25 @@
 
     <div id="menu">
       <div class="pure-menu">
-        <a class="pure-menu-heading" href="#">Shubox.js</a>
+        <a class="pure-menu-heading" href="/demo/">Shubox.js</a>
+
         <ul class="pure-menu-list">
-          <li class="pure-menu-item"><a href="/demo/index.html" class="pure-menu-link">Avatar Demo</a></li>
-          <li class="pure-menu-item"><a href="/demo/multiple-files.html" class="pure-menu-link">Multiple File Previews</a></li>
-          <li class="pure-menu-item"><a href="/demo/standalone.html" class="pure-menu-link">Standalone Script</a></li>
-          <li class="pure-menu-item"><a href="/demo/github.html" class="pure-menu-link">GitHub Textarea</a></li>
-          <li class="pure-menu-item"><a href="/demo/form-insert-at.html" class="pure-menu-link">Inserting Text</a></li>
-          <li class="pure-menu-item"><a href="/demo/events.html" class="pure-menu-link">Event Handlers</a></li>
-          <li class="pure-menu-item"><a href="/demo/webcam-photo.html" class="pure-menu-link">Webcam Photo</a></li>
-          <li class="pure-menu-item"><a href="/demo/webcam-video.html" class="pure-menu-link">Webcam Video</a></li>
+          <li class="pure-menu-item avatar-demo"><a href="/demo/index.html" class="pure-menu-link">Avatar Demo</a></li>
+          <li class="pure-menu-item multiple-files"><a href="/demo/multiple-files.html" class="pure-menu-link">Multiple File Previews</a></li>
+          <li class="pure-menu-item standalone-script"><a href="/demo/standalone.html" class="pure-menu-link">Standalone Script</a></li>
+          <li class="pure-menu-item github-textarea"><a href="/demo/github.html" class="pure-menu-link">GitHub Textarea</a></li>
+          <li class="pure-menu-item inserting-text"><a href="/demo/form-insert-at.html" class="pure-menu-link">Inserting Text</a></li>
+          <li class="pure-menu-item event-handlers"><a href="/demo/events.html" class="pure-menu-link">Event Handlers</a></li>
+          <li class="pure-menu-item webcam-photo"><a href="/demo/webcam-photo.html" class="pure-menu-link">Webcam Photo</a></li>
+          <li class="pure-menu-item webcam-video"><a href="/demo/webcam-video.html" class="pure-menu-link">Webcam Video</a></li>
+          <li class="pure-menu-item wait-for-a-variant"><a href="/demo/await_generation.html" class="pure-menu-link">Image Variants</a></li>
         </ul>
       </div>
     </div>
 
     <div id="main">
 
-<!-- head -->
+<!-- head GitHub Textarea -->
 
 <div class="header">
   <h1>A GitHub Form-Like Experience</h1>

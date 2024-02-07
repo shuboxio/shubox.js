@@ -1,13 +1,13 @@
 @keyframes blink {
-  50% {
-    opacity: 0.0;
-  }
+50% {
+  opacity: 0.0;
+}
 }
 
 @-webkit-keyframes blink {
-  50% {
-    opacity: 0.0;
-  }
+50% {
+  opacity: 0.0;
+}
 }
 
 .shubox-webcam {
@@ -94,7 +94,7 @@
   height: 9rem;
   border-radius: 50%;
   overflow: hidden;
-  background: url(avatar.png) center center no-repeat, url(white.png) left 100% no-repeat;
+  background: url(../images/avatar.png) center center no-repeat, url(../images/white.png) left 100% no-repeat;
   background-size: 4.5rem, 100% 0%;
   overflow: hidden;
 }
