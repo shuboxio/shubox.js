@@ -9,6 +9,10 @@ npm install
 # Build HTML files for the demo
 ./bin/build_html.rb
 
+# Remove the script tag from standalone.html.
+# It'll use the UMD file lower down in the body of the page.
+sed -i '' '/javascript\/demo.js/d' demo/standalone.html
+
 # Create config file that the demo pages pulls in
 if [ ! -f ./demo/javascript/shubox_config.js ]; then
 	cp \

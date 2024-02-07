@@ -1,3 +1,5 @@
+import Shubox from '../../src/shubox';
+
 new Shubox('#webcam-photo', {
   key: window.shuboxSandboxKey,
   webcam: 'photo',
@@ -13,7 +15,7 @@ new Shubox('#webcam-with-options', {
     type: 'photo',
     startCamera: '#webcam-start',
     stopCamera: '#webcam-stop',
-    startCapture: '#webcam-capture',
+    takePhoto: '#webcam-capture',
     videoInput: '.photo-videoinput',
     cameraStarted: (_webcam) => { console.log("camera started") },
     cameraStopped: (_webcam) => { console.log("camera stopped") },
