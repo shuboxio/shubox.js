@@ -5,6 +5,7 @@ import { typescriptPaths } from "rollup-plugin-typescript-paths";
 
 export default defineConfig({
   plugins: [],
+  define: { global: 'window' },
   resolve: {
     alias: [
       {

@@ -13,7 +13,7 @@
     "dist"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest --inspect-brk --pool forks --poolOptions.forks.singleFork",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
@@ -25,10 +25,13 @@
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/dom-mediacapture-record": "^1.0.5",
     "@types/dropzone": "^5.0.4",
+    "@types/jsdom": "^21.1.6",
     "@types/node": "^20.11.10",
+    "jsdom": "^24.0.0",
     "rollup-plugin-typescript-paths": "^1.5.0",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3",
-    "vite": "^5.0.12"
+    "vite": "^5.0.12",
+    "vitest": "^1.2.2"
   }
 }
