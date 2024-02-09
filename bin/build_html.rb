@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-head = File.read('./demo/partials/head.html')
-tail = File.read('./demo/partials/tail.html')
+head = File.read('./demo/partials/head.tmpl')
+tail = File.read('./demo/partials/tail.tmpl')
 
 Dir.glob('./demo/*.html').each do |file|
   match = File
