@@ -13,13 +13,14 @@
     "dist"
   ],
   "scripts": {
-    "test": "vitest --inspect-brk --pool forks --poolOptions.forks.singleFork",
+    "test-debugger": "vitest --inspect-brk --pool forks --poolOptions.forks.singleFork",
+    "test": "vitest",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vitest run && tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "dropzone": "5.9.3"
+    "dropzone": "5.7.2"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.6",
