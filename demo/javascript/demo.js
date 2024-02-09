@@ -113,6 +113,20 @@ new Shubox('#shubox--textarea--replace', {
   successTemplate: "![{{name}}]({{s3url}})",
 })
 
+new Shubox('#avatar-cropped', {
+  key: window.shuboxSandboxKey,
+  previewsContainer: false,
+  maxFiles: 1,
+
+  transformCallbacks: {
+    // once the 200x200 WEBP is created, and found, replace the image with this one
+    "200x200#.webp": function(shuboxFile) {
+      console.log(shuboxFile.transforms["200x200#.webp"].s3url)
+      document.querySelector("#avatar-cropped img").src = shuboxFile.transforms["200x200#.webp"].s3url;
+    }
+  }
+})
+
 new Shubox('#avatar-events', {
   key: window.shuboxSandboxKey,
   previewsContainer: false,
