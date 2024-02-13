@@ -23,6 +23,6 @@ if [ ! -f ./demo/javascript/shubox_config.js ]; then
 	echo ""
 	echo "Get that sandbox key at:"
 	echo ""
-	echo "	https://dashboard.shubox.io/domains/sandbox/key.txt"
+	echo "	https://dashboard.shubox.io/v2/sandbox.txt"
 	echo ""
 fi
