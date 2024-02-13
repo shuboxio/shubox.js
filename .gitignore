@@ -3,4 +3,5 @@ node_modules
 *.tgz
 *.tsbuildinfo
 **/dist
+tags.*
 demo/shubox_config.js
