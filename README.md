@@ -17,8 +17,8 @@
 ## What does this do?
 
 The Shubox mission is to take the tedium and boilerplate out of the web-based
-file storage and image manipulation story. After signing up for a shubox
-account and setting our js library up on your website(s) you will be able to:
+file storage and image manipulation story. After creating your Shubox account,
+and setting our js library up on your website(s), you will be able to:
 
 * Upload to S3, "the internet's ftp server", **_directly_ from the web browser**.
 * Manipulate and transform images and videos after they are uploaded -
@@ -70,9 +70,10 @@ announcements, or the occasional pithy tweet.
 # Installation
 
 ## Using the "Sandbox"
+
 To get things working as fast as possible we'll operate under the understanding
-that we'll use a **sandbox** domain that we've already set up. It's an
-ephemeral S3 bucket with some limitations that you can use to upload and test
+that we'll use a **sandbox** bucket that we've already set up. It's an
+ephemeral S3 bucket with limitations that you can use to upload and test
 against.
 
 ## Sign up for an account
@@ -82,7 +83,8 @@ needs to happen in order to get things working just right. We handle all of
 that stuff via the Shubox service.
 
 1. [Sign up for an account at Shubox](https://dashboard.shubox.io/sign_up)
-2. [Obtain your "Sandbox" key from the Shubox dashboard.](https://dashboard.shubox.io/domains/sandbox). You'll need this for your Javascript code when you initialize your first Shubox object.
+2. [Obtain your "Sandbox" key from the Shubox dashboard.](https://dashboard.shubox.io/v2/sandbox.txt).
+   You'll need this for your Javascript code when you initialize your first Shubox object.
 
 ## Download the Library
 
@@ -95,13 +97,13 @@ $ npm install shubox
 $ yarn add shubox
 ```
 
-Require the Shubox library in your JS.
+Require the Shubox library in your JS, via ES module:
 
 ```javascript
 import Shubox from 'shubox'
 ```
 
-### The 👴 "old school" 👵 script embed
+### Or via the UMD module (IIFE)
 
 Download and embed the shubox js file directly in your html
 
@@ -990,28 +992,28 @@ npm install --global yarn
 yarn install
 ```
 
-*Grab your "Sandbox" key from the [Shubox dashboard](https://dashboard.shubox.io/domains/sandbox).*
+*Grab your "Sandbox" key from the [Shubox dashboard](https://dashboard.shubox.io/v2/sandbox).*
 
 ```sh
-open http://dashboard.shubox.io/domains/sandbox/key.txt
+open http://dashboard.shubox.io/v2/sandbox.txt
 ```
 
 *Place your key into shubox_config.js as a global variable*. This will allow
 your local dev/example server to use your sandbox key.
 
 ```sh
-cp packages/@shubox/examples/public/shubox_config_sample.js \
-  ./packages/@shubox/examples/public/shubox_config.js
+cp demo/javascript/shubox_config_sample.js \
+   demo/javascript/shubox_config.js
 
 echo "var shuboxSandboxKey = '[SANDBOX KEY GOES HERE]';" > \
-  ./packages/@shubox/examples/public/shubox_config.js
+   demo/javascript/shubox_config.js
 ```
 
 *Run local example server*
 
 ```sh
-yarn start
-# ... then open up http://localhost:9001/
+npm run dev
+# ... then open up http://localhost:3000/
 ```
 
 ![](https://shubox.io/images/README/localhost-9001.png)
@@ -1019,9 +1021,9 @@ yarn start
 ## Setup
 
 ```sh
-yarn install
-yarn prebuild
-yarn build
+./bin/setup    # set everything up (dependencies, etc)
+npm run test   # run tests
+npm run dev    # run local dev environment
 ```
 
 # Code of Conduct
