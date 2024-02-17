@@ -4,4 +4,4 @@ node_modules
 *.tsbuildinfo
 **/dist
 tags.*
-demo/shubox_config.js
+demo/javascript/shubox_config.js
