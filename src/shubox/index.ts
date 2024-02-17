@@ -4,6 +4,7 @@ import { ShuboxOptions } from "./shubox_options";
 import { IWebcamOptions, Webcam } from "./webcam";
 
 export interface IUserOptions {
+  baseUrl?: string;
   signatureUrl?: string;
   uploadUrl?: string;
   uuid?: string;
@@ -15,8 +16,9 @@ export default class Shubox {
   public static instances: Dropzone[] = [];
 
   public static stopCamera: () => void = Webcam.stopCamera;
-  public signatureUrl: string = "https://api.shubox.io/signatures";
-  public uploadUrl: string = "https://api.shubox.io/uploads";
+  public baseUrl: string = "https://api.shubox.io";
+  public signatureUrl: string = `${this.baseUrl}/signatures`;
+  public uploadUrl: string = `${this.baseUrl}/uploads`;
   public key: string = "";
   public selector: string;
   public element: HTMLElement | HTMLInputElement;
@@ -27,6 +29,13 @@ export default class Shubox {
   constructor(selector: string = ".shubox", options: IUserOptions = {}) {
     this.selector = selector;
     this.element = document.createElement('div') as HTMLDivElement;
+
+    if (options.baseUrl) {
+      this.baseUrl = options.baseUrl;
+      this.signatureUrl = `${this.baseUrl}/signatures`;
+      this.uploadUrl = `${this.baseUrl}/uploads`;
+      delete options.baseUrl;
+    }
 
     if (options.signatureUrl) {
       this.signatureUrl = options.signatureUrl;
