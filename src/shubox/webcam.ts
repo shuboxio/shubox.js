@@ -18,6 +18,7 @@ export interface IWebcamOptions {
   audioInput?: string;
   videoInput?: string;
   timeLimit?: number;
+  portraitMode?: boolean;
   cameraStarted?: (webcam: Webcam) => void;
   cameraStopped?: (webcam: Webcam) => void;
   photoTaken?: (webcam: Webcam, file: Blob) => void;
