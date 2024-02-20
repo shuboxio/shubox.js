@@ -21,7 +21,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "dropzone": "5.7.2"
+    "dropzone": "5.9.3"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.6",
