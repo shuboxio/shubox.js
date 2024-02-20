@@ -985,12 +985,14 @@ git clone https://github.com/shuboxio/shubox.js.git shubox.js
 cd ./shubox.js
 ```
 
-*Install dependencies*
+*Set everything up*
 
 ```sh
-npm install --global yarn
-yarn install
+./bin/setup
 ```
+
+This will install dependencies, build the demo html files, and copy local
+demo config files.
 
 *Grab your "Sandbox" key from the [Shubox dashboard](https://dashboard.shubox.io/v2/sandbox).*
 
@@ -999,7 +1001,8 @@ open http://dashboard.shubox.io/v2/sandbox.txt
 ```
 
 *Place your key into shubox_config.js as a global variable*. This will allow
-your local dev/example server to use your sandbox key.
+your local dev/example server to use your sandbox key. _This is done within
+`./bin/setup` but, just in case:
 
 ```sh
 cp demo/javascript/shubox_config_sample.js \
@@ -1017,14 +1020,6 @@ npm run dev
 ```
 
 ![](https://shubox.io/images/README/localhost-9001.png)
-
-## Setup
-
-```sh
-./bin/setup    # set everything up (dependencies, etc)
-npm run test   # run tests
-npm run dev    # run local dev environment
-```
 
 # Code of Conduct
 
