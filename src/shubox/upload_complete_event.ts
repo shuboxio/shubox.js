@@ -35,6 +35,7 @@ export function uploadCompleteEvent(
       },
       key: shubox.key,
       transformName: shubox.options.transformName,
+      transforms: shubox.options.transforms,
     }),
     method: "POST",
     mode: "cors",

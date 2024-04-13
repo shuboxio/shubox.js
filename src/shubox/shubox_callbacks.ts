@@ -20,6 +20,7 @@ export interface IShuboxDefaultOptions {
   previewsContainer?: null | string | HTMLElement;
   extraParams?: object;
   transformName?: null | string;
+  transforms?: null | Array<string>;
   transformCallbacks?: null | object;
   s3Key?: null | string;
   cdn?: null | string;

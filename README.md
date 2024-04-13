@@ -296,9 +296,12 @@ const avatar = new Shubox('#avatar', {
   key: window.shuboxKey,
   previewsContainer: false,
 
-  // the image transform's name, as defined
-  // in the dashboard, is 'test-transform'
-  transformName: 'test-transform',
+  // image transforms represented by an array of ImageMagick Geometries
+  // see: https://legacy.imagemagick.org/Usage/resize/#resize
+  transforms: [
+    '144x144#',     // resize and crop to 144x144
+    '400x300.avif', // resize to 400x300 and convert to avif
+    ],
 
   // a hash with N keys corresponding to
   // the versions of the transforms

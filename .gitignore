@@ -5,3 +5,4 @@ node_modules
 **/dist
 tags.*
 demo/javascript/shubox_config.js
+yarn.lock
