@@ -298,29 +298,27 @@ const avatar = new Shubox('#avatar', {
 
   // image transforms represented by an array of ImageMagick Geometries
   // see: https://legacy.imagemagick.org/Usage/resize/#resize
-  transforms: [
-    '144x144#',     // resize and crop to 144x144
-    '400x300.avif', // resize to 400x300 and convert to avif
-    ],
+  transforms: {
+    // resize to 500 px wide, and then do nothing.
+    // Just let it do its thing.
+    '500x': null,
 
-  // a hash with N keys corresponding to
-  // the versions of the transforms
-  transformCallbacks: {
-
-    // the image size defined in the dashboard is '144x144#'
+    // resize and crop to 144x144
     '144x144#': function(shuboxFile) {
-
       // once image is found, insert an `img`
       // tag with that url as the src
       let el = document.getElementById('avatar')
       el.insertAdjacentHTML(
         'beforeend',
-        `<img src='${shuboxFile.transforms["144x144#"].s3url}'>`
+        `<img src='${shuboxFile.transform.s3url}'>`
       )
+    },
+    // resize to 400x300 and convert to avif
+    '400x300.avif': function(shuboxFile) {
+      console.log(shuboxFile.transform.s3Url)
     }
   }
 })
-
 ```
 
 ![](https://shubox.io/images/README/shubox_demo_transform_callback.gif)
