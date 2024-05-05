@@ -5,7 +5,6 @@
 <p align="center"g>
   <br>
   <a href="https://www.npmjs.com/package/shubox"><img src="https://img.shields.io/npm/v/shubox.svg?style=flat" alt="npm"></a>
-  <a href="https://unpkg.com/shubox"><img src="https://img.badgesize.io/https://unpkg.com/shubox/dist/shubox.umd.js?compression=gzip" alt="gzip size"></a>
   <a href="https://www.npmjs.com/package/shubox"><img src="https://img.shields.io/npm/dt/shubox.svg" alt="downloads" ></a><br>
 </p>
 
@@ -134,7 +133,7 @@ bucket, but the code works! (More info soon on how to set up your own bucket)
 
 # Set Up Your Own S3 Bucket
 
-Coming soon!
+Instructions coming soon!
 
 # Examples & Ideas
 
@@ -270,11 +269,7 @@ const multfiles = new Shubox("#shubox--multiple-files", {
 
 ## Upload avatar and insert generated transform/variant image
 
-"Transforms" are variants of uploaded images that you define in the Shubox
-dashboard. If you want a `100x100` sized image generated after an 800x600 photo
-is uploaded you can define that image transform in the [Image
-Transforms](https://dashboard.shubox.io/image_transforms) section of the
-dashboard.
+"Transforms" are variants of uploaded images that you define as an option in the `Shubox` initializer. For example: you may want a `100x100` sized image generated after an 800x600 photo is uploaded, or an image to be converted to an `avif`.
 
 In the JS library you can define a corresponding callback that will fire once
 that version of the image is generated, and HTTP request and response
@@ -299,10 +294,6 @@ const avatar = new Shubox('#avatar', {
   // image transforms represented by an array of ImageMagick Geometries
   // see: https://legacy.imagemagick.org/Usage/resize/#resize
   transforms: {
-    // resize to 500 px wide, and then do nothing.
-    // Just let it do its thing.
-    '500x': null,
-
     // resize and crop to 144x144
     '144x144#': function(shuboxFile) {
       // once image is found, insert an `img`
@@ -312,10 +303,6 @@ const avatar = new Shubox('#avatar', {
         'beforeend',
         `<img src='${shuboxFile.transform.s3url}'>`
       )
-    },
-    // resize to 400x300 and convert to avif
-    '400x300.avif': function(shuboxFile) {
-      console.log(shuboxFile.transform.s3Url)
     }
   }
 })
@@ -696,32 +683,46 @@ s3Key: '/users/avatars/sam.jpg'
 s3Key: '/client-name/project-name/{{filename}}'
 ```
 
-### `transformKey`:
+### `transformKey` and `transformCallbacks`:
 
-Over in [the Shubox dashboard](https://dashboard.shubox.io/image_transforms)
-you can set up what we call _Image Transforms_. These are named pipelines of
-"transformations" you can execute when images are uploaded through your Shubox
-uploaders. For example - you could name one "userProfilePhoto" and configure it
-to create a `200x200` image every time an image is run through this pipeline.
+> [!WARNING]  
+> `transformKey` and `transformCallbacks` are deprecated and will be removed from the library in version 2.0. They have been replaced by the `transforms` option, which acts as a combination/unification of the two.
 
-By setting `transformKey` to `userProfilePhoto` in your Shubox initializer's
-options you are telling the Shubox app to run your images through that
-transformer pipeline and create that `200x200` version of the image.
+To view previous documentation around these two options [visit a previous version of this README](https://github.com/shuboxio/shubox.js/blob/593a57f11eb24150c8653ed493381040ecd81cd5/README.md).
+
+### `transforms`:
 
 ```javascript
-transformKey: null                  // default
-transformKey: 'myTransformerName'
+transforms: null // default
+transforms: { string: function|null }
 ```
 
-### `transformCallbacks`:
+Assigning an object/hash to `transforms` with keys that contain a ImageMagick compatible geometry string, and a default of `null` will tell Shubox to generate a variant of that image. For example, the following will tell Shubox to resize and generate an image with the width of 200px, while maintaining the aspect ratio with a variable height.
 
-To tie together the _Image Transform_ you set up on [the Shubox
-dashboard](https://dashboard.shubox.io/image_transforms) you use the
-`transformKey` option above. But what about _after_ you upload images that pass
-through your transform pipeline? What if you want to trigger a callback once
-one of those files is generated and available? With this option you can. If
-you've set things up in the dashboard to generate a `"200x200"` image, for
-example, the following will run once it's available via an OPTION HTTP request.
+```javascript
+transforms: {
+  '200x': null
+}
+```
+
+While the following will resize and crop (to fit) a 300x300 image, _and_ convert it to the `webp` format. Additionally, it will execute the provided callback function once that file's URL returns a successful HTTP HEAD request.
+
+```javascript
+transforms: {
+  '300x300#.webp': function(shuboxFile) {
+	  // once image is found, insert an `img`
+	  // tag with that url as the src
+	  let el = document.getElementById('shuboxElement')
+	  el.insertAdjacentHTML(
+	    'beforeend',
+	    `<img src='${shuboxFile.transform.s3url}'>`
+	  )
+  }
+}
+```
+
+
+**Image resize and file format variants**
 
 Here are the variants that you can watch for.
 
@@ -738,8 +739,8 @@ The imagemagick geometries/sizes (more [here](https://www.imagemagick.org/script
 * `'x200'`, _xheight_ - Height given, width automagically selected to preserve aspect ratio.
 * `'200x200'`, _widthxheight_ - Maximum values of height and width given, aspect ratio preserved.
 * `'200x200^'`, _widthxheight^_ - Minimum values of width and height given, aspect ratio preserved.
-* `'200x200!'`, _widthxheight!_ - Width and height emphatically given, original aspect ratio ignored.
-* `'200x200#'`, _widthxheight#_ Width and height emphatically given, cropped to fill.
+* `'200x200!'`, _widthxheight!_ - Width and height given, original aspect ratio ignored.
+* `'200x200#'`, _widthxheight#_ Width and height explicitly given, cropped to fill.
 
 The extracted animated GIF frame:
 
