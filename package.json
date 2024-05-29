@@ -16,7 +16,7 @@
     "test-debugger": "vitest --inspect-brk --pool forks --poolOptions.forks.singleFork",
     "test-watch": "vitest",
     "test": "vitest run",
-    "dev": "vite",
+    "dev": "vite --port 8888",
     "build": "vitest run && tsc && vite build",
     "preview": "vite preview"
   },
