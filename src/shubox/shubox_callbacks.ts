@@ -161,7 +161,7 @@ export class ShuboxCallbacks {
 
           for (const variant of Object.keys(callbacks)) {
             const callback = callbacks[variant];
-            new TransformCallback(file, variant, callback, doVariantCharacterTranslation).run();
+            new TransformCallback(file, variant, callback, apiVersion, doVariantCharacterTranslation).run();
           }
         }
 
