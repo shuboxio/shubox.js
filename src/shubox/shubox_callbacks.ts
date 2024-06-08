@@ -68,6 +68,7 @@ export class ShuboxCallbacks {
     const hash = {
       accept(file: any, done: any) {
         fetch(self.shubox.signatureUrl, {
+          headers: { "X-Shubox-Client": self.shubox.version },
           body: objectToFormData({
             file: {
               name: filenameFromFile(file),
@@ -78,7 +79,7 @@ export class ShuboxCallbacks {
             s3Key: self.shubox.options.s3Key,
           }),
           method: "post",
-          mode: "cors",
+          mode: "cors"
         })
           .then((response) => {
             return response.json();
@@ -129,6 +130,7 @@ export class ShuboxCallbacks {
         self.shubox.element.classList.remove("shubox-uploading");
         const match = /\<Location\>(.*)\<\/Location\>/g.exec(response) || ["", ""];
         const url = match[1];
+        let apiVersion = 1.0
         file.s3url = url.replace(/%2F/g, "/").replace(/%2B/g, "%20");
 
         if (self.shubox.options.cdn) {
@@ -136,7 +138,11 @@ export class ShuboxCallbacks {
           file.s3url = `${self.shubox.options.cdn}/${path}`;
         }
 
-        uploadCompleteEvent(self.shubox, file, (self.shubox.options.extraParams || {}));
+        uploadCompleteEvent(self.shubox, file, (self.shubox.options.extraParams || {})).then(response => {
+          if (!response) return;
+          apiVersion = Number(response.headers.get("X-Shubox-API-Version"));
+        });
+
         Dropzone.prototype.defaultOptions.success!.apply(this, [<Dropzone.DropzoneFile>file]);
 
         // Update the form value if it is able
@@ -144,12 +150,18 @@ export class ShuboxCallbacks {
           self._updateFormValue(file, "successTemplate");
         }
 
-        if (self.shubox.options.transformCallbacks) {
-          const callbacks = self.shubox.options.transformCallbacks;
+        if (self.shubox.options.transformCallbacks || self.shubox.options.transforms) {
+          // If using the legacy transformCallbacks option, we need to translate the variant character to the old style.
+          // EG: 400x400# -> 400x400_hash
+          //
+          // If using the new transforms option, we don't need to do this translation.
+          // EG: 400x400# -> 400x400#
+          const doVariantCharacterTranslation = !!self.shubox.options.transformCallbacks;
+          const callbacks = self.shubox.options.transformCallbacks || self.shubox.options.transforms;
 
           for (const variant of Object.keys(callbacks)) {
             const callback = callbacks[variant];
-            new TransformCallback(file, variant, callback).run();
+            new TransformCallback(file, variant, callback, doVariantCharacterTranslation).run();
           }
         }
 

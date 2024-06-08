@@ -1,4 +1,4 @@
-import {Variant} from "./variant";
+import { Variant } from "./variant";
 
 export interface IShuboxFile {
   s3url: string;
@@ -13,10 +13,16 @@ export class TransformCallback {
   public retry: number = 10;
   public success: boolean = false;
 
-  constructor(file: IShuboxFile, variant: string = "", callback: (file: IShuboxFile) => void) {
+  constructor(
+    file: IShuboxFile,
+    variant: string = "",
+    callback: (file: IShuboxFile) => void,
+    apiVersion: number = 1.0,
+    doVariantCharacterTranslation: boolean = true
+  ) {
     this.file = file;
     this.variant = variant;
-    this.variantUrl = new Variant(file, variant).url();
+    this.variantUrl = new Variant(file, variant, apiVersion, doVariantCharacterTranslation).url();
     this.callback = callback;
   }
 

@@ -16,9 +16,10 @@ export function uploadCompleteEvent(
   shubox: Shubox,
   file: IShuboxFile,
   extraParams: object,
-): void {
+): Promise<void | Response> {
 
-  fetch(shubox.uploadUrl, {
+  return fetch(shubox.uploadUrl, {
+    headers: { "X-Shubox-Client": shubox.version },
     body: objectToFormData({
       bucket: "localhost-4100",
       extraParams,

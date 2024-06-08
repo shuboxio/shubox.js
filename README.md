@@ -685,7 +685,7 @@ s3Key: '/client-name/project-name/{{filename}}'
 
 ### `transformKey` and `transformCallbacks`:
 
-> [!WARNING]  
+> [!WARNING]
 > `transformKey` and `transformCallbacks` are deprecated and will be removed from the library in version 2.0. They have been replaced by the `transforms` option, which acts as a combination/unification of the two.
 
 To view previous documentation around these two options [visit a previous version of this README](https://github.com/shuboxio/shubox.js/blob/593a57f11eb24150c8653ed493381040ecd81cd5/README.md).
@@ -694,14 +694,14 @@ To view previous documentation around these two options [visit a previous versio
 
 ```javascript
 transforms: null // default
-transforms: { string: function|null }
+transforms: { string: function }
 ```
 
 Assigning an object/hash to `transforms` with keys that contain a ImageMagick compatible geometry string, and a default of `null` will tell Shubox to generate a variant of that image. For example, the following will tell Shubox to resize and generate an image with the width of 200px, while maintaining the aspect ratio with a variable height.
 
 ```javascript
 transforms: {
-  '200x': null
+  '200x': ()=>{}
 }
 ```
 
