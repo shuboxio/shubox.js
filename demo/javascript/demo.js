@@ -1,6 +1,7 @@
 import Shubox from '../../src/shubox';
 
 new Shubox('#webcam-photo', {
+  baseUrl: 'http://localhost:4101',
   key: window.shuboxSandboxKey,
   webcam: 'photo',
   success: (file) => {
@@ -10,6 +11,7 @@ new Shubox('#webcam-photo', {
 })
 
 new Shubox('#webcam-with-options', {
+  baseUrl: 'http://localhost:4101',
   key: window.shuboxSandboxKey,
   webcam: {
     type: 'photo',
@@ -28,6 +30,7 @@ new Shubox('#webcam-with-options', {
 })
 
 new Shubox('#webcam-video', {
+  baseUrl: 'http://localhost:4101',
   key: window.shuboxSandboxKey,
   webcam: 'video',
   success: file => {
@@ -37,6 +40,7 @@ new Shubox('#webcam-video', {
 })
 
 new Shubox('#webcam-video-with-options', {
+  baseUrl: 'http://localhost:4101',
   key: window.shuboxSandboxKey,
   webcam: {
     type: 'video',
@@ -60,6 +64,7 @@ new Shubox('#webcam-video-with-options', {
 })
 
 new Shubox('#avatar', {
+  baseUrl: 'http://localhost:4101',
   key: window.shuboxSandboxKey,
   previewsContainer: false,
   success: file => {
@@ -98,6 +103,7 @@ new Shubox('#avatar', {
 })
 
 new Shubox("#shubox--multiple-files", {
+  baseUrl: 'http://localhost:4101',
   key: window.shuboxSandboxKey,
   previewsContainer: '#shubox--multiple-files-preview',
   addedfile: () => { console.log('added') },
@@ -106,6 +112,7 @@ new Shubox("#shubox--multiple-files", {
 })
 
 new Shubox('#shubox--textarea', {
+  baseUrl: 'http://localhost:4101',
   key: window.shuboxSandboxKey,
   clickable: '#shubox--click-to-upload',
   uploadingTemplate: '![Uploading {{name}}...]()\n',
@@ -114,6 +121,7 @@ new Shubox('#shubox--textarea', {
 })
 
 new Shubox('#shubox--textarea--cursor', {
+  baseUrl: 'http://localhost:4101',
   key: window.shuboxSandboxKey,
   clickable: null,
   uploadingTemplate: "![Uploading {{name}}...]()",
@@ -122,6 +130,7 @@ new Shubox('#shubox--textarea--cursor', {
 })
 
 new Shubox('#shubox--textarea--append', {
+  baseUrl: 'http://localhost:4101',
   key: window.shuboxSandboxKey,
   clickable: null,
   textBehavior: 'append',
@@ -130,6 +139,7 @@ new Shubox('#shubox--textarea--append', {
 })
 
 new Shubox('#shubox--textarea--replace', {
+  baseUrl: 'http://localhost:4101',
   key: window.shuboxSandboxKey,
   clickable: null,
   // used intentionally to display deprecation warning
@@ -140,7 +150,8 @@ new Shubox('#shubox--textarea--replace', {
 })
 
 new Shubox('#avatar-cropped', {
-  key: window.shuboxSandboxKey,
+  baseUrl: 'http://localhost:4101',
+  key: 'ff65d394-bf7d-4706-ae58-fa8f7771089f',
   previewsContainer: false,
   maxFiles: 1,
   transforms: {
@@ -159,12 +170,13 @@ new Shubox('#avatar-cropped', {
 
       img.alt = "cropped webp avatar"
       img.className = "avatar"
-      img.src = shuboxFile.transform.s3url
+      img.src = shuboxFile.transforms["200x200#"].s3url
     }
   }
 })
 
 new Shubox('#avatar-events', {
+  baseUrl: 'http://localhost:4101',
   key: window.shuboxSandboxKey,
   previewsContainer: false,
   maxFiles: 1,
