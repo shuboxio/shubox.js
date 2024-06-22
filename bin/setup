@@ -5,6 +5,7 @@ set -e
 
 # Install dependencies
 npm install
+npm config set fund false
 
 # Build HTML files for the demo
 ./bin/build_html.rb
