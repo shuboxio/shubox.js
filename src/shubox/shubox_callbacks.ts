@@ -20,6 +20,7 @@ export interface IShuboxDefaultOptions {
   previewsContainer?: null | string | HTMLElement;
   extraParams?: object;
   transformName?: null | string;
+  transforms?: null | object;
   transformCallbacks?: null | object;
   s3Key?: null | string;
   cdn?: null | string;
@@ -67,6 +68,7 @@ export class ShuboxCallbacks {
     const hash = {
       accept(file: any, done: any) {
         fetch(self.shubox.signatureUrl, {
+          headers: { "X-Shubox-Client": self.shubox.version },
           body: objectToFormData({
             file: {
               name: filenameFromFile(file),
@@ -77,7 +79,7 @@ export class ShuboxCallbacks {
             s3Key: self.shubox.options.s3Key,
           }),
           method: "post",
-          mode: "cors",
+          mode: "cors"
         })
           .then((response) => {
             return response.json();
@@ -128,6 +130,7 @@ export class ShuboxCallbacks {
         self.shubox.element.classList.remove("shubox-uploading");
         const match = /\<Location\>(.*)\<\/Location\>/g.exec(response) || ["", ""];
         const url = match[1];
+        let apiVersion = 1.0
         file.s3url = url.replace(/%2F/g, "/").replace(/%2B/g, "%20");
 
         if (self.shubox.options.cdn) {
@@ -135,27 +138,38 @@ export class ShuboxCallbacks {
           file.s3url = `${self.shubox.options.cdn}/${path}`;
         }
 
-        uploadCompleteEvent(self.shubox, file, (self.shubox.options.extraParams || {}));
-        Dropzone.prototype.defaultOptions.success!.apply(this, [<Dropzone.DropzoneFile>file]);
+        uploadCompleteEvent(self.shubox, file, (self.shubox.options.extraParams || {})).then(response => {
+          if (!response) return;
 
-        // Update the form value if it is able
-        if (self._isFormElement()) {
-          self._updateFormValue(file, "successTemplate");
-        }
+          apiVersion = Number(response.headers.get("X-Shubox-API"));
 
-        if (self.shubox.options.transformCallbacks) {
-          const callbacks = self.shubox.options.transformCallbacks;
+          Dropzone.prototype.defaultOptions.success!.apply(this, [<Dropzone.DropzoneFile>file]);
 
-          for (const variant of Object.keys(callbacks)) {
-            const callback = callbacks[variant];
-            new TransformCallback(file, variant, callback).run();
+          // Update the form value if it is able
+          if (self._isFormElement()) {
+            self._updateFormValue(file, "successTemplate");
           }
-        }
 
-        // If supplied, run the options callback
-        if (self.shubox.options.success) {
-          self.shubox.options.success(file);
-        }
+          if (self.shubox.options.transformCallbacks || self.shubox.options.transforms) {
+            // If using the legacy transformCallbacks option, we need to translate the variant character to the old style.
+            // EG: 400x400# -> 400x400_hash
+            //
+            // If using the new transforms option, we don't need to do this translation.
+            // EG: 400x400# -> 400x400#
+            const doVariantCharacterTranslation = !!self.shubox.options.transformCallbacks;
+            const callbacks = self.shubox.options.transformCallbacks || self.shubox.options.transforms;
+
+            for (const variant of Object.keys(callbacks)) {
+              const callback = callbacks[variant];
+              new TransformCallback(file, variant, callback, apiVersion, doVariantCharacterTranslation).run();
+            }
+          }
+
+          // If supplied, run the options callback
+          if (self.shubox.options.success) {
+            self.shubox.options.success(file);
+          }
+        });
       },
 
       error(file: any, message: any) {
@@ -203,6 +217,19 @@ work with localhost.
     const el = this.shubox.element as HTMLInputElement;
     let interpolatedText = "";
     let uploadingText = "";
+
+    // If passed the transformName option, warn about its deprecation.
+    if (this.shubox.options.transformName) {
+      window.console!.warn(
+        `DEPRECATION: The "transformName" option will be deprecated by version 1.2. Please update to "transforms", and see docs.`,
+      );
+    }
+    // ... same with transformCallbacks.
+    if (this.shubox.options.transformCallbacks) {
+      window.console!.warn(
+        `DEPRECATION: The "transformCallbacks" option will be deprecated by version 1.2. Please update to "transforms", and see docs.`,
+      );
+    }
 
     // If we're processing the successTemplate, and the user instead used
     // the deprecated "s3urlTemplate" option, then rename the template name

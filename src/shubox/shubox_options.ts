@@ -21,6 +21,7 @@ export class ShuboxOptions {
       successTemplate: "{{s3url}}",
       textBehavior: "replace",
       transformName: null,
+      transforms: null,
       uploadingTemplate: "",
       webcam: null,
     };

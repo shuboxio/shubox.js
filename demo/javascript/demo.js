@@ -70,6 +70,31 @@ new Shubox('#avatar', {
     }
     img.src = file.s3url
   },
+  transforms: {
+    // resize to 500 px wide, and then do nothing.
+    // Just let it do its thing.
+    '500x': ()=>{},
+
+    // resize and crop to 144x144
+    '144x144#': (shuboxFile) => {
+      // once image is found, insert an `img`
+      // tag with that url as the src
+      const el  = document.getElementById("avatar")
+      const img = document.createElement("img")
+
+      // when the image is loaded, swap the images
+      img.addEventListener('load', () => {
+        // remove the previous image
+        el.firstChild.remove()
+        // then append the new one
+        el.appendChild(img);
+      });
+
+      img.alt = "cropped avatar"
+      img.className = "avatar"
+      img.src = shuboxFile.transform.s3url
+    }
+  }
 })
 
 new Shubox("#shubox--multiple-files", {
@@ -83,8 +108,9 @@ new Shubox("#shubox--multiple-files", {
 new Shubox('#shubox--textarea', {
   key: window.shuboxSandboxKey,
   clickable: '#shubox--click-to-upload',
-  uploadingTemplate: '![Uploading {{name}}...]()',
-  successTemplate: '![{{name}}]({{s3url}})',
+  uploadingTemplate: '![Uploading {{name}}...]()\n',
+  successTemplate: '![{{name}}]({{s3url}})\n',
+  textBehavior: 'append',
 })
 
 new Shubox('#shubox--textarea--cursor', {
@@ -117,12 +143,23 @@ new Shubox('#avatar-cropped', {
   key: window.shuboxSandboxKey,
   previewsContainer: false,
   maxFiles: 1,
+  transforms: {
+    // once the 200x200 WEBP is created and found, replace the image with this one
+    "200x200#.avif": (shuboxFile) => {
+      // once image is found, insert an `img`
+      // tag with that url as the src
+      const el  = document.getElementById("avatar-cropped")
+      const img = document.createElement("img")
 
-  transformCallbacks: {
-    // once the 200x200 WEBP is created, and found, replace the image with this one
-    "200x200#.webp": function(shuboxFile) {
-      console.log(shuboxFile.transforms["200x200#.webp"].s3url)
-      document.querySelector("#avatar-cropped img").src = shuboxFile.transforms["200x200#.webp"].s3url;
+      // when the image is loaded...
+      img.addEventListener('load', () => {
+        // ... append the new one
+        el.appendChild(img);
+      });
+
+      img.alt = "cropped webp avatar"
+      img.className = "avatar"
+      img.src = shuboxFile.transform.s3url
     }
   }
 })

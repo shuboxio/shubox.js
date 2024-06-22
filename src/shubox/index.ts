@@ -2,6 +2,7 @@ import Dropzone from "dropzone";
 import { ShuboxCallbacks } from "./shubox_callbacks";
 import { ShuboxOptions } from "./shubox_options";
 import { IWebcamOptions, Webcam } from "./webcam";
+import { version } from "../../package.json";
 
 export interface IUserOptions {
   baseUrl?: string;
@@ -25,6 +26,7 @@ export default class Shubox {
   public options: any = {};
   public callbacks: any = {};
   public webcam?: Webcam;
+  public version: string = version;
 
   constructor(selector: string = ".shubox", options: IUserOptions = {}) {
     this.selector = selector;

@@ -4,6 +4,10 @@ Shubox.js Changes
 Master
 ------
 
+v1.1.0
+------
+
+* New `transforms` option instead of `transformName` and `transformCallbacks`. See README.md
 * Upgrade lerna (7.4.1)
 * Update logic to detect and set codec(s) when capturing video/audio.
 * Upgrade typescript to `3.9.7` (yes. it's behind).
