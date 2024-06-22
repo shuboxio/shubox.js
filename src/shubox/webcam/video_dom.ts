@@ -23,16 +23,17 @@ export class VideoDom {
 
   public init(): void {
     if (this.initialized) { return; }
+
     this.webcam.element.innerHTML = this.options.videoTemplate || "";
     this.video = this.findOrCreate("video") as HTMLVideoElement;
 
-    this.video.width = this.webcam.webcamOptions.portraitMode ?
-      this.webcam.element.offsetWidth :
-      this.webcam.element.offsetHeight;
-
-    this.video.height = this.webcam.webcamOptions.portraitMode ?
+    this.video.width = !!this.webcam.webcamOptions.portraitMode ?
       this.webcam.element.offsetHeight :
       this.webcam.element.offsetWidth;
+
+    this.video.height = !!this.webcam.webcamOptions.portraitMode ?
+      this.webcam.element.offsetWidth :
+      this.webcam.element.offsetHeight;
 
     this.initialized = true;
   }
