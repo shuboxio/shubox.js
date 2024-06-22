@@ -9,6 +9,7 @@ Master
 * Upgrade typescript to `3.9.7` (yes. it's behind).
 * Add .tool-versions file to specify versions of nodejs and python to use in building.
 * Update scripts to fall back to legacy ssl provider.
+* Fix bug with portraitMode where the logic for width and height were opposite of what is desired.
 
 v0.5.2
 ------
