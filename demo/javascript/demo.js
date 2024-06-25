@@ -170,7 +170,7 @@ new Shubox('#avatar-cropped', {
 
       img.alt = "cropped webp avatar"
       img.className = "avatar"
-      img.src = shuboxFile.transforms["200x200#"].s3url
+      img.src = shuboxFile.transform.s3url
     }
   }
 })
