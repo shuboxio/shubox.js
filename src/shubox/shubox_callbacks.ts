@@ -5,6 +5,7 @@ import { insertAtCursor } from "./insert_at_cursor";
 import { objectToFormData } from "./object_to_form_data";
 import { TransformCallback } from "./transform_callback";
 import { uploadCompleteEvent } from "./upload_complete_event";
+import type { ShuboxDropzoneFile, SignatureResponse, IShuboxFile } from "./types";
 
 declare var window: any;
 
@@ -65,7 +66,7 @@ export class ShuboxCallbacks {
     const self = this;
 
     const hash = {
-      accept(file: any, done: any) {
+      accept(file: ShuboxDropzoneFile, done: (error?: string | Error) => void) {
         fetch(self.shubox.signatureUrl, {
           headers: { "X-Shubox-Client": self.shubox.version },
           body: objectToFormData({
@@ -101,7 +102,7 @@ export class ShuboxCallbacks {
           });
       },
 
-      sending(file: any, xhr: any, formData: any) {
+      sending(file: ShuboxDropzoneFile, xhr: XMLHttpRequest, formData: FormData) {
         self.shubox.element.classList.add("shubox-uploading");
 
         // Update the form value if it is able
@@ -112,7 +113,9 @@ export class ShuboxCallbacks {
         const keys = Object.keys(file.postData);
         keys.forEach((key) => {
           const val = file.postData[key];
-          formData.append(key, val);
+          if (val !== undefined) {
+            formData.append(key, val);
+          }
         });
 
         // Run user's provided sending callback
@@ -121,14 +124,14 @@ export class ShuboxCallbacks {
         }
       },
 
-      addedfile(file: any) {
+      addedfile(file: ShuboxDropzoneFile) {
         Dropzone.prototype.defaultOptions.addedfile!.apply(this, [file]);
         if (self.shubox.options.addedfile) {
           self.shubox.options.addedfile(file);
         }
       },
 
-      success(file: any, response: any) {
+      success(file: ShuboxDropzoneFile, response: string) {
         self.shubox.element.classList.add("shubox-success");
         self.shubox.element.classList.remove("shubox-uploading");
         const match = /\<Location\>(.*)\<\/Location\>/g.exec(response) || ["", ""];
@@ -141,7 +144,7 @@ export class ShuboxCallbacks {
           file.s3url = `${self.shubox.options.cdn}/${path}`;
         }
 
-        uploadCompleteEvent(self.shubox, file, (self.shubox.options.extraParams || {})).then(response => {
+        uploadCompleteEvent(self.shubox, file as IShuboxFile, (self.shubox.options.extraParams || {})).then(response => {
           if (!response) return;
 
           apiVersion = Number(response.headers.get("X-Shubox-API"));
@@ -165,7 +168,7 @@ export class ShuboxCallbacks {
 
             for (const variant of Object.keys(transformCallbacks)) {
               const callback = transformCallbacks[variant];
-              new TransformCallback(file, variant, callback, apiVersion, doVariantCharacterTranslation).run();
+              new TransformCallback(file as IShuboxFile, variant, callback, apiVersion, doVariantCharacterTranslation).run();
             }
           }
 
@@ -176,14 +179,15 @@ export class ShuboxCallbacks {
         });
       },
 
-      error(file: any, message: any) {
+      error(file: ShuboxDropzoneFile, message: string | Error) {
         self.shubox.element.classList.remove("shubox-uploading");
         self.shubox.element.classList.add("shubox-error");
 
         const xhr = new XMLHttpRequest(); // bc type signature
         Dropzone.prototype.defaultOptions.error!.apply(this, [file, message, xhr]);
 
-        if (message.includes("Referring domain not permitted") && window.location.hostname === "localhost") {
+        const messageStr = typeof message === 'string' ? message : message.message;
+        if (messageStr.includes("Referring domain not permitted") && window.location.hostname === "localhost") {
           console.log(`%cOOPS!`, "font-size: 14px; color:#7c5cd1; font-weight: bold;");
           console.log(
             `%cIt looks like you're attempting to test Shubox on localhost but are running into an issue.
@@ -203,7 +207,7 @@ work with localhost.
         }
       },
 
-      uploadProgress(file: any, progress: any, bytesSent: any) {
+      uploadProgress(file: ShuboxDropzoneFile, progress: number, bytesSent: number) {
         self.shubox.element.dataset.shuboxProgress = String(progress);
         Dropzone.prototype.defaultOptions.uploadprogress!.apply(
           this,
@@ -217,7 +221,7 @@ work with localhost.
 
   // Private
 
-  public _updateFormValue(file: any, templateName: string) {
+  public _updateFormValue(file: ShuboxDropzoneFile, templateName: string) {
     const el = this.shubox.element as HTMLInputElement;
     let interpolatedText = "";
     let uploadingText = "";
@@ -258,14 +262,16 @@ work with localhost.
     }
 
     for (const key of this.replaceable) {
-      interpolatedText = interpolatedText.replace(`{{${key}}}`, file[key]);
+      const value = (file as any)[key];
+      interpolatedText = interpolatedText.replace(`{{${key}}}`, value);
     }
 
     if (this.shubox.options.uploadingTemplate) {
       uploadingText = this.shubox.options.uploadingTemplate;
 
       for (const key of this.replaceable) {
-        uploadingText = uploadingText.replace(`{{${key}}}`, file[key]);
+        const value = (file as any)[key];
+        uploadingText = uploadingText.replace(`{{${key}}}`, value);
       }
     }
 

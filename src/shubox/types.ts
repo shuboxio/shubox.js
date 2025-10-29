@@ -14,6 +14,7 @@ export interface SignatureResponse {
   "x-amz-date": string;
   "x-amz-signature": string;
   error?: string;
+  [key: string]: string | undefined;
 }
 
 /**
