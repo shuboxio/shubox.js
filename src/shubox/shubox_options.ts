@@ -23,7 +23,6 @@ export class ShuboxOptions {
       transformName: null,
       transforms: null,
       uploadingTemplate: "",
-      webcam: null,
     };
   }
 }
