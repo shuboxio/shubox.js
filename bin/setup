@@ -4,15 +4,18 @@
 set -e
 
 # Install dependencies
-npm install
-npm config set fund false
+npm install --no-audit --no-fund
 
 # Build HTML files for the demo
 ./bin/build_html.rb
 
 # Remove the script tag from standalone.html.
 # It'll use the UMD file lower down in the body of the page.
-sed -i '' '/javascript\/demo.js/d' demo/standalone.html
+if [ "$(uname)" = "Darwin" ]; then
+  sed -i '' '/javascript\/demo.js/d' demo/standalone.html
+else
+  sed -i '/javascript\/demo.js/d' demo/standalone.html
+fi
 
 # Create config file that the demo pages pulls in
 if [ ! -f ./demo/javascript/shubox_config.js ]; then
