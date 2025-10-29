@@ -1,9 +1,10 @@
 import Dropzone from "dropzone";
 import { ShuboxCallbacks } from "./shubox_callbacks";
-import { ShuboxOptions } from "./shubox_options";
+import { ShuboxOptions as ShuboxOptionsClass } from "./shubox_options";
 import { version } from "../../package.json";
+import type { ShuboxOptions, ShuboxCallbackMethods } from "./types";
 
-export interface IUserOptions {
+export interface IUserOptions extends Partial<ShuboxOptions> {
   baseUrl?: string;
   signatureUrl?: string;
   uploadUrl?: string;
@@ -20,8 +21,8 @@ export default class Shubox {
   public key: string = "";
   public selector: string;
   public element: HTMLElement | HTMLInputElement;
-  public options: any = {};
-  public callbacks: any = {};
+  public options: ShuboxOptions = {} as ShuboxOptions;
+  public callbacks: ShuboxCallbackMethods = {} as ShuboxCallbackMethods;
   public version: string = version;
 
   constructor(selector: string = ".shubox", options: IUserOptions = {}) {
@@ -58,7 +59,7 @@ export default class Shubox {
     this.init(options);
   }
 
-  public init(options: object) {
+  public init(options: Partial<ShuboxOptions>) {
     Dropzone.autoDiscover = false;
     const els = document.querySelectorAll(this.selector);
 
@@ -67,27 +68,27 @@ export default class Shubox {
       this.callbacks = new ShuboxCallbacks(this as Shubox, Shubox.instances).toHash();
       this.options = {
         ...this.options,
-        ...(new ShuboxOptions(this as Shubox).toHash()),
+        ...(new ShuboxOptionsClass(this as Shubox).toHash()),
         ...options,
-      };
+      } as ShuboxOptions;
 
-      const dropzoneOptions = {
+      const dropzoneOptions: Dropzone.DropzoneOptions = {
         // callbacks that we need to delegate to. In some cases there's work
         // needing to be passed through to Shubox's handler, and sometimes
         // the Dropbox handler, _in addition to_ the callback the user provides.
-        accept: this.callbacks.accept,
+        accept: this.callbacks.accept as any,
         acceptedFiles: this.options.acceptedFiles,
-        addedfile: this.callbacks.addedfile,
-        error: this.callbacks.error,
+        addedfile: this.callbacks.addedfile as any,
+        error: this.callbacks.error as any,
         previewsContainer: this.options.previewsContainer,
-        sending: this.callbacks.sending,
-        success: this.callbacks.success,
-        uploadprogress: this.callbacks.uploadProgress,
+        sending: this.callbacks.sending as any,
+        success: this.callbacks.success as any,
+        uploadprogress: this.callbacks.uploadProgress as any,
         url: "http://localhost",
       };
 
       const dropzone = new Dropzone(this.element, {
-        ...this.options,
+        ...(this.options as any),
         ...dropzoneOptions,
       });
 

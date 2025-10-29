@@ -116,12 +116,16 @@ export class ShuboxCallbacks {
         });
 
         // Run user's provided sending callback
-        self.shubox.options.sending(file, xhr, formData);
+        if (self.shubox.options.sending) {
+          self.shubox.options.sending(file, xhr, formData);
+        }
       },
 
       addedfile(file: any) {
         Dropzone.prototype.defaultOptions.addedfile!.apply(this, [file]);
-        self.shubox.options.addedfile(file);
+        if (self.shubox.options.addedfile) {
+          self.shubox.options.addedfile(file);
+        }
       },
 
       success(file: any, response: any) {
@@ -149,17 +153,18 @@ export class ShuboxCallbacks {
             self._updateFormValue(file, "successTemplate");
           }
 
-          if (self.shubox.options.transformCallbacks || self.shubox.options.transforms) {
+          const transformCallbacks = self.shubox.options.transformCallbacks || self.shubox.options.transforms;
+
+          if (transformCallbacks) {
             // If using the legacy transformCallbacks option, we need to translate the variant character to the old style.
             // EG: 400x400# -> 400x400_hash
             //
             // If using the new transforms option, we don't need to do this translation.
             // EG: 400x400# -> 400x400#
             const doVariantCharacterTranslation = !!self.shubox.options.transformCallbacks;
-            const callbacks = self.shubox.options.transformCallbacks || self.shubox.options.transforms;
 
-            for (const variant of Object.keys(callbacks)) {
-              const callback = callbacks[variant];
+            for (const variant of Object.keys(transformCallbacks)) {
+              const callback = transformCallbacks[variant];
               new TransformCallback(file, variant, callback, apiVersion, doVariantCharacterTranslation).run();
             }
           }
@@ -212,7 +217,7 @@ work with localhost.
 
   // Private
 
-  public _updateFormValue(file: any, templateName: any) {
+  public _updateFormValue(file: any, templateName: string) {
     const el = this.shubox.element as HTMLInputElement;
     let interpolatedText = "";
     let uploadingText = "";
@@ -233,16 +238,23 @@ work with localhost.
     // If we're processing the successTemplate, and the user instead used
     // the deprecated "s3urlTemplate" option, then rename the template name
     // to use that one as the key.
+    let effectiveTemplateName = templateName;
     if (templateName === "successTemplate" && this.shubox.options.s3urlTemplate) {
       window.console!.warn(
         `DEPRECATION: The "s3urlTemplate" will be deprecated by version 1.0. Please update to "successTemplate".`,
       );
 
-      templateName = "s3urlTemplate";
+      effectiveTemplateName = "s3urlTemplate";
     }
 
-    if (this.shubox.options[templateName]) {
-      interpolatedText = this.shubox.options[templateName];
+    const templateValue = effectiveTemplateName === "successTemplate"
+      ? this.shubox.options.successTemplate
+      : effectiveTemplateName === "s3urlTemplate"
+        ? this.shubox.options.s3urlTemplate
+        : undefined;
+
+    if (templateValue) {
+      interpolatedText = templateValue;
     }
 
     for (const key of this.replaceable) {

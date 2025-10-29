@@ -1,21 +1,12 @@
 import Shubox from "./index";
 import { filenameFromFile } from "./filename_from_file";
 import { objectToFormData } from "./object_to_form_data";
-
-export interface IShuboxFile extends Dropzone.DropzoneFile {
-  width: number;
-  height: number;
-  lastModified: number;
-  lastModifiedDate: any;
-  s3: string;
-  s3url: string;
-  postData: object[];
-}
+import type { IShuboxFile, ExtraParams } from "./types";
 
 export function uploadCompleteEvent(
   shubox: Shubox,
   file: IShuboxFile,
-  extraParams: object,
+  extraParams: ExtraParams,
 ): Promise<void | Response> {
 
   return fetch(shubox.uploadUrl, {

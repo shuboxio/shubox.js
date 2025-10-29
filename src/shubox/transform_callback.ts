@@ -1,10 +1,5 @@
 import { Variant } from "./variant";
-
-export interface IShuboxFile {
-  s3url: string;
-  transforms: any;
-  transform: object;
-}
+import type { IShuboxFile, TransformResult } from "./types";
 
 export class TransformCallback {
   public file: IShuboxFile;
