@@ -1,7 +1,6 @@
 import Dropzone from "dropzone";
 import { ShuboxCallbacks } from "./shubox_callbacks";
 import { ShuboxOptions } from "./shubox_options";
-import { IWebcamOptions, Webcam } from "./webcam";
 import { version } from "../../package.json";
 
 export interface IUserOptions {
@@ -10,13 +9,11 @@ export interface IUserOptions {
   uploadUrl?: string;
   uuid?: string;
   key?: string;
-  webcam?: "photo" | "video" | IWebcamOptions;
 }
 
 export default class Shubox {
   public static instances: Dropzone[] = [];
 
-  public static stopCamera: () => void = Webcam.stopCamera;
   public baseUrl: string = "https://api.shubox.io";
   public signatureUrl: string = `${this.baseUrl}/signatures`;
   public uploadUrl: string = `${this.baseUrl}/uploads`;
@@ -25,7 +22,6 @@ export default class Shubox {
   public element: HTMLElement | HTMLInputElement;
   public options: any = {};
   public callbacks: any = {};
-  public webcam?: Webcam;
   public version: string = version;
 
   constructor(selector: string = ".shubox", options: IUserOptions = {}) {
@@ -75,11 +71,6 @@ export default class Shubox {
         ...options,
       };
 
-      if (this.options.webcam) {
-        this.options.clickable = false;
-        this.options.acceptedFiles = "video/webm,video/mp4,image/png";
-      }
-
       const dropzoneOptions = {
         // callbacks that we need to delegate to. In some cases there's work
         // needing to be passed through to Shubox's handler, and sometimes
@@ -99,10 +90,6 @@ export default class Shubox {
         ...this.options,
         ...dropzoneOptions,
       });
-
-      if (this.options.webcam) {
-        this.webcam = new Webcam(dropzone, this.element, this.options.webcam);
-      }
 
       this.element.addEventListener("paste", ShuboxCallbacks.pasteCallback(dropzone));
       Shubox.instances.push(dropzone);
