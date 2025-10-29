@@ -22,7 +22,7 @@ export class TransformCallback {
     this.callback = callback;
   }
 
-  public run = (error: any = null) => {
+  public run = (error?: Error | string) => {
     const delay = Math.pow(2, 19 - this.retry); // 512, 1024, 2048, 4096 ...
 
     if (this.retry && !this.success) {
@@ -36,7 +36,7 @@ export class TransformCallback {
     }
   }
 
-  public validateResponse = (response: any) => {
+  public validateResponse = (response: Response) => {
     if (!response.ok) { throw Error(response.statusText); }
 
     this.success = true;

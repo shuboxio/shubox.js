@@ -7,8 +7,6 @@ import { TransformCallback } from "./transform_callback";
 import { uploadCompleteEvent } from "./upload_complete_event";
 import type { ShuboxDropzoneFile, SignatureResponse, IShuboxFile } from "./types";
 
-declare var window: any;
-
 export interface IShuboxDefaultOptions {
   success?: (file: Dropzone.DropzoneFile) => void;
   error?: (file: Dropzone.DropzoneFile, message: string) => void;
@@ -89,7 +87,8 @@ export class ShuboxCallbacks {
               self.shubox.callbacks.error(file, json.error);
             } else {
               self.instances.forEach((dz) => {
-                (dz as any).options.url = json.aws_endpoint;
+                // Dropzone instances allow setting url at runtime
+                dz.options.url = json.aws_endpoint;
               });
 
               file.postData = json;
