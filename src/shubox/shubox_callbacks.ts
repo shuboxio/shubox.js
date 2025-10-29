@@ -5,6 +5,8 @@ import { insertAtCursor } from "./insert_at_cursor";
 import { objectToFormData } from "./object_to_form_data";
 import { TransformCallback } from "./transform_callback";
 import { uploadCompleteEvent } from "./upload_complete_event";
+import { fetchWithRetry, parseJsonResponse } from "./fetch_with_retry";
+import { OfflineError } from "./errors";
 import type { ShuboxDropzoneFile, SignatureResponse, IShuboxFile } from "./types";
 
 export interface IShuboxDefaultOptions {
@@ -64,41 +66,55 @@ export class ShuboxCallbacks {
     const self = this;
 
     const hash = {
-      accept(file: ShuboxDropzoneFile, done: (error?: string | Error) => void) {
-        fetch(self.shubox.signatureUrl, {
-          headers: { "X-Shubox-Client": self.shubox.version },
-          body: objectToFormData({
-            file: {
-              name: filenameFromFile(file),
-              size: file.size,
-              type: file.type,
-            },
-            key: self.shubox.key,
-            s3Key: self.shubox.options.s3Key,
-          }),
-          method: "post",
-          mode: "cors"
-        })
-          .then((response) => {
-            return response.json();
-          })
-          .then((json) => {
-            if (json.error) {
-              self.shubox.callbacks.error(file, json.error);
-            } else {
-              self.instances.forEach((dz) => {
-                // Dropzone instances allow setting url at runtime
-                dz.options.url = json.aws_endpoint;
-              });
+      async accept(file: ShuboxDropzoneFile, done: (error?: string | Error) => void) {
+        // Check if user is offline before attempting to fetch signature
+        if (typeof navigator !== 'undefined' && !navigator.onLine) {
+          const offlineError = new OfflineError("Cannot upload while offline. Please check your internet connection.");
+          self.shubox.callbacks.error(file, offlineError);
+          return;
+        }
 
-              file.postData = json;
-              file.s3 = json.key;
-              done();
+        try {
+          const response = await fetchWithRetry(
+            self.shubox.signatureUrl,
+            {
+              headers: { "X-Shubox-Client": self.shubox.version },
+              body: objectToFormData({
+                file: {
+                  name: filenameFromFile(file),
+                  size: file.size,
+                  type: file.type,
+                },
+                key: self.shubox.key,
+                s3Key: self.shubox.options.s3Key,
+              }),
+              method: "post",
+              mode: "cors"
+            },
+            {
+              retryAttempts: self.shubox.options.retryAttempts || 3,
+              timeout: self.shubox.options.timeout || 30000,
             }
-          })
-          .catch((err) => {
-            self.shubox.callbacks.error(file, err.message);
-          });
+          );
+
+          const json = await parseJsonResponse<SignatureResponse>(response);
+
+          if (json.error) {
+            self.shubox.callbacks.error(file, json.error);
+          } else {
+            self.instances.forEach((dz) => {
+              // Dropzone instances allow setting url at runtime
+              dz.options.url = json.aws_endpoint;
+            });
+
+            file.postData = json;
+            file.s3 = json.key;
+            done();
+          }
+        } catch (err) {
+          const error = err instanceof Error ? err : new Error(String(err));
+          self.shubox.callbacks.error(file, error);
+        }
       },
 
       sending(file: ShuboxDropzoneFile, xhr: XMLHttpRequest, formData: FormData) {
@@ -167,7 +183,14 @@ export class ShuboxCallbacks {
 
             for (const variant of Object.keys(transformCallbacks)) {
               const callback = transformCallbacks[variant];
-              new TransformCallback(file as IShuboxFile, variant, callback, apiVersion, doVariantCharacterTranslation).run();
+              new TransformCallback(
+                file as IShuboxFile,
+                variant,
+                callback,
+                apiVersion,
+                doVariantCharacterTranslation,
+                self.shubox.callbacks.error
+              ).run();
             }
           }
 

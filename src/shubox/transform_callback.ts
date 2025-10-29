@@ -1,4 +1,5 @@
 import { Variant } from "./variant";
+import { TransformError } from "./errors";
 import type { IShuboxFile, TransformResult } from "./types";
 
 export class TransformCallback {
@@ -6,6 +7,7 @@ export class TransformCallback {
   public variant: string = "";
   public variantUrl: string = "";
   public callback: (file: IShuboxFile) => void;
+  public errorCallback?: (file: IShuboxFile, error: Error | string) => void;
   public retry: number = 10;
   public success: boolean = false;
 
@@ -14,12 +16,14 @@ export class TransformCallback {
     variant: string = "",
     callback: (file: IShuboxFile) => void,
     apiVersion: number = 1.0,
-    doVariantCharacterTranslation: boolean = true
+    doVariantCharacterTranslation: boolean = true,
+    errorCallback?: (file: IShuboxFile, error: Error | string) => void
   ) {
     this.file = file;
     this.variant = variant;
     this.variantUrl = new Variant(file, variant, apiVersion, doVariantCharacterTranslation).url();
     this.callback = callback;
+    this.errorCallback = errorCallback;
   }
 
   public run = (error?: Error | string) => {
@@ -33,6 +37,14 @@ export class TransformCallback {
           .then(this.validateResponse)
           .catch(this.run);
       }, delay);
+    } else if (!this.success && this.errorCallback) {
+      // Retries exhausted and transform failed - notify user
+      const transformError = new TransformError(
+        `Image processing failed for variant '${this.variant}'`,
+        this.variant,
+        error instanceof Error ? error : undefined
+      );
+      this.errorCallback(this.file, transformError);
     }
   }
 

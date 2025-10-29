@@ -1,6 +1,7 @@
 import Dropzone from "dropzone";
 import { ShuboxCallbacks } from "./shubox_callbacks";
 import { ShuboxOptions as ShuboxOptionsClass } from "./shubox_options";
+import { OfflineError } from "./errors";
 import { version } from "../../package.json";
 import type { ShuboxOptions, ShuboxCallbackMethods } from "./types";
 
@@ -10,6 +11,8 @@ export interface IUserOptions extends Partial<ShuboxOptions> {
   uploadUrl?: string;
   uuid?: string;
   key?: string;
+  timeout?: number;
+  retryAttempts?: number;
 }
 
 export default class Shubox {
@@ -98,6 +101,15 @@ export default class Shubox {
   }
 
   public upload(file: Dropzone.DropzoneFile) {
+    // Check if user is offline before attempting upload
+    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+      const offlineError = new OfflineError("Cannot upload while offline. Please check your internet connection.");
+      if (this.callbacks.error) {
+        this.callbacks.error(file, offlineError);
+      }
+      return;
+    }
+
     this.element.dropzone.addFile(file);
   }
 }

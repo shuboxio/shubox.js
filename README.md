@@ -58,6 +58,12 @@ announcements, or the occasional pithy tweet.
 * [Set Up Your Own S3 Bucket](#set-up-your-own-s3-bucket)
 * [Examples &amp; Ideas](#examples--ideas)
 * [Library Documentation](#library-documentation)
+	* [Event Lifecycle Callbacks](#event-lifecycle-callbacks)
+	* [Error Handling](#error-handling)
+		* [Error Types](#error-types)
+		* [Automatic Retry](#automatic-retry)
+		* [Offline Detection](#offline-detection)
+		* [Transform Error Handling](#transform-error-handling)
 * [Development Notes](#development-notes)
 	* [Setup](#development-setup)
 	* [Lerna](#lerna)
@@ -473,11 +479,23 @@ success: function(file) {}
 ### error:
 
 Assign a function to the error key, accepting a [file object](#file-object) and
-error string. This method will be called when errors are incurred with a file
-upload, or during the S3 signature generation process
+error message or error object. This method will be called when errors are incurred
+with a file upload, during the S3 signature generation process, or when transforms fail.
+
+Starting with version 1.1.0, the error parameter may be a typed error object
+(see [Error Types](#error-types) below) which provides more context about the failure.
 
 ```javascript
-error: function(file, message) {}
+error: function(file, error) {
+  // error can be a string or an Error object
+  if (error instanceof TransformError) {
+    console.log('Transform failed for variant:', error.variant)
+  } else if (error instanceof OfflineError) {
+    alert('Cannot upload while offline')
+  } else {
+    console.log('Upload error:', error.message || error)
+  }
+}
 ```
 
 ### queuecomplete:
@@ -487,6 +505,143 @@ uploading.
 
 ```javascript
 queuecomplete: function() {}
+```
+
+## Error Handling
+
+Shubox.js v1.1.0+ includes comprehensive error handling with automatic retries,
+timeout protection, and offline detection.
+
+### Error Types
+
+Shubox provides typed error classes for better error handling:
+
+- **`NetworkError`** - Network failures or timeouts (recoverable)
+- **`SignatureError`** - S3 signature fetch failures
+- **`UploadError`** - S3 upload failures (includes `statusCode`)
+- **`TransformError`** - Image transform failures (includes `variant` name)
+- **`ValidationError`** - File validation failures
+- **`TimeoutError`** - Request timeout (extends NetworkError)
+- **`OfflineError`** - Offline detection (extends NetworkError)
+
+All error types extend the base `ShuboxError` class and include:
+- `code` - Error code string
+- `message` - Human-readable error message
+- `recoverable` - Boolean indicating if retry is possible
+- `originalError` - Underlying error object (if any)
+
+### Automatic Retry
+
+Network failures are automatically retried with exponential backoff:
+
+```javascript
+new Shubox('#upload', {
+  key: 'my-key',
+  retryAttempts: 3,  // Number of retry attempts (default: 3)
+  timeout: 30000,    // Request timeout in ms (default: 30000)
+
+  error: function(file, error) {
+    // Called only after all retries are exhausted
+    console.error('Upload failed:', error.message)
+  }
+})
+```
+
+**What gets retried:**
+- ✅ 5xx server errors (e.g., 500, 503)
+- ✅ Network failures (connection refused, DNS failures)
+- ✅ 429 rate limit errors
+- ✅ Request timeouts
+- ❌ 4xx client errors (e.g., 400, 404) - no retry
+
+**Retry behavior:**
+- Exponential backoff: 1s, 2s, 4s, 8s...
+- Applies to signature fetching, S3 uploads, and transform polling
+- Upload complete notifications also retry (non-blocking)
+
+### Offline Detection
+
+Shubox automatically detects when the user is offline and blocks uploads immediately:
+
+```javascript
+new Shubox('#upload', {
+  key: 'my-key',
+  error: function(file, error) {
+    if (error instanceof OfflineError) {
+      // User is offline
+      showNotification('Cannot upload while offline. Please check your connection.')
+    }
+  }
+})
+```
+
+### Transform Error Handling
+
+Transform failures are now reported instead of failing silently:
+
+```javascript
+new Shubox('#upload', {
+  key: 'my-key',
+  transforms: {
+    '200x200#': function(file) {
+      // Called when transform succeeds
+      document.getElementById('avatar').src = file.transform.s3url
+    }
+  },
+  error: function(file, error) {
+    if (error instanceof TransformError) {
+      // Transform failed after retries
+      console.log(`Failed to generate ${error.variant} variant`)
+      // You can still use the original uploaded file
+      console.log('Original file:', file.s3url)
+    }
+  }
+})
+```
+
+### Comprehensive Error Handling Example
+
+```javascript
+new Shubox('#upload', {
+  key: 'my-key',
+  retryAttempts: 5,      // Retry up to 5 times
+  timeout: 60000,        // 60 second timeout
+
+  transforms: {
+    '400x400#': function(file) {
+      // Success - use transformed image
+    }
+  },
+
+  error: function(file, error) {
+    // Differentiate error types
+    if (error instanceof OfflineError) {
+      showBanner('You appear to be offline. Upload will retry when connection is restored.')
+    }
+    else if (error instanceof TransformError) {
+      showNotification(`Image processing failed for ${error.variant}, but original uploaded successfully`)
+      // Fall back to original image
+      useOriginalImage(file.s3url)
+    }
+    else if (error instanceof TimeoutError) {
+      showNotification('Upload timed out. Please try again.')
+    }
+    else if (error instanceof NetworkError && error.recoverable) {
+      showNotification('Network error - upload failed after retries')
+    }
+    else if (error instanceof UploadError && error.statusCode === 403) {
+      showNotification('Upload forbidden - check your Shubox key and bucket permissions')
+    }
+    else {
+      showNotification(`Upload failed: ${error.message || error}`)
+    }
+  },
+
+  success: function(file) {
+    hideNotifications()
+    console.log('Upload successful:', file.s3url)
+  }
+})
 ```
 
 ## File Object
