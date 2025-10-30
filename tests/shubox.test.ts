@@ -55,13 +55,13 @@ describe('shubox', () => {
         const errorCallback = vi.fn();
         shubox.callbacks.error = errorCallback;
 
-        // This would normally call dropzone.addFile, which we can't fully test here
-        // but we can verify the error callback is NOT called
-        try {
-          shubox.upload(mockFile);
-        } catch (e) {
-          // Expected to fail because dropzone isn't fully initialized in test
+        // Mock dropzone.addFile to prevent thumbnail creation which fails in JSDOM
+        if (shubox.element.dropzone) {
+          shubox.element.dropzone.addFile = vi.fn();
         }
+
+        // This would normally call dropzone.addFile, which we've now mocked
+        shubox.upload(mockFile);
 
         expect(errorCallback).not.toHaveBeenCalled();
       });

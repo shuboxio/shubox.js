@@ -93,7 +93,11 @@ describe('fetchWithRetry', () => {
 
     global.fetch = vi.fn().mockResolvedValue(mockResponse);
 
-    const promise = fetchWithRetry('https://api.test.com/endpoint', {}, { retryAttempts: 3 }).catch((err) => { throw err; });
+    // Start the promise and immediately set up the rejection handler
+    const promise = fetchWithRetry('https://api.test.com/endpoint', {}, { retryAttempts: 3 });
+
+    // Set up error expectation before advancing timers
+    const errorPromise = promise.catch(err => err);
 
     // Advance through all retry delays
     await vi.advanceTimersByTimeAsync(1000); // First retry
@@ -103,7 +107,8 @@ describe('fetchWithRetry', () => {
     await vi.advanceTimersByTimeAsync(4000); // Third retry
     await vi.runOnlyPendingTimersAsync();
 
-    await expect(promise).rejects.toThrow(NetworkError);
+    const error = await errorPromise;
+    expect(error).toBeInstanceOf(NetworkError);
     expect(fetch).toHaveBeenCalledTimes(3);
   });
 
@@ -160,14 +165,18 @@ describe('fetchWithRetry', () => {
   it('should throw NetworkError after network errors exhausted', async () => {
     global.fetch = vi.fn().mockRejectedValue(new TypeError('Network request failed'));
 
-    const promise = fetchWithRetry('https://api.test.com/endpoint', {}, { retryAttempts: 2 }).catch((err) => { throw err; });
+    const promise = fetchWithRetry('https://api.test.com/endpoint', {}, { retryAttempts: 2 });
+
+    // Set up error expectation before advancing timers
+    const errorPromise = promise.catch(err => err);
 
     await vi.advanceTimersByTimeAsync(1000);
     await vi.runOnlyPendingTimersAsync();
     await vi.advanceTimersByTimeAsync(2000);
     await vi.runOnlyPendingTimersAsync();
 
-    await expect(promise).rejects.toThrow(NetworkError);
+    const error = await errorPromise;
+    expect(error).toBeInstanceOf(NetworkError);
     expect(fetch).toHaveBeenCalledTimes(2);
   });
 
