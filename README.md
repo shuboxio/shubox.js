@@ -507,6 +507,30 @@ uploading.
 queuecomplete: function() {}
 ```
 
+### canceled:
+
+The canceled callback will be called when a user cancels an upload. Shubox automatically
+cleans up resources (retry state, pending timeouts, CSS classes) before calling this callback.
+
+```javascript
+canceled: function(file) {
+  console.log('Upload canceled:', file.name);
+  // Perform any additional custom cleanup here
+}
+```
+
+### removedfile:
+
+The removedfile callback will be called when a file is removed from the upload queue.
+Shubox automatically cleans up resources before calling this callback.
+
+```javascript
+removedfile: function(file) {
+  console.log('File removed:', file.name);
+  // Remove any custom UI elements associated with this file
+}
+```
+
 ## Error Handling
 
 Shubox.js v1.1.0+ includes comprehensive error handling with automatic retries,

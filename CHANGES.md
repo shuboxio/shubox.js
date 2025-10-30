@@ -41,11 +41,23 @@ v1.1.0
 * Visual offline indicators - Adds `shubox-offline` CSS class and `data-shubox-offline` attribute when offline
 * All events bubble up the DOM and are cancelable for flexible integration
 
+**Phase 5: Graceful Degradation**
+
+* **Resource cleanup on cancel** - Properly cleans up retry state, pending timeouts, CSS classes, and progress attributes when uploads are canceled or files removed
+* **Lifecycle callbacks** - New `canceled`, `removedfile`, and `queuecomplete` callbacks for handling upload lifecycle events
+* **Partial success handling** - Main upload success callback fires even if transforms fail; transform failures reported separately with clear messages
+* **Non-blocking metadata** - Upload complete notification failures logged but don't block UI (main upload already succeeded)
+* **Memory leak prevention** - All timeouts cleared, retry counters reset, no orphaned resources
+* **CSS class management** - Proper cleanup of `.shubox-uploading`, `.shubox-error`, and progress indicators throughout lifecycle
+
 **Configuration Options Summary:**
 * `timeout` - Request timeout in milliseconds (default: 60000)
 * `retryAttempts` - Number of retry attempts (default: 3)
 * `offlineCheck` - Enable offline detection (default: true)
 * `onRetry` - Callback for retry attempts: `(attempt, error, file) => {}`
+* `canceled` - Callback when upload is canceled: `(file) => {}`
+* `removedfile` - Callback when file is removed: `(file) => {}`
+* `queuecomplete` - Callback when upload queue completes: `() => {}`
 
 **Breaking Changes:**
 * **Minor**: Error callback may now receive Error objects instead of just strings (backward compatible - string errors still work)

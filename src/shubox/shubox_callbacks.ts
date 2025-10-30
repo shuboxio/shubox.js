@@ -268,8 +268,8 @@ export class ShuboxCallbacks {
           // Remove error styling temporarily
           self.shubox.element.classList.remove("shubox-error");
 
-          // Schedule retry after delay
-          setTimeout(() => {
+          // Schedule retry after delay and store timeout ID for cleanup
+          file._shuboxRetryTimeout = setTimeout(() => {
             // Find the dropzone instance that owns this file
             const dropzone = self.instances.find(dz => {
               return Array.from(dz.files).some(f => f === file);
@@ -324,9 +324,68 @@ work with localhost.
           [file, progress, bytesSent],
         );
       },
+
+      canceled(file: ShuboxDropzoneFile) {
+        // Clean up resources when upload is canceled
+        self._cleanupFile(file);
+
+        // Call user's canceled callback if provided
+        if (self.shubox.options.canceled) {
+          self.shubox.options.canceled(file);
+        }
+      },
+
+      removedfile(file: ShuboxDropzoneFile) {
+        // Clean up resources when file is removed
+        self._cleanupFile(file);
+
+        // Call Dropzone's default removedfile to handle DOM cleanup
+        if (Dropzone.prototype.defaultOptions.removedfile) {
+          Dropzone.prototype.defaultOptions.removedfile!.apply(this, [file]);
+        }
+
+        // Call user's removedfile callback if provided
+        if (self.shubox.options.removedfile) {
+          self.shubox.options.removedfile(file);
+        }
+      },
+
+      queuecomplete() {
+        // Remove uploading class when queue is complete
+        self.shubox.element.classList.remove("shubox-uploading");
+
+        // Call user's queuecomplete callback if provided
+        if (self.shubox.options.queuecomplete) {
+          self.shubox.options.queuecomplete();
+        }
+      },
     };
 
     return hash;
+  }
+
+  /**
+   * Clean up resources associated with a file
+   * @param file - The file to clean up
+   */
+  private _cleanupFile(file: ShuboxDropzoneFile): void {
+    // Reset retry count
+    if (file._shuboxRetryCount !== undefined) {
+      delete file._shuboxRetryCount;
+    }
+
+    // Clean up any pending retry timeouts
+    if (file._shuboxRetryTimeout !== undefined) {
+      clearTimeout(file._shuboxRetryTimeout);
+      delete file._shuboxRetryTimeout;
+    }
+
+    // Remove upload-related CSS classes
+    this.shubox.element.classList.remove("shubox-uploading");
+    this.shubox.element.classList.remove("shubox-error");
+
+    // Remove progress data attribute
+    delete this.shubox.element.dataset.shuboxProgress;
   }
 
   // Private

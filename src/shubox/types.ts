@@ -39,6 +39,7 @@ export interface ShuboxDropzoneFile extends Dropzone.DropzoneFile {
   transforms?: Record<string, TransformResult>;
   transform?: TransformResult;
   _shuboxRetryCount?: number;
+  _shuboxRetryTimeout?: NodeJS.Timeout;
 }
 
 /**
@@ -96,6 +97,9 @@ export interface ShuboxOptions extends Omit<Dropzone.DropzoneOptions, 'previewsC
   error?: (file: ShuboxDropzoneFile, message: string | Error) => void;
   sending?: (file: ShuboxDropzoneFile, xhr: XMLHttpRequest, formData: FormData) => void;
   addedfile?: (file: ShuboxDropzoneFile) => void;
+  canceled?: (file: ShuboxDropzoneFile) => void;
+  removedfile?: (file: ShuboxDropzoneFile) => void;
+  queuecomplete?: () => void;
 }
 
 /**
@@ -108,4 +112,7 @@ export interface ShuboxCallbackMethods {
   success: (file: ShuboxDropzoneFile, response: string) => void;
   error: (file: ShuboxDropzoneFile, message: string | Error) => void;
   uploadProgress: (file: ShuboxDropzoneFile, progress: number, bytesSent: number) => void;
+  canceled: (file: ShuboxDropzoneFile) => void;
+  removedfile: (file: ShuboxDropzoneFile) => void;
+  queuecomplete: () => void;
 }
