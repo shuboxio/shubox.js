@@ -116,8 +116,9 @@ new Shubox('#avatar-events', {
   key: window.shuboxSandboxKey,
   previewsContainer: false,
   maxFiles: 1,
-  retryAttempts: 3,  // Retry failed uploads up to 3 times
-  timeout: 30000,    // 30 second timeout
+  retryAttempts: 3,    // Retry failed uploads up to 3 times
+  timeout: 30000,      // 30 second timeout
+  offlineCheck: true,  // Enable offline detection
 
   addedfile: _file => { logEvent('Added file!') },
 
@@ -142,10 +143,38 @@ new Shubox('#avatar-events', {
     logEvent(errorMsg);
   },
 
+  onRetry: (attempt, error, _file) => {
+    logEvent(`Retry attempt ${attempt}: ${error.message}`);
+  },
+
   queuecomplete: () => { logEvent('Queue complete!') },
   sending: (_file, _xhr, _formData) => { logEvent('Sending file!') },
   success: (_file, _responseText, _e) => { logEvent('File sent!') },
 })
+
+// Add event listeners for new Phase 4 events
+const avatarEventsElement = document.getElementById('avatar-events');
+if (avatarEventsElement) {
+  avatarEventsElement.addEventListener('shubox:retry:start', (e) => {
+    logEvent(`🔄 Starting retry (max ${e.detail.maxRetries} attempts)`);
+  });
+
+  avatarEventsElement.addEventListener('shubox:retry:attempt', (e) => {
+    logEvent(`🔄 Retry ${e.detail.attempt}/${e.detail.maxRetries} (waiting ${e.detail.delay}ms)`);
+  });
+
+  avatarEventsElement.addEventListener('shubox:recovered', (e) => {
+    logEvent(`✅ Upload recovered after ${e.detail.attemptCount} attempts!`);
+  });
+
+  avatarEventsElement.addEventListener('shubox:timeout', (e) => {
+    logEvent(`⏱️ Timeout after ${e.detail.timeout}ms`);
+  });
+
+  avatarEventsElement.addEventListener('shubox:error', (e) => {
+    logEvent(`❌ Error event: ${e.detail.error.code}`);
+  });
+}
 
 const logEvent = e =>{
   let eventsEl = document.getElementById("events")

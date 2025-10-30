@@ -6,7 +6,8 @@ import { objectToFormData } from "./object_to_form_data";
 import { TransformCallback } from "./transform_callback";
 import { uploadCompleteEvent } from "./upload_complete_event";
 import { fetchWithRetry, parseJsonResponse } from "./fetch_with_retry";
-import { OfflineError } from "./errors";
+import { OfflineError, NetworkError, UploadError, TimeoutError } from "./errors";
+import { dispatchShuboxEvent } from "./events";
 import type { ShuboxDropzoneFile, SignatureResponse, IShuboxFile } from "./types";
 
 export interface IShuboxDefaultOptions {
@@ -147,6 +148,17 @@ export class ShuboxCallbacks {
       },
 
       success(file: ShuboxDropzoneFile, response: string) {
+        // Check if this is a recovery from previous failures
+        const hadPreviousFailures = file._shuboxRetryCount && file._shuboxRetryCount > 0;
+
+        if (hadPreviousFailures) {
+          // Dispatch recovered event
+          dispatchShuboxEvent(self.shubox.element, 'shubox:recovered', {
+            file,
+            attemptCount: file._shuboxRetryCount! + 1, // +1 because the first attempt is not counted
+          });
+        }
+
         self.shubox.element.classList.add("shubox-success");
         self.shubox.element.classList.remove("shubox-uploading");
         const match = /\<Location\>(.*)\<\/Location\>/g.exec(response) || ["", ""];
@@ -202,8 +214,84 @@ export class ShuboxCallbacks {
       },
 
       error(file: ShuboxDropzoneFile, message: string | Error) {
+        // Initialize retry count if not set
+        if (file._shuboxRetryCount === undefined) {
+          file._shuboxRetryCount = 0;
+        }
+
+        // Determine if this error is recoverable and should be retried
+        const error = message instanceof Error ? message : new Error(String(message));
+        const isRecoverable = self._isRecoverableUploadError(error);
+        const maxRetries = self.shubox.options.retryAttempts || 3;
+        const shouldRetry = isRecoverable && file._shuboxRetryCount < maxRetries;
+
+        // Dispatch timeout event if this is a timeout error
+        if (error instanceof TimeoutError) {
+          dispatchShuboxEvent(self.shubox.element, 'shubox:timeout', {
+            file,
+            timeout: self.shubox.options.timeout || 60000,
+          });
+        }
+
+        if (shouldRetry) {
+          file._shuboxRetryCount++;
+
+          // Dispatch retry:start event on first retry
+          if (file._shuboxRetryCount === 1) {
+            dispatchShuboxEvent(self.shubox.element, 'shubox:retry:start', {
+              error,
+              file,
+              maxRetries,
+            });
+          }
+
+          // Calculate exponential backoff delay
+          const delay = Math.pow(2, file._shuboxRetryCount - 1) * 1000; // 1s, 2s, 4s
+
+          // Dispatch retry:attempt event
+          dispatchShuboxEvent(self.shubox.element, 'shubox:retry:attempt', {
+            error,
+            file,
+            attempt: file._shuboxRetryCount,
+            maxRetries,
+            delay,
+          });
+
+          // Call onRetry callback if provided
+          if (self.shubox.options.onRetry) {
+            self.shubox.options.onRetry(file._shuboxRetryCount, error, file);
+          }
+
+          // Reset file status to queued to allow retry
+          file.status = Dropzone.QUEUED;
+
+          // Remove error styling temporarily
+          self.shubox.element.classList.remove("shubox-error");
+
+          // Schedule retry after delay
+          setTimeout(() => {
+            // Find the dropzone instance that owns this file
+            const dropzone = self.instances.find(dz => {
+              return Array.from(dz.files).some(f => f === file);
+            });
+
+            if (dropzone) {
+              dropzone.processFile(file);
+            }
+          }, delay);
+
+          return; // Don't call error handler yet, we're retrying
+        }
+
+        // If we've exhausted retries or error is not recoverable, handle the error
         self.shubox.element.classList.remove("shubox-uploading");
         self.shubox.element.classList.add("shubox-error");
+
+        // Dispatch error event
+        dispatchShuboxEvent(self.shubox.element, 'shubox:error', {
+          error,
+          file,
+        });
 
         const xhr = new XMLHttpRequest(); // bc type signature
         Dropzone.prototype.defaultOptions.error!.apply(this, [file, message, xhr]);
@@ -339,5 +427,59 @@ work with localhost.
       el.tagName === "TEXTAREA" &&
       this.shubox.options.textBehavior === "insertAtCursor"
     );
+  }
+
+  /**
+   * Determines if an upload error is recoverable and should be retried
+   * @param error - The error that occurred
+   * @returns true if the error is recoverable and should be retried
+   */
+  public _isRecoverableUploadError(error: Error): boolean {
+    const errorMessage = error.message.toLowerCase();
+
+    // Network errors are recoverable
+    if (error instanceof NetworkError) {
+      return true;
+    }
+
+    // Timeout errors are recoverable (they might succeed on retry)
+    if (errorMessage.includes("timeout") || errorMessage.includes("timed out")) {
+      return true;
+    }
+
+    // Connection errors are recoverable
+    if (errorMessage.includes("network") ||
+        errorMessage.includes("connection") ||
+        errorMessage.includes("fetch")) {
+      return true;
+    }
+
+    // 5xx server errors are recoverable (server might recover)
+    if (error instanceof UploadError && error.statusCode && error.statusCode >= 500) {
+      return true;
+    }
+
+    // HTTP 5xx errors in message
+    if (errorMessage.match(/http 5\d{2}/)) {
+      return true;
+    }
+
+    // 429 rate limit errors are recoverable
+    if (errorMessage.includes("429") || errorMessage.includes("rate limit")) {
+      return true;
+    }
+
+    // Service unavailable, bad gateway, gateway timeout
+    if (errorMessage.includes("503") ||
+        errorMessage.includes("502") ||
+        errorMessage.includes("504") ||
+        errorMessage.includes("service unavailable") ||
+        errorMessage.includes("bad gateway") ||
+        errorMessage.includes("gateway timeout")) {
+      return true;
+    }
+
+    // All other errors (4xx, validation errors, etc.) are not recoverable
+    return false;
   }
 }

@@ -40,7 +40,7 @@ export class TransformCallback {
     } else if (!this.success && this.errorCallback) {
       // Retries exhausted and transform failed - notify user
       const transformError = new TransformError(
-        `Image processing failed for variant '${this.variant}'`,
+        `Image processing failed for variant '${this.variant}'. Original file uploaded successfully.`,
         this.variant,
         error instanceof Error ? error : undefined
       );

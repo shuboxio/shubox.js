@@ -89,22 +89,19 @@ export class ValidationError extends ShuboxError {
 /**
  * Timeout errors
  */
-export class TimeoutError extends NetworkError {
+export class TimeoutError extends ShuboxError {
   constructor(message: string = "Request timed out") {
-    super(message);
+    super(message, "TIMEOUT_ERROR", true);
     this.name = "TimeoutError";
-    this.code = "TIMEOUT_ERROR";
   }
 }
 
 /**
  * Offline errors
  */
-export class OfflineError extends NetworkError {
+export class OfflineError extends ShuboxError {
   constructor(message: string = "Cannot upload while offline") {
-    super(message);
+    super(message, "OFFLINE_ERROR", true);
     this.name = "OfflineError";
-    this.code = "OFFLINE_ERROR";
-    this.recoverable = true;
   }
 }

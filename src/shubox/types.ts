@@ -38,6 +38,7 @@ export interface ShuboxDropzoneFile extends Dropzone.DropzoneFile {
   postData: SignatureResponse;
   transforms?: Record<string, TransformResult>;
   transform?: TransformResult;
+  _shuboxRetryCount?: number;
 }
 
 /**
@@ -75,6 +76,12 @@ export interface ShuboxOptions extends Omit<Dropzone.DropzoneOptions, 'previewsC
   textBehavior?: "replace" | "append" | "insertAtCursor";
   transforms?: TransformCallbacks | null;
   uploadingTemplate?: string;
+
+  // Error handling options
+  timeout?: number;
+  retryAttempts?: number;
+  onRetry?: (attempt: number, error: Error, file: ShuboxDropzoneFile) => void;
+  offlineCheck?: boolean;
 
   // Deprecated options (kept for backward compatibility)
   /** @deprecated Use transforms instead */

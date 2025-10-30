@@ -27,10 +27,15 @@ export default class Shubox {
   public options: ShuboxOptions = {} as ShuboxOptions;
   public callbacks: ShuboxCallbackMethods = {} as ShuboxCallbackMethods;
   public version: string = version;
+  private offlineCheckEnabled: boolean = true;
+  private dropzoneInstances: Dropzone[] = [];
 
   constructor(selector: string = ".shubox", options: IUserOptions = {}) {
     this.selector = selector;
     this.element = document.createElement('div') as HTMLDivElement;
+
+    // Configure offline check (default: true)
+    this.offlineCheckEnabled = options.offlineCheck !== false;
 
     if (options.baseUrl) {
       this.baseUrl = options.baseUrl;
@@ -60,6 +65,7 @@ export default class Shubox {
     }
 
     this.init(options);
+    this._setupOfflineDetection();
   }
 
   public init(options: Partial<ShuboxOptions>) {
@@ -88,6 +94,8 @@ export default class Shubox {
         success: this.callbacks.success as any,
         uploadprogress: this.callbacks.uploadProgress as any,
         url: "http://localhost",
+        // Set timeout for XHR requests (default: 60 seconds for uploads)
+        timeout: this.options.timeout || 60000,
       };
 
       const dropzone = new Dropzone(this.element, {
@@ -95,8 +103,16 @@ export default class Shubox {
         ...dropzoneOptions,
       });
 
+      // Track instances for this Shubox instance
+      this.dropzoneInstances.push(dropzone);
+
       this.element.addEventListener("paste", ShuboxCallbacks.pasteCallback(dropzone));
       Shubox.instances.push(dropzone);
+
+      // Apply offline state if currently offline
+      if (this.offlineCheckEnabled && this._isOffline()) {
+        this._disableDropzone(dropzone);
+      }
     }
   }
 
@@ -105,11 +121,65 @@ export default class Shubox {
     if (typeof navigator !== 'undefined' && !navigator.onLine) {
       const offlineError = new OfflineError("Cannot upload while offline. Please check your internet connection.");
       if (this.callbacks.error) {
-        this.callbacks.error(file, offlineError);
+        this.callbacks.error(file as any, offlineError);
       }
       return;
     }
 
     this.element.dropzone.addFile(file);
+  }
+
+  /**
+   * Set up online/offline event listeners
+   * @private
+   */
+  private _setupOfflineDetection(): void {
+    if (!this.offlineCheckEnabled || typeof window === 'undefined') {
+      return;
+    }
+
+    // Handle going offline
+    window.addEventListener('offline', () => {
+      this.dropzoneInstances.forEach(dropzone => {
+        this._disableDropzone(dropzone);
+      });
+    });
+
+    // Handle coming back online
+    window.addEventListener('online', () => {
+      this.dropzoneInstances.forEach(dropzone => {
+        this._enableDropzone(dropzone);
+      });
+    });
+  }
+
+  /**
+   * Check if browser is currently offline
+   * @private
+   */
+  private _isOffline(): boolean {
+    return typeof navigator !== 'undefined' && !navigator.onLine;
+  }
+
+  /**
+   * Disable a Dropzone instance (prevent file selection)
+   * @private
+   */
+  private _disableDropzone(dropzone: Dropzone): void {
+    dropzone.disable();
+    const element = dropzone.element as HTMLElement;
+    element.classList.add('shubox-offline');
+    element.setAttribute('data-shubox-offline', 'true');
+  }
+
+  /**
+   * Enable a Dropzone instance (allow file selection)
+   * @private
+   */
+  private _enableDropzone(dropzone: Dropzone): void {
+    dropzone.enable();
+    const element = dropzone.element as HTMLElement;
+    element.classList.remove('shubox-offline');
+    element.removeAttribute('data-shubox-offline');
   }
 }

@@ -136,11 +136,11 @@ describe('TimeoutError', () => {
 
     expect(error).toBeInstanceOf(Error);
     expect(error).toBeInstanceOf(ShuboxError);
-    expect(error).toBeInstanceOf(NetworkError);
     expect(error).toBeInstanceOf(TimeoutError);
     expect(error.message).toBe('Request timed out');
     expect(error.code).toBe('TIMEOUT_ERROR');
     expect(error.name).toBe('TimeoutError');
+    expect(error.recoverable).toBe(true);
   });
 
   it('should allow custom message', () => {
@@ -155,7 +155,6 @@ describe('OfflineError', () => {
 
     expect(error).toBeInstanceOf(Error);
     expect(error).toBeInstanceOf(ShuboxError);
-    expect(error).toBeInstanceOf(NetworkError);
     expect(error).toBeInstanceOf(OfflineError);
     expect(error.message).toBe('Cannot upload while offline');
     expect(error.code).toBe('OFFLINE_ERROR');
@@ -184,9 +183,11 @@ describe('Error instanceof checks', () => {
     expect(networkError instanceof NetworkError).toBe(true);
     expect(networkError instanceof TimeoutError).toBe(false);
 
-    // Timeout and Offline extend NetworkError
-    expect(timeoutError instanceof NetworkError).toBe(true);
-    expect(offlineError instanceof NetworkError).toBe(true);
+    // Timeout and Offline extend ShuboxError directly (not NetworkError)
+    expect(timeoutError instanceof ShuboxError).toBe(true);
+    expect(timeoutError instanceof NetworkError).toBe(false);
+    expect(offlineError instanceof ShuboxError).toBe(true);
+    expect(offlineError instanceof NetworkError).toBe(false);
 
     // Transform is not a network error
     expect(transformError instanceof NetworkError).toBe(false);

@@ -77,17 +77,24 @@ export async function fetchWithRetry(
 
           // For 5xx errors (server errors) or 429 (rate limit), retry if we have attempts left
           if (shouldRetryStatus(response.status) && attempt < retryAttempts - 1) {
-            lastError = new Error(
-              `HTTP ${response.status}: ${response.statusText}`,
-            );
+            const retryMessage = response.status === 429
+              ? "Rate limit reached. Retrying..."
+              : "Shubox service temporarily unavailable. Retrying...";
+            lastError = new Error(retryMessage);
             // Wait before retrying
             await delay(retryDelay(attempt));
             continue;
           }
 
           // No more retries, throw error
+          const finalMessage = response.status === 429
+            ? "Rate limit exceeded. Please try again later."
+            : response.status >= 500
+              ? "Shubox service is unavailable. Please try again later."
+              : `Upload failed: ${response.statusText}`;
+
           throw new NetworkError(
-            `HTTP ${response.status}: ${response.statusText}`,
+            finalMessage,
             new Error(response.statusText),
           );
         }
@@ -104,11 +111,11 @@ export async function fetchWithRetry(
       // Handle timeout
       if (err.name === "AbortError") {
         if (attempt < retryAttempts - 1) {
-          lastError = new TimeoutError();
+          lastError = new TimeoutError("Request timed out. Retrying...");
           await delay(retryDelay(attempt));
           continue;
         }
-        throw new TimeoutError();
+        throw new TimeoutError("Upload timed out. Please check your connection and try again.");
       }
 
       // Handle network errors (connection refused, DNS failure, etc.)
@@ -123,7 +130,7 @@ export async function fetchWithRetry(
           continue;
         }
         throw new NetworkError(
-          "Network request failed after retries",
+          "Upload failed due to network error. Please check your connection and try again.",
           err,
         );
       }

@@ -561,11 +561,12 @@ new Shubox('#upload', {
 
 ### Offline Detection
 
-Shubox automatically detects when the user is offline and blocks uploads immediately:
+Shubox automatically detects when the user is offline and prevents file selection:
 
 ```javascript
 new Shubox('#upload', {
   key: 'my-key',
+  offlineCheck: true,  // Default: true - automatically detects offline state
   error: function(file, error) {
     if (error instanceof OfflineError) {
       // User is offline
@@ -573,6 +574,25 @@ new Shubox('#upload', {
     }
   }
 })
+```
+
+**Offline behavior:**
+- When offline, Dropzone is automatically disabled (prevents file selection)
+- Visual indicator: `shubox-offline` CSS class and `data-shubox-offline` attribute added to element
+- When connection restored, Dropzone automatically re-enabled
+- To disable this feature, set `offlineCheck: false`
+
+**Styling offline state:**
+```css
+.shubox-offline {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.shubox-offline::before {
+  content: 'Offline - uploads disabled';
+  color: #999;
+}
 ```
 
 ### Transform Error Handling
@@ -606,11 +626,17 @@ new Shubox('#upload', {
   key: 'my-key',
   retryAttempts: 5,      // Retry up to 5 times
   timeout: 60000,        // 60 second timeout
+  offlineCheck: true,    // Enable offline detection
 
   transforms: {
     '400x400#': function(file) {
       // Success - use transformed image
     }
+  },
+
+  onRetry: function(attempt, error, file) {
+    // Called on each retry attempt
+    console.log(`Retry ${attempt}: ${error.message}`)
   },
 
   error: function(file, error) {
@@ -641,6 +667,113 @@ new Shubox('#upload', {
     hideNotifications()
     console.log('Upload successful:', file.s3url)
   }
+})
+```
+
+## Event System
+
+Shubox dispatches custom events throughout the upload lifecycle for monitoring, analytics, and user feedback. All events bubble up the DOM and are cancelable.
+
+### Available Events
+
+**`shubox:error`** - Dispatched when an upload error occurs (after all retries exhausted)
+```javascript
+element.addEventListener('shubox:error', (e) => {
+  console.error('Upload error:', e.detail.error.message)
+  console.log('Failed file:', e.detail.file.name)
+})
+```
+
+**`shubox:timeout`** - Dispatched when a request times out
+```javascript
+element.addEventListener('shubox:timeout', (e) => {
+  console.log(`Request timed out after ${e.detail.timeout}ms`)
+})
+```
+
+**`shubox:retry:start`** - Dispatched on the first retry attempt
+```javascript
+element.addEventListener('shubox:retry:start', (e) => {
+  console.log(`Starting retry (max ${e.detail.maxRetries} attempts)`)
+  showNotification('Upload failed, retrying...')
+})
+```
+
+**`shubox:retry:attempt`** - Dispatched on each retry attempt
+```javascript
+element.addEventListener('shubox:retry:attempt', (e) => {
+  console.log(`Retry ${e.detail.attempt}/${e.detail.maxRetries}`)
+  console.log(`Waiting ${e.detail.delay}ms before retry`)
+  updateProgressBar(e.detail.attempt, e.detail.maxRetries)
+})
+```
+
+**`shubox:recovered`** - Dispatched when upload succeeds after previous failures
+```javascript
+element.addEventListener('shubox:recovered', (e) => {
+  console.log(`Upload recovered after ${e.detail.attemptCount} attempts`)
+  showSuccessNotification('Upload succeeded after retry!')
+})
+```
+
+### Event System Example
+
+```javascript
+const uploadElement = document.querySelector('#upload')
+
+// Monitor all upload lifecycle events
+uploadElement.addEventListener('shubox:retry:start', (e) => {
+  showMessage('Upload failed, retrying...')
+})
+
+uploadElement.addEventListener('shubox:retry:attempt', (e) => {
+  showMessage(`Retry attempt ${e.detail.attempt}/${e.detail.maxRetries}...`)
+})
+
+uploadElement.addEventListener('shubox:recovered', (e) => {
+  showSuccess(`Upload succeeded after ${e.detail.attemptCount} attempts!`)
+})
+
+uploadElement.addEventListener('shubox:error', (e) => {
+  if (e.detail.error instanceof OfflineError) {
+    showError('You appear to be offline')
+  } else {
+    showError(`Upload failed: ${e.detail.error.message}`)
+  }
+})
+
+uploadElement.addEventListener('shubox:timeout', (e) => {
+  analytics.track('upload_timeout', {
+    timeout: e.detail.timeout,
+    file: e.detail.file.name
+  })
+})
+
+// Initialize Shubox
+new Shubox('#upload', {
+  key: 'my-key',
+  retryAttempts: 3,
+  timeout: 60000
+})
+```
+
+### Global Event Monitoring
+
+Listen at the document level to monitor all Shubox instances:
+
+```javascript
+// Analytics integration
+document.addEventListener('shubox:error', (e) => {
+  analytics.track('upload_error', {
+    error: e.detail.error.code,
+    file: e.detail.file.name
+  })
+})
+
+document.addEventListener('shubox:recovered', (e) => {
+  analytics.track('upload_recovered', {
+    attempts: e.detail.attemptCount
+  })
 })
 ```
 

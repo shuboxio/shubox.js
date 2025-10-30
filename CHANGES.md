@@ -7,19 +7,49 @@ Master
 v1.1.0
 ------
 
-### Error Handling Improvements (Phases 1 & 2)
+### Error Handling Improvements (Phases 1-4)
+
+**Phase 1 & 2: Foundation & Critical Fixes**
 
 * **New error type system** - Typed error classes (`NetworkError`, `SignatureError`, `UploadError`, `TransformError`, `ValidationError`, `TimeoutError`, `OfflineError`) with error codes for better error handling
-* **Automatic retry with exponential backoff** - Network failures automatically retry up to 3 times (configurable via `retryAttempts` option)
-* **Transform failure notifications** - Transform failures now invoke the error callback instead of failing silently
 * **HTTP status validation** - Proper validation of HTTP response status codes before processing
-* **Timeout protection** - All network requests have configurable timeout support (default: 30s, configurable via `timeout` option)
-* **Offline detection** - Uploads are blocked immediately when offline with clear error message
+* **Transform failure notifications** - Transform failures now invoke the error callback instead of failing silently
 * **Upload complete error handling** - Metadata upload failures now retry automatically and log properly
-* New `retryAttempts` option - Configure number of retry attempts (default: 3)
-* New `timeout` option - Configure request timeout in milliseconds (default: 30000)
 * Enhanced `error` callback - Now receives typed error objects with `code`, `message`, `recoverable`, and `originalError` properties
-* **Breaking change (minor)**: Error callback may now receive Error objects instead of just strings (backward compatible - string errors still work)
+
+**Phase 3: Automatic Retry Mechanisms**
+
+* **Automatic retry with exponential backoff** - Network failures automatically retry with smart backoff (1s, 2s, 4s...)
+* **Intelligent error classification** - Automatically determines which errors should be retried (5xx, timeouts, network failures) vs. which shouldn't (4xx client errors)
+* **Signature fetch retry** - S3 signature requests retry on recoverable failures
+* **S3 upload retry** - Failed uploads automatically retry up to configured limit
+* New `retryAttempts` option - Configure number of retry attempts (default: 3)
+* New `onRetry` callback - Optional callback invoked on each retry attempt
+* New `timeout` option - Configure request timeout in milliseconds (default: 60000 for uploads, 30000 for signatures)
+
+**Phase 4: Enhanced User Feedback**
+
+* **Offline detection with prevention** - Automatically detects offline state and disables file selection, re-enables when connection restored
+* **Improved error messages** - Context-aware, actionable error messages (e.g., "Upload timed out. Please check your connection and try again.")
+* **Comprehensive event system** - New custom events for monitoring upload lifecycle:
+  - `shubox:error` - Dispatched when errors occur
+  - `shubox:timeout` - Dispatched on timeout
+  - `shubox:retry:start` - Dispatched on first retry attempt
+  - `shubox:retry:attempt` - Dispatched on each retry with attempt details
+  - `shubox:recovered` - Dispatched when upload succeeds after retries
+* New `offlineCheck` option - Enable/disable offline detection (default: true)
+* Visual offline indicators - Adds `shubox-offline` CSS class and `data-shubox-offline` attribute when offline
+* All events bubble up the DOM and are cancelable for flexible integration
+
+**Configuration Options Summary:**
+* `timeout` - Request timeout in milliseconds (default: 60000)
+* `retryAttempts` - Number of retry attempts (default: 3)
+* `offlineCheck` - Enable offline detection (default: true)
+* `onRetry` - Callback for retry attempts: `(attempt, error, file) => {}`
+
+**Breaking Changes:**
+* **Minor**: Error callback may now receive Error objects instead of just strings (backward compatible - string errors still work)
+* **Minor**: `TimeoutError` and `OfflineError` now extend `ShuboxError` directly instead of `NetworkError` (improves TypeScript readonly property handling)
 
 ### Other Changes
 
