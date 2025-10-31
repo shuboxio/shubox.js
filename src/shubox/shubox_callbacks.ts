@@ -18,6 +18,7 @@ export interface IShuboxDefaultOptions {
   textBehavior?: string;
   s3urlTemplate?: string;
   successTemplate?: string;
+  uploadingTemplate?: string;
   acceptedFiles?: string;
   previewsContainer?: null | string | HTMLElement;
   extraParams?: object;
@@ -424,7 +425,9 @@ work with localhost.
       ? this.shubox.options.successTemplate
       : effectiveTemplateName === "s3urlTemplate"
         ? this.shubox.options.s3urlTemplate
-        : undefined;
+        : effectiveTemplateName === "uploadingTemplate"
+          ? this.shubox.options.uploadingTemplate
+          : undefined;
 
     if (templateValue) {
       interpolatedText = templateValue;
