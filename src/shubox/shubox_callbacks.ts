@@ -11,12 +11,22 @@ interface ICallbackOptions {
 }
 
 export class ShuboxCallbacks {
+  private dropzoneInstance: Dropzone | null = null;
+
   constructor(
     private signatureHandler: S3SignatureHandler,
     private uploadHandler: S3UploadHandler,
     private successHandler: SuccessHandler,
     private options: ICallbackOptions
   ) {}
+
+  /**
+   * Set the Dropzone instance for use in callbacks
+   * Must be called after the Dropzone instance is created
+   */
+  setDropzoneInstance(dropzone: Dropzone): void {
+    this.dropzoneInstance = dropzone;
+  }
 
   accept = (file: IDropzoneFile, done: (error?: string) => void): void => {
     this.signatureHandler.handle(file, done)
@@ -31,7 +41,10 @@ export class ShuboxCallbacks {
   }
 
   addedfile = (file: IDropzoneFile): void => {
-    Dropzone.prototype.defaultOptions.addedfile!.apply(this, [file]);
+    // Call Dropzone's default addedfile handler with the correct context (the Dropzone instance)
+    if (this.dropzoneInstance) {
+      Dropzone.prototype.defaultOptions.addedfile!.apply(this.dropzoneInstance, [file]);
+    }
     if (this.options.addedfile) {
       this.options.addedfile(file)
     }
@@ -39,7 +52,10 @@ export class ShuboxCallbacks {
 
   error = (file: IDropzoneFile, message: string | Error): void => {
     const xhr = new XMLHttpRequest(); // bc type signature
-    Dropzone.prototype.defaultOptions.error!.apply(this, [file, message, xhr]);
+    // Call Dropzone's default error handler with the correct context (the Dropzone instance)
+    if (this.dropzoneInstance) {
+      Dropzone.prototype.defaultOptions.error!.apply(this.dropzoneInstance, [file, message, xhr]);
+    }
 
     if (this.options.error) {
       this.options.error(file, message)

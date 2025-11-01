@@ -177,6 +177,9 @@ export default class Shubox {
         ...dropzoneOptions,
       });
 
+      // Set the dropzone instance in callbacks so they can call Dropzone defaults with correct context
+      shuboxCallbacks.setDropzoneInstance(dropzone);
+
       // Track instances for this Shubox instance
       this.dropzoneInstances.push(dropzone);
 
