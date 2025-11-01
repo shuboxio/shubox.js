@@ -47,6 +47,34 @@ npx vitest run tests/shubox/variant.test.ts
 
 ## Architecture
 
+### New Modular Architecture (Post-Refactoring)
+
+The codebase follows a modular architecture with dependency injection:
+
+**Core Modules:**
+- `src/shubox/config/` - Centralized constants, defaults, and TypeScript types
+- `src/shubox/api/` - API client for HTTP communication with Shubox service
+- `src/shubox/dom/` - DOM renderer for template interpolation and insertion
+- `src/shubox/handlers/` - Single-responsibility handlers for upload lifecycle
+  - `signature.ts` - Fetches S3 pre-signed URLs
+  - `upload.ts` - Posts files to S3 with signed form data
+  - `transform_poller.ts` - Polls for transform completion
+  - `success.ts` - Orchestrates post-upload actions
+- `src/shubox/callbacks/` - Thin Dropzone integration layer
+
+**Dependency Flow:**
+```
+Shubox (orchestrator)
+  ├─> ShuboxApiClient
+  ├─> ShuboxDomRenderer
+  └─> ShuboxCallbacks
+       ├─> S3SignatureHandler(apiClient)
+       ├─> S3UploadHandler()
+       └─> SuccessHandler(renderer, apiClient)
+```
+
+All dependencies are injected through constructors, making the codebase testable and modular.
+
 ### Core Entry Points
 - `src/shubox.ts` - Re-exports default from `src/shubox/index.ts`
 - `src/shubox/index.ts` - Main `Shubox` class that initializes Dropzone instances
