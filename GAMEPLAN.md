@@ -23,7 +23,6 @@ This document outlines comprehensive improvements identified for the Shubox.js l
 
 ### **4. Test Coverage**
 - Expand test suite significantly - only 3 test files found for a complex library
-- Add integration tests for webcam functionality
 - Mock external dependencies (Dropzone, fetch calls) properly
 - Add visual regression tests for UI components
 
@@ -36,7 +35,6 @@ This document outlines comprehensive improvements identified for the Shubox.js l
 
 ### **6. Bundle Optimization**
 - Tree-shaking support - make features more modular
-- Lazy load webcam functionality when not needed
 - Optimize for smaller bundle size (currently depends on full Dropzone)
 
 ### **7. Modern Web APIs**
@@ -49,7 +47,6 @@ This document outlines comprehensive improvements identified for the Shubox.js l
 ### **8. Accessibility**
 - Add ARIA labels and keyboard navigation support
 - Screen reader compatibility for upload progress
-- Better focus management during webcam operations
 
 ### **9. Developer Experience**
 - Add TypeScript declaration files for better IDE support
@@ -65,7 +62,6 @@ This document outlines comprehensive improvements identified for the Shubox.js l
 
 ### **11. Reliability**
 - [x] Add connection retry logic
-- Implement proper cleanup for webcam resources
 - [x] Handle edge cases like network interruptions during upload
 
 ## **Documentation & Examples**
