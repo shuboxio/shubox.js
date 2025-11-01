@@ -1,6 +1,6 @@
 declare var document: any;
 
-export function insertAtCursor(el: HTMLInputElement, myValue: string): void {
+export function insertAtCursor(el: HTMLInputElement | HTMLTextAreaElement, myValue: string): void {
   if (document.selection) {
     el.focus();
     const sel = document.selection.createRange();

@@ -1,9 +1,13 @@
+function isFile(value: unknown): value is File {
+    return value instanceof File;
+}
+
 export function objectToFormData(
     obj: object,
     form?: FormData,
     namespace?: string,
 ) {
-    const formData = form || new (window as any).FormData();
+    const formData = form || new FormData();
     let formKey;
 
     for (const property in obj) {
@@ -15,13 +19,12 @@ export function objectToFormData(
             }
 
             // if the property is an object/hash, and not a File,
-            if (
-                typeof obj[property as keyof typeof obj] === "object" &&
-                !(obj[property as keyof typeof obj] as any instanceof (window as any).File)
-            ) {
-                objectToFormData(obj[property as keyof typeof obj], formData, property);
+            const value = obj[property as keyof typeof obj];
+
+            if (typeof value === "object" && value !== null && !isFile(value)) {
+                objectToFormData(value, formData, property);
             } else {
-                formData.append(formKey, obj[property as keyof typeof obj]);
+                formData.append(formKey, value);
             }
         }
     }

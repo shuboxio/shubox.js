@@ -1,6 +1,4 @@
-export interface IShuboxFile {
-  s3url: string;
-}
+import type { IShuboxFile } from "./types";
 
 export class Variant {
   public s3url: string = "";

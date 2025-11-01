@@ -4,8 +4,45 @@ Shubox.js Changes
 Master
 ------
 
+### Added
+* Create success handler for post-upload orchestration and template insertion
+* Create S3 upload handler for posting files to S3 with signed form data
+* Create S3 signature handler for fetching pre-signed upload URLs with retry logic
+* Create DOM renderer module for template interpolation and insertion into form elements
+* Create API client module for signature and transform requests with error handling
+* Create configuration module with centralized constants, defaults, and TypeScript types
+* Implement comprehensive error handling with automatic retries, offline detection, and custom event system
+* Implement graceful degradation with resource cleanup and lifecycle callbacks
+* Add integration tests for full upload flow to ensure end-to-end functionality
+
+### Changed
+* Update ShuboxOptions to use centralized config module for better maintainability
+* Remove old TransformCallback in favor of new TransformPoller handler architecture
+* Update Shubox class to use dependency injection with new modular architecture
+* Update ShuboxCallbacks to delegate to focused handler classes for single responsibility
+* Extract TransformPoller handler from TransformCallback for better separation of concerns
+* Improve TypeScript type safety with consolidated type definitions and proper interfaces
+* Fix callback function parameters to match expected signatures and improve type checking
+* Remove type assertions and achieve 100% type safety across the codebase
+* Update architecture documentation to reflect new modular structure and dependency injection
+* Add JSDoc comments to public APIs for better developer experience
+
+### Removed
+* Remove all webcam support from Shubox.js to simplify the codebase and reduce maintenance overhead
+* Update demo files by removing webcam-related pages and examples
+* Move and remove superfluous documentation files that are no longer relevant
+
+### Fixed
+* Fix bug with interpolated uploading and complete text not being inserted into form elements
+* Update insertAtCursor function to accept HTMLTextAreaElement for proper type compatibility
+* Resolve issues found during testing and build process to ensure stability
+* Fix async test error handling to eliminate unhandled promise rejections
+
 v1.1.0
 ------
+
+
+### Other Changes
 
 * New `transforms` option instead of `transformName` and `transformCallbacks`. See README.md
 * Upgrade lerna (7.4.1)

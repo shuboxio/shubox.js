@@ -1,4 +1,7 @@
 import Shubox from "./index";
+import type { ShuboxDropzoneFile } from "./types";
+import { DROPZONE_CONSTANTS } from "./config/constants";
+import { SHUBOX_DEFAULTS } from "./config/defaults";
 
 export class ShuboxOptions {
   public shubox: Shubox;
@@ -9,21 +12,20 @@ export class ShuboxOptions {
 
   public toHash() {
     return {
-      acceptedFiles: "image/*",
-      addedfile(file: any) { },
+      acceptedFiles: DROPZONE_CONSTANTS.DEFAULT_ACCEPTED_FILES,
+      addedfile(file: ShuboxDropzoneFile) { },
       cdn: null,
-      error(file: any, message: String) { },
-      extraParams: {},
-      previewsContainer: ["INPUT", "TEXTAREA"].indexOf(this.shubox.element.tagName) >= 0 ? false : null,
+      error(file: ShuboxDropzoneFile, message: string | Error) { },
+      extraParams: SHUBOX_DEFAULTS.extraParams,
+      previewsContainer: ["INPUT", "TEXTAREA"].indexOf(this.shubox.element.tagName) >= 0 ? false : SHUBOX_DEFAULTS.previewsContainer,
       s3Key: null,
-      sending(file: any, xhr: any, formData: any) { },
-      success(file: any) { },
-      successTemplate: "{{s3url}}",
-      textBehavior: "replace",
+      sending(file: ShuboxDropzoneFile, xhr: XMLHttpRequest, formData: FormData) { },
+      success(file: ShuboxDropzoneFile) { },
+      successTemplate: SHUBOX_DEFAULTS.successTemplate,
+      textBehavior: SHUBOX_DEFAULTS.textBehavior,
       transformName: null,
-      transforms: null,
-      uploadingTemplate: "",
-      webcam: null,
+      transforms: SHUBOX_DEFAULTS.transforms,
+      uploadingTemplate: SHUBOX_DEFAULTS.uploadingTemplate,
     };
   }
 }

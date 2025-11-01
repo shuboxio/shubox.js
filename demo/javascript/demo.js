@@ -1,64 +1,5 @@
 import Shubox from '../../src/shubox';
 
-new Shubox('#webcam-photo', {
-  key: window.shuboxSandboxKey,
-  webcam: 'photo',
-  success: (file) => {
-    console.log(`File ${file.name} successfully uploaded!`)
-    console.log(file.s3url)
-  },
-})
-
-new Shubox('#webcam-with-options', {
-  key: window.shuboxSandboxKey,
-  webcam: {
-    type: 'photo',
-    startCamera: '#webcam-start',
-    stopCamera: '#webcam-stop',
-    takePhoto: '#webcam-capture',
-    videoInput: '.photo-videoinput',
-    cameraStarted: (_webcam) => { console.log("camera started") },
-    cameraStopped: (_webcam) => { console.log("camera stopped") },
-    photoTaken: (_webcam, _file) => { console.log("photo taken") }
-  },
-  success: file => {
-    console.log(`File ${file.name} successfully uploaded!`)
-    console.log(file.s3url)
-  },
-})
-
-new Shubox('#webcam-video', {
-  key: window.shuboxSandboxKey,
-  webcam: 'video',
-  success: file => {
-    console.log(`File ${file.name} successfully uploaded!`)
-    console.log(file.s3url)
-  },
-})
-
-new Shubox('#webcam-video-with-options', {
-  key: window.shuboxSandboxKey,
-  webcam: {
-    type: 'video',
-    startCamera: '#video-start',
-    stopCamera: '#video-stop',
-    startRecording: '#video-record-start',
-    stopRecording: '#video-record-stop',
-    videoTemplate: `<video muted autoplay></video>`,
-    audioInput: '.shubox-audioinput',
-    videoInput: '.shubox-videoinput',
-    timeLimit: 4,
-    cameraStarted: (_webcam) => { console.log("camera started") },
-    cameraStopped: (_webcam) => { console.log("camera stopped") },
-    recordingStarted: (_webcam) => { console.log("recording started") },
-    recordingStopped: (_webcam, _file) => { console.log("recording stopped") }
-  },
-  success: file => {
-    console.log(`File ${file.name} successfully uploaded!`)
-    console.log(file.s3url)
-  },
-})
-
 new Shubox('#avatar', {
   key: window.shuboxSandboxKey,
   previewsContainer: false,
@@ -144,7 +85,7 @@ new Shubox('#avatar-cropped', {
   previewsContainer: false,
   maxFiles: 1,
   transforms: {
-    // once the 200x200 WEBP is created and found, replace the image with this one
+    // once the 200x200 AVIF is created and found, replace the image with this one
     "200x200#.avif": (shuboxFile) => {
       // once image is found, insert an `img`
       // tag with that url as the src
@@ -157,9 +98,16 @@ new Shubox('#avatar-cropped', {
         el.appendChild(img);
       });
 
-      img.alt = "cropped webp avatar"
+      img.alt = "cropped avif avatar"
       img.className = "avatar"
       img.src = shuboxFile.transform.s3url
+    }
+  },
+  // Handle transform errors (v1.1.0+)
+  error: (file, error) => {
+    if (error.code === 'TRANSFORM_ERROR') {
+      console.log(`Transform '${error.variant}' failed, but original uploaded:`, file.s3url)
+      // Could fall back to original image here
     }
   }
 })
@@ -168,13 +116,65 @@ new Shubox('#avatar-events', {
   key: window.shuboxSandboxKey,
   previewsContainer: false,
   maxFiles: 1,
+  retryAttempts: 3,    // Retry failed uploads up to 3 times
+  timeout: 30000,      // 30 second timeout
+  offlineCheck: true,  // Enable offline detection
 
   addedfile: _file => { logEvent('Added file!') },
-  error: (_file, message) => { logEvent('Oops. Error: ' + message) },
+
+  error: (_file, error) => {
+    // Enhanced error handling with typed errors (v1.1.0+)
+    let errorMsg = 'Oops. Error: ';
+
+    if (typeof error === 'string') {
+      errorMsg += error;
+    } else if (error.code === 'OFFLINE_ERROR') {
+      errorMsg += 'You are offline. Please check your connection.';
+    } else if (error.code === 'TRANSFORM_ERROR') {
+      errorMsg += `Image processing failed for variant '${error.variant}'`;
+    } else if (error.code === 'TIMEOUT_ERROR') {
+      errorMsg += 'Upload timed out. Please try again.';
+    } else if (error.code === 'NETWORK_ERROR' && error.recoverable) {
+      errorMsg += 'Network error - failed after retries';
+    } else {
+      errorMsg += error.message || error;
+    }
+
+    logEvent(errorMsg);
+  },
+
+  onRetry: (attempt, error, _file) => {
+    logEvent(`Retry attempt ${attempt}: ${error.message}`);
+  },
+
   queuecomplete: () => { logEvent('Queue complete!') },
   sending: (_file, _xhr, _formData) => { logEvent('Sending file!') },
   success: (_file, _responseText, _e) => { logEvent('File sent!') },
 })
+
+// Add event listeners for new Phase 4 events
+const avatarEventsElement = document.getElementById('avatar-events');
+if (avatarEventsElement) {
+  avatarEventsElement.addEventListener('shubox:retry:start', (e) => {
+    logEvent(`🔄 Starting retry (max ${e.detail.maxRetries} attempts)`);
+  });
+
+  avatarEventsElement.addEventListener('shubox:retry:attempt', (e) => {
+    logEvent(`🔄 Retry ${e.detail.attempt}/${e.detail.maxRetries} (waiting ${e.detail.delay}ms)`);
+  });
+
+  avatarEventsElement.addEventListener('shubox:recovered', (e) => {
+    logEvent(`✅ Upload recovered after ${e.detail.attemptCount} attempts!`);
+  });
+
+  avatarEventsElement.addEventListener('shubox:timeout', (e) => {
+    logEvent(`⏱️ Timeout after ${e.detail.timeout}ms`);
+  });
+
+  avatarEventsElement.addEventListener('shubox:error', (e) => {
+    logEvent(`❌ Error event: ${e.detail.error.code}`);
+  });
+}
 
 const logEvent = e =>{
   let eventsEl = document.getElementById("events")

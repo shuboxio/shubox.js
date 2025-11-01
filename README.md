@@ -58,7 +58,12 @@ announcements, or the occasional pithy tweet.
 * [Set Up Your Own S3 Bucket](#set-up-your-own-s3-bucket)
 * [Examples &amp; Ideas](#examples--ideas)
 * [Library Documentation](#library-documentation)
-	* [Webcam Configuration](#webcam-configuration)
+	* [Event Lifecycle Callbacks](#event-lifecycle-callbacks)
+	* [Error Handling](#error-handling)
+		* [Error Types](#error-types)
+		* [Automatic Retry](#automatic-retry)
+		* [Offline Detection](#offline-detection)
+		* [Transform Error Handling](#transform-error-handling)
 * [Development Notes](#development-notes)
 	* [Setup](#development-setup)
 	* [Lerna](#lerna)
@@ -415,112 +420,6 @@ const append = new Shubox('#shubox--textarea--append', {
 
 ![](https://shubox.io/images/README/shubox_demo_append_after.gif)
 
-## Capture a photo with your webcam
-
-```html
-<div id="webcam-photo" class="webcam"></div>
-```
-
-```javascript
-const webcamPhoto = new Shubox('#webcam-photo', {
-  key: window.shuboxSandboxKey,
-  webcam: 'photo',
-  success: function(file) {
-    console.log(`File ${file.name} successfully uploaded!`)
-    console.log(file.s3url)
-  },
-})
-```
-
-![](https://shubox.io/images/README/shubox_demo_camera_01.gif)
-
-### ... Webcam capture with controls for start, stop, & capture
-
-```html
-<div id="webcam-with-options" class="webcam"></div>
-<ul>
-  <li><a href="#" id="webcam-start">Start Camera 📷</a></li>
-  <li><a href="#" id="webcam-stop">Stop Camera 🚫</a></li>
-  <li><a href="#" id="webcam-capture">Take Photo ✨</a></li>
-</ul>
-```
-
-```javascript
-const webcamOptions = new Shubox('#webcam-with-options', {
-  key: window.shuboxSandboxKey,
-  webcam: {
-    type: 'photo',
-    startCamera: '#webcam-start',
-    stopCamera: '#webcam-stop',
-    takePhoto: '#webcam-capture'
-  },
-  success: function(file) {
-    console.log(`File ${file.name} successfully uploaded!`)
-    console.log(file.s3url)
-  },
-})
-```
-
-![](https://shubox.io/images/README/shubox_demo_camera_02.gif)
-
-### Record a _video_ with your webcam!
-
-```html
-<div id="webcam-video" class="webcam"></div>
-```
-
-```javascript
-const video = new Shubox('#webcam-video', {
-  key: window.shuboxSandboxKey,
-  webcam: 'video',
-  success: function(file) {
-    console.log(`File ${file.name} successfully uploaded!`)
-    console.log(file.s3url)
-  },
-})
-```
-
-### Record a video with controls, and camera and microphone selection
-
-```html
-<div id="webcam-video" class="webcam"></div>
-<ul>
-  <li><a href="#" id="video-start">Start Camera 📹</a></li>
-  <li><a href="#" id="video-stop">Stop Camera 🚫</a></li>
-  <li><a href="#" id="video-record-start">Start Recording 🔴</a></li>
-  <li><a href="#" id="video-record-stop">Stop Recording ⏹ </a></li>
-  <li><select class="shubox-audioinput">
-    <option>Select Mic</option>
-  </select></li>
-  <li><select class="shubox-videoinput">
-    <option>Select Camera</option>
-  </select></li>
-</ul>
-```
-
-```javascript
-const videoWithOptions = new Shubox('#webcam-video', {
-  key: window.shuboxSandboxKey,
-  webcam: {
-    type: 'video',
-    startCamera: '#video-start',
-    stopCamera: '#video-stop',
-    startRecording: '#video-record-start',
-    stopRecording: '#video-record-stop',
-    audioInput: '.shubox-audioinput',
-    videoInput: '.shubox-videoinput',
-    cameraStarted: (_webcam) => { console.log("camera started") },
-    cameraStopped: (_webcam) => { console.log("camera stopped") },
-    recordingStarted: (_webcam) => { console.log("recording started") },
-    recordingStopped: (_webcam, _file) => { console.log("recording stopped") }
-  },
-  success: file => {
-    console.log(`File ${file.name} successfully uploaded!`)
-    console.log(file.s3url)
-  },
-})
-```
-
 ### Uploading a file directly from javascript
 
 There are some cases where you might have a file object programmatically
@@ -580,11 +479,23 @@ success: function(file) {}
 ### error:
 
 Assign a function to the error key, accepting a [file object](#file-object) and
-error string. This method will be called when errors are incurred with a file
-upload, or during the S3 signature generation process
+error message or error object. This method will be called when errors are incurred
+with a file upload, during the S3 signature generation process, or when transforms fail.
+
+Starting with version 1.1.0, the error parameter may be a typed error object
+(see [Error Types](#error-types) below) which provides more context about the failure.
 
 ```javascript
-error: function(file, message) {}
+error: function(file, error) {
+  // error can be a string or an Error object
+  if (error instanceof TransformError) {
+    console.log('Transform failed for variant:', error.variant)
+  } else if (error instanceof OfflineError) {
+    alert('Cannot upload while offline')
+  } else {
+    console.log('Upload error:', error.message || error)
+  }
+}
 ```
 
 ### queuecomplete:
@@ -594,6 +505,300 @@ uploading.
 
 ```javascript
 queuecomplete: function() {}
+```
+
+### canceled:
+
+The canceled callback will be called when a user cancels an upload. Shubox automatically
+cleans up resources (retry state, pending timeouts, CSS classes) before calling this callback.
+
+```javascript
+canceled: function(file) {
+  console.log('Upload canceled:', file.name);
+  // Perform any additional custom cleanup here
+}
+```
+
+### removedfile:
+
+The removedfile callback will be called when a file is removed from the upload queue.
+Shubox automatically cleans up resources before calling this callback.
+
+```javascript
+removedfile: function(file) {
+  console.log('File removed:', file.name);
+  // Remove any custom UI elements associated with this file
+}
+```
+
+## Error Handling
+
+Shubox.js v1.1.0+ includes comprehensive error handling with automatic retries,
+timeout protection, and offline detection.
+
+### Error Types
+
+Shubox provides typed error classes for better error handling:
+
+- **`NetworkError`** - Network failures or timeouts (recoverable)
+- **`SignatureError`** - S3 signature fetch failures
+- **`UploadError`** - S3 upload failures (includes `statusCode`)
+- **`TransformError`** - Image transform failures (includes `variant` name)
+- **`ValidationError`** - File validation failures
+- **`TimeoutError`** - Request timeout (extends NetworkError)
+- **`OfflineError`** - Offline detection (extends NetworkError)
+
+All error types extend the base `ShuboxError` class and include:
+- `code` - Error code string
+- `message` - Human-readable error message
+- `recoverable` - Boolean indicating if retry is possible
+- `originalError` - Underlying error object (if any)
+
+### Automatic Retry
+
+Network failures are automatically retried with exponential backoff:
+
+```javascript
+new Shubox('#upload', {
+  key: 'my-key',
+  retryAttempts: 3,  // Number of retry attempts (default: 3)
+  timeout: 30000,    // Request timeout in ms (default: 30000)
+
+  error: function(file, error) {
+    // Called only after all retries are exhausted
+    console.error('Upload failed:', error.message)
+  }
+})
+```
+
+**What gets retried:**
+- ✅ 5xx server errors (e.g., 500, 503)
+- ✅ Network failures (connection refused, DNS failures)
+- ✅ 429 rate limit errors
+- ✅ Request timeouts
+- ❌ 4xx client errors (e.g., 400, 404) - no retry
+
+**Retry behavior:**
+- Exponential backoff: 1s, 2s, 4s, 8s...
+- Applies to signature fetching, S3 uploads, and transform polling
+- Upload complete notifications also retry (non-blocking)
+
+### Offline Detection
+
+Shubox automatically detects when the user is offline and prevents file selection:
+
+```javascript
+new Shubox('#upload', {
+  key: 'my-key',
+  offlineCheck: true,  // Default: true - automatically detects offline state
+  error: function(file, error) {
+    if (error instanceof OfflineError) {
+      // User is offline
+      showNotification('Cannot upload while offline. Please check your connection.')
+    }
+  }
+})
+```
+
+**Offline behavior:**
+- When offline, Dropzone is automatically disabled (prevents file selection)
+- Visual indicator: `shubox-offline` CSS class and `data-shubox-offline` attribute added to element
+- When connection restored, Dropzone automatically re-enabled
+- To disable this feature, set `offlineCheck: false`
+
+**Styling offline state:**
+```css
+.shubox-offline {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.shubox-offline::before {
+  content: 'Offline - uploads disabled';
+  color: #999;
+}
+```
+
+### Transform Error Handling
+
+Transform failures are now reported instead of failing silently:
+
+```javascript
+new Shubox('#upload', {
+  key: 'my-key',
+  transforms: {
+    '200x200#': function(file) {
+      // Called when transform succeeds
+      document.getElementById('avatar').src = file.transform.s3url
+    }
+  },
+  error: function(file, error) {
+    if (error instanceof TransformError) {
+      // Transform failed after retries
+      console.log(`Failed to generate ${error.variant} variant`)
+      // You can still use the original uploaded file
+      console.log('Original file:', file.s3url)
+    }
+  }
+})
+```
+
+### Comprehensive Error Handling Example
+
+```javascript
+new Shubox('#upload', {
+  key: 'my-key',
+  retryAttempts: 5,      // Retry up to 5 times
+  timeout: 60000,        // 60 second timeout
+  offlineCheck: true,    // Enable offline detection
+
+  transforms: {
+    '400x400#': function(file) {
+      // Success - use transformed image
+    }
+  },
+
+  onRetry: function(attempt, error, file) {
+    // Called on each retry attempt
+    console.log(`Retry ${attempt}: ${error.message}`)
+  },
+
+  error: function(file, error) {
+    // Differentiate error types
+    if (error instanceof OfflineError) {
+      showBanner('You appear to be offline. Upload will retry when connection is restored.')
+    }
+    else if (error instanceof TransformError) {
+      showNotification(`Image processing failed for ${error.variant}, but original uploaded successfully`)
+      // Fall back to original image
+      useOriginalImage(file.s3url)
+    }
+    else if (error instanceof TimeoutError) {
+      showNotification('Upload timed out. Please try again.')
+    }
+    else if (error instanceof NetworkError && error.recoverable) {
+      showNotification('Network error - upload failed after retries')
+    }
+    else if (error instanceof UploadError && error.statusCode === 403) {
+      showNotification('Upload forbidden - check your Shubox key and bucket permissions')
+    }
+    else {
+      showNotification(`Upload failed: ${error.message || error}`)
+    }
+  },
+
+  success: function(file) {
+    hideNotifications()
+    console.log('Upload successful:', file.s3url)
+  }
+})
+```
+
+## Event System
+
+Shubox dispatches custom events throughout the upload lifecycle for monitoring, analytics, and user feedback. All events bubble up the DOM and are cancelable.
+
+### Available Events
+
+**`shubox:error`** - Dispatched when an upload error occurs (after all retries exhausted)
+```javascript
+element.addEventListener('shubox:error', (e) => {
+  console.error('Upload error:', e.detail.error.message)
+  console.log('Failed file:', e.detail.file.name)
+})
+```
+
+**`shubox:timeout`** - Dispatched when a request times out
+```javascript
+element.addEventListener('shubox:timeout', (e) => {
+  console.log(`Request timed out after ${e.detail.timeout}ms`)
+})
+```
+
+**`shubox:retry:start`** - Dispatched on the first retry attempt
+```javascript
+element.addEventListener('shubox:retry:start', (e) => {
+  console.log(`Starting retry (max ${e.detail.maxRetries} attempts)`)
+  showNotification('Upload failed, retrying...')
+})
+```
+
+**`shubox:retry:attempt`** - Dispatched on each retry attempt
+```javascript
+element.addEventListener('shubox:retry:attempt', (e) => {
+  console.log(`Retry ${e.detail.attempt}/${e.detail.maxRetries}`)
+  console.log(`Waiting ${e.detail.delay}ms before retry`)
+  updateProgressBar(e.detail.attempt, e.detail.maxRetries)
+})
+```
+
+**`shubox:recovered`** - Dispatched when upload succeeds after previous failures
+```javascript
+element.addEventListener('shubox:recovered', (e) => {
+  console.log(`Upload recovered after ${e.detail.attemptCount} attempts`)
+  showSuccessNotification('Upload succeeded after retry!')
+})
+```
+
+### Event System Example
+
+```javascript
+const uploadElement = document.querySelector('#upload')
+
+// Monitor all upload lifecycle events
+uploadElement.addEventListener('shubox:retry:start', (e) => {
+  showMessage('Upload failed, retrying...')
+})
+
+uploadElement.addEventListener('shubox:retry:attempt', (e) => {
+  showMessage(`Retry attempt ${e.detail.attempt}/${e.detail.maxRetries}...`)
+})
+
+uploadElement.addEventListener('shubox:recovered', (e) => {
+  showSuccess(`Upload succeeded after ${e.detail.attemptCount} attempts!`)
+})
+
+uploadElement.addEventListener('shubox:error', (e) => {
+  if (e.detail.error instanceof OfflineError) {
+    showError('You appear to be offline')
+  } else {
+    showError(`Upload failed: ${e.detail.error.message}`)
+  }
+})
+
+uploadElement.addEventListener('shubox:timeout', (e) => {
+  analytics.track('upload_timeout', {
+    timeout: e.detail.timeout,
+    file: e.detail.file.name
+  })
+})
+
+// Initialize Shubox
+new Shubox('#upload', {
+  key: 'my-key',
+  retryAttempts: 3,
+  timeout: 60000
+})
+```
+
+### Global Event Monitoring
+
+Listen at the document level to monitor all Shubox instances:
+
+```javascript
+// Analytics integration
+document.addEventListener('shubox:error', (e) => {
+  analytics.track('upload_error', {
+    error: e.detail.error.code,
+    file: e.detail.file.name
+  })
+})
+
+document.addEventListener('shubox:recovered', (e) => {
+  analytics.track('upload_recovered', {
+    attempts: e.detail.attemptCount
+  })
+})
 ```
 
 ## File Object
@@ -893,100 +1098,6 @@ comma separated list of mime types or file extensions. Eg.:
 ```javascript
 acceptedFiles: "image/*"                      // default value
 acceptedFiles: "image/*,application/pdf,.psd" // image, pdfs, psd
-```
-
-## Webcam Configuration
-
-The webcam option(s) for the library support two modes of capture: `"photo"`,
-and `"video"`.
-
-### `webcam`: basic capture
-
-You can capture a photo or record a video via your webcam and have it sent
-right up to S3. The most straightforward approach is to initialize Shubox by
-pointing to an element (usually a div) sized to how large you would like the
-video element to be. The `webcam` key accepts a string `"photo"` or `"video"`,
-or an object with a required key of `type`, and optional keys that are detailed
-below. To start:
-
-```javascript
-// let shubox handle everything in the context of your target el
-
-// for a photo, set the root-level key of "webcam" to "photo"
-webcam: 'photo',
-
-// for a video, set the root-level key of "webcam" to "video"
-webcam: 'video',
-```
-
-The above will wire up the video elements to trigger the steps in the  lifecyle
-by clicking on the element. Eg: `start camera -> take photo`, or
-`start camera -> start record -> stop record`.
-
-## `webcam`: with extended options for `type: "photo"`
-
-The options you can pass to the nested hash in `webcam:` are as follows:
-
-```javascript
-webcam: {
-  type: 'photo',
-  startCamera: '#webcam-start',    // selector to element to start camera
-  stopCamera: '#webcam-stop',      // selector to element that stops camera
-  takePhoto: '#webcam-take',       // selector to element that takes the photo
-  // startCapture: '#webcam-take', // deprecated. same as `takePhoto
-
-  // the template that gets inserted into the shubox element div. You may
-  // customize this but do make sure the video, canvas, and img are in there
-  photoTemplate: `
-    <video class="shubox-video" muted autoplay></video>
-    <canvas style="display: none"></canvas>
-    <img style="display: none">
-  `,
-
-  // selector to a <select> element that will be populated with all camera
-  // devices. When changed that will change the video input stream
-  videoInput: '#select-camera',
-
-  // Callbacks that get triggered during the photo-taking lifecycle. `webcam`
-  // is an instance of the Webcam class. `file` is of type `Blob`.
-  cameraStarted: (webcam) => ();
-  cameraStopped: (webcam) => ();
-  photoTaken: (webcam, file) => ();
-}
-```
-
-## `webcam`: with extended options for `type: "video"`
-
-The options you can pass to the nested hash in `webcam:` are as follows:
-
-```javascript
-webcam: {
-  type: 'video',
-  startCamera: '#webcam-start',    // selector to element to start camera
-  stopCamera: '#webcam-stop',      // selector to element that stops camera
-  startRecording: '#video-start',  // selector to element that starts recording
-  stopRecording: '#video-stop',    // selector to element that stops recording
-  timeLimit: 5,                    // default: undefined. video recording time limit
-  portraitMode: false,             // default: undefined. set width and height to fit portrait mode
-
-  // the template that gets inserted into the shubox element div. You may
-  // customize this but do make sure the video is in there.
-  // the following is the default:
-  videoTemplate: `<video class="shubox-video" muted autoplay></video>`,
-
-  // selector to <select> elements that will be populated with all camera and
-  // and microphone devices. When changed, each will change the video or audio
-  // input stream
-  videoInput: '#select-camera',
-  audioInput: '#select-mic',
-
-  // Callbacks that get triggered during the photo-taking lifecycle. `webcam`
-  // is an instance of the Webcam class. `file` is of type `Blob`.
-  cameraStarted: (webcam) => ();
-  cameraStopped: (webcam) => ();
-  recordingStarted: (webcam) => ();
-  recordingStopped: (webcam, file) => ();
-}
 ```
 
 # Development Notes
