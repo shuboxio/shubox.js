@@ -17,7 +17,7 @@ describe('S3UploadHandler', () => {
       name: 'test.jpg',
       size: 1024,
       type: 'image/jpeg',
-      __shuboxSignature: {
+      postData: {
         aws_endpoint: 'https://s3.amazonaws.com/bucket',
         signature: 'sig123',
         policy: 'pol123',

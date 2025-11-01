@@ -21,13 +21,13 @@ export class S3UploadHandler {
 	 * Appends signature fields to the form data for S3 upload.
 	 * Note: The XHR is already opened by Dropzone at this point, and the URL
 	 * has been set by the signature handler in the accept callback.
-	 * @param file - The file being uploaded (must have __shuboxSignature attached)
+	 * @param file - The file being uploaded (must have postData with signature attached)
 	 * @param xhr - XMLHttpRequest object (already opened by Dropzone)
 	 * @param formData - FormData to append signature fields to
 	 * @throws Error if signature not found on file
 	 */
 	handle(file: IDropzoneFile, xhr: XMLHttpRequest, formData: FormData): void {
-		const signature = (file as any).__shuboxSignature
+		const signature = (file as any).postData
 
 		if (!signature) {
 			throw new Error('Signature not found on file')

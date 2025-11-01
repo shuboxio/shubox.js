@@ -176,18 +176,15 @@ export default class Shubox {
 				...(this.options as any),
 				...dropzoneOptions,
 			});
-			console.log(JSON.stringify({
-				...(this.options as any),
-				...dropzoneOptions
-			}));
-			debugger;
 
-			// Set the dropzone instance in handlers and callbacks
-			signatureHandler.setDropzoneInstance(dropzone);
+			// Set the dropzone instance in callbacks
 			shuboxCallbacks.setDropzoneInstance(dropzone);
 
 			// Track instances for this Shubox instance
 			this.dropzoneInstances.push(dropzone);
+
+			// Set all dropzone instances on signature handler so it can update all URLs
+			signatureHandler.setDropzoneInstances(this.dropzoneInstances);
 
 			this.element.addEventListener("paste", ShuboxCallbacks.pasteCallback(dropzone));
 			Shubox.instances.push(dropzone);

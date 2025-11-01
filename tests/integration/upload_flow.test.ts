@@ -105,7 +105,7 @@ describe('Upload Flow Integration', () => {
     expect(doneCallback).toHaveBeenCalledWith()
 
     // Verify signature was stored on file
-    expect((mockFile as any).__shuboxSignature).toBeDefined()
+    expect((mockFile as any).postData).toBeDefined()
 
     // Step 2: Sending callback appends signature fields to form data
     // (XHR.open() is called by Dropzone before this callback)
@@ -214,7 +214,7 @@ describe('Upload Flow Integration', () => {
     } as any
 
     // Attach signature to file (simulating accept callback)
-    ;(mockFile as any).__shuboxSignature = {
+    ;(mockFile as any).postData = {
       aws_endpoint: 'https://s3.amazonaws.com/bucket',
       signature: 'sig123',
       policy: 'pol123',
