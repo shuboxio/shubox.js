@@ -4,12 +4,9 @@ Shubox.js Changes
 Master
 ------
 
-v1.1.0
-------
+### Error Handling Improvements
 
-### Error Handling Improvements (Phases 1-4)
-
-**Phase 1 & 2: Foundation & Critical Fixes**
+** Foundation & Critical Fixes**
 
 * **New error type system** - Typed error classes (`NetworkError`, `SignatureError`, `UploadError`, `TransformError`, `ValidationError`, `TimeoutError`, `OfflineError`) with error codes for better error handling
 * **HTTP status validation** - Proper validation of HTTP response status codes before processing
@@ -17,7 +14,7 @@ v1.1.0
 * **Upload complete error handling** - Metadata upload failures now retry automatically and log properly
 * Enhanced `error` callback - Now receives typed error objects with `code`, `message`, `recoverable`, and `originalError` properties
 
-**Phase 3: Automatic Retry Mechanisms**
+**Automatic Retry Mechanisms**
 
 * **Automatic retry with exponential backoff** - Network failures automatically retry with smart backoff (1s, 2s, 4s...)
 * **Intelligent error classification** - Automatically determines which errors should be retried (5xx, timeouts, network failures) vs. which shouldn't (4xx client errors)
@@ -27,7 +24,7 @@ v1.1.0
 * New `onRetry` callback - Optional callback invoked on each retry attempt
 * New `timeout` option - Configure request timeout in milliseconds (default: 60000 for uploads, 30000 for signatures)
 
-**Phase 4: Enhanced User Feedback**
+**Enhanced User Feedback**
 
 * **Offline detection with prevention** - Automatically detects offline state and disables file selection, re-enables when connection restored
 * **Improved error messages** - Context-aware, actionable error messages (e.g., "Upload timed out. Please check your connection and try again.")
@@ -41,7 +38,7 @@ v1.1.0
 * Visual offline indicators - Adds `shubox-offline` CSS class and `data-shubox-offline` attribute when offline
 * All events bubble up the DOM and are cancelable for flexible integration
 
-**Phase 5: Graceful Degradation**
+**Graceful Degradation**
 
 * **Resource cleanup on cancel** - Properly cleans up retry state, pending timeouts, CSS classes, and progress attributes when uploads are canceled or files removed
 * **Lifecycle callbacks** - New `canceled`, `removedfile`, and `queuecomplete` callbacks for handling upload lifecycle events
@@ -62,6 +59,10 @@ v1.1.0
 **Breaking Changes:**
 * **Minor**: Error callback may now receive Error objects instead of just strings (backward compatible - string errors still work)
 * **Minor**: `TimeoutError` and `OfflineError` now extend `ShuboxError` directly instead of `NetworkError` (improves TypeScript readonly property handling)
+
+v1.1.0
+------
+
 
 ### Other Changes
 
