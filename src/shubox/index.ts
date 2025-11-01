@@ -176,10 +176,11 @@ export default class Shubox {
 				...(this.options as any),
 				...dropzoneOptions,
 			});
-			console.log({
+			console.log(JSON.stringify({
 				...(this.options as any),
-				...dropzoneOptions,
-			})
+				...dropzoneOptions
+			}));
+			debugger;
 
 			// Set the dropzone instance in handlers and callbacks
 			signatureHandler.setDropzoneInstance(dropzone);
