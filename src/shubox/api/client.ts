@@ -1,6 +1,7 @@
 import type { IS3Signature, ITransformResult, ISignatureOptions, IApiClientConfig } from '~/shubox/config/types'
 import { API_CONSTANTS } from '~/shubox/config/constants'
 import { objectToFormData } from '~/shubox/object_to_form_data'
+import { filenameFromFile } from '~/shubox/filename_from_file'
 
 /**
  * Client for communicating with the Shubox API.
@@ -32,9 +33,11 @@ export class ShuboxApiClient {
    */
   async fetchSignature(file: File, options: ISignatureOptions): Promise<IS3Signature> {
     const formData = objectToFormData({
-      name: file.name,
-      size: file.size,
-      type: file.type,
+      file: {
+        name: filenameFromFile(file),
+        size: file.size,
+        type: file.type,
+      },
       key: options.key,
       s3Key: options.s3Key,
       ...options.extraParams
