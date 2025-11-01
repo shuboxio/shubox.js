@@ -4,6 +4,11 @@ import { ShuboxOptions as ShuboxOptionsClass } from "./shubox_options";
 import { OfflineError } from "./errors";
 import { version } from "../../package.json";
 import type { ShuboxOptions, ShuboxCallbackMethods } from "./types";
+import { ShuboxApiClient } from "~/shubox/api/client";
+import { ShuboxDomRenderer } from "~/shubox/dom/renderer";
+import { S3SignatureHandler } from "~/shubox/handlers/signature";
+import { S3UploadHandler } from "~/shubox/handlers/upload";
+import { SuccessHandler } from "~/shubox/handlers/success";
 
 export interface IUserOptions extends Partial<ShuboxOptions> {
   baseUrl?: string;
@@ -29,6 +34,8 @@ export default class Shubox {
   public version: string = version;
   private offlineCheckEnabled: boolean = true;
   private dropzoneInstances: Dropzone[] = [];
+  private apiClient!: ShuboxApiClient;
+  private renderer!: ShuboxDomRenderer;
 
   constructor(selector: string = ".shubox", options: IUserOptions = {}) {
     this.selector = selector;
@@ -64,6 +71,16 @@ export default class Shubox {
       delete options.key;
     }
 
+    // Create core services with dependency injection
+    this.apiClient = new ShuboxApiClient({
+      key: this.key,
+      baseUrl: this.baseUrl,
+      signatureUrl: this.signatureUrl,
+      uploadUrl: this.uploadUrl
+    });
+
+    this.renderer = new ShuboxDomRenderer();
+
     this.init(options);
     this._setupOfflineDetection();
   }
@@ -74,25 +91,55 @@ export default class Shubox {
 
     for (const element of Array.from(els)) {
       this.element = element as HTMLElement;
-      this.callbacks = new ShuboxCallbacks(this as Shubox, Shubox.instances).toHash();
+
+      // Get default options from ShuboxOptionsClass
       this.options = {
         ...this.options,
         ...(new ShuboxOptionsClass(this as Shubox).toHash()),
         ...options,
       } as ShuboxOptions;
 
+      // Create handlers with dependency injection
+      const signatureHandler = new S3SignatureHandler(this.apiClient, {
+        key: this.key,
+        s3Key: this.options.s3Key || undefined,
+        extraParams: this.options.extraParams
+      });
+
+      const uploadHandler = new S3UploadHandler({
+        extraParams: this.options.extraParams
+      });
+
+      const successHandler = new SuccessHandler(this.renderer, this.apiClient, {
+        successTemplate: this.options.successTemplate || '{{s3url}}',
+        textBehavior: this.options.textBehavior || 'replace',
+        transforms: this.options.transforms || {},
+        success: this.options.success
+      });
+
+      // Create callbacks with handlers
+      const shuboxCallbacks = new ShuboxCallbacks(
+        signatureHandler,
+        uploadHandler,
+        successHandler,
+        {
+          addedfile: this.options.addedfile,
+          error: this.options.error,
+          uploadingTemplate: this.options.uploadingTemplate
+        }
+      );
+
       const dropzoneOptions: Dropzone.DropzoneOptions = {
         // callbacks that we need to delegate to. In some cases there's work
         // needing to be passed through to Shubox's handler, and sometimes
         // the Dropbox handler, _in addition to_ the callback the user provides.
-        accept: this.callbacks.accept as any,
+        accept: shuboxCallbacks.accept as any,
         acceptedFiles: this.options.acceptedFiles,
-        addedfile: this.callbacks.addedfile as any,
-        error: this.callbacks.error as any,
+        addedfile: shuboxCallbacks.addedfile as any,
+        error: shuboxCallbacks.error as any,
         previewsContainer: this.options.previewsContainer,
-        sending: this.callbacks.sending as any,
-        success: this.callbacks.success as any,
-        uploadprogress: this.callbacks.uploadProgress as any,
+        sending: shuboxCallbacks.sending as any,
+        success: shuboxCallbacks.success as any,
         url: "http://localhost",
         // Set timeout for XHR requests (default: 60 seconds for uploads)
         timeout: this.options.timeout || 60000,
