@@ -20,7 +20,24 @@ export interface IUserOptions extends Partial<ShuboxOptions> {
   retryAttempts?: number;
 }
 
+/**
+ * Main Shubox class for direct browser-to-S3 file uploads.
+ * Wraps Dropzone.js and integrates with the Shubox service for S3 signatures
+ * and image/video transformations.
+ *
+ * @example
+ * ```typescript
+ * new Shubox('.upload-area', {
+ *   key: 'your-shubox-key',
+ *   success: (file) => console.log('Uploaded:', file.s3url),
+ *   transforms: {
+ *     '200x200#': (file) => console.log('Thumbnail:', file.transform.s3url)
+ *   }
+ * })
+ * ```
+ */
 export default class Shubox {
+  /** Array of all Dropzone instances created by Shubox */
   public static instances: Dropzone[] = [];
 
   public baseUrl: string = "https://api.shubox.io";
@@ -37,6 +54,11 @@ export default class Shubox {
   private apiClient!: ShuboxApiClient;
   private renderer!: ShuboxDomRenderer;
 
+  /**
+   * Creates a new Shubox instance and initializes Dropzone on matching elements.
+   * @param selector - CSS selector for elements to enable file upload (default: ".shubox")
+   * @param options - Configuration options including key, callbacks, and Dropzone settings
+   */
   constructor(selector: string = ".shubox", options: IUserOptions = {}) {
     this.selector = selector;
     this.element = document.createElement('div') as HTMLDivElement;
@@ -85,6 +107,11 @@ export default class Shubox {
     this._setupOfflineDetection();
   }
 
+  /**
+   * Initializes Dropzone instances on all elements matching the selector.
+   * Creates handler instances with dependency injection and configures callbacks.
+   * @param options - Shubox configuration options to merge with defaults
+   */
   public init(options: Partial<ShuboxOptions>) {
     Dropzone.autoDiscover = false;
     const els = document.querySelectorAll(this.selector);
@@ -163,6 +190,11 @@ export default class Shubox {
     }
   }
 
+  /**
+   * Programmatically uploads a file using the configured Shubox instance.
+   * Checks for offline status before attempting upload.
+   * @param file - Dropzone file object to upload
+   */
   public upload(file: Dropzone.DropzoneFile) {
     // Check if user is offline before attempting upload
     if (typeof navigator !== 'undefined' && !navigator.onLine) {

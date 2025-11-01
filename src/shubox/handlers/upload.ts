@@ -4,9 +4,27 @@ export interface IUploadHandlerOptions {
   extraParams?: Record<string, any>
 }
 
+/**
+ * Handles posting files to S3 with pre-signed credentials.
+ * Configures the XMLHttpRequest to upload directly to S3 instead of
+ * the application server.
+ */
 export class S3UploadHandler {
+  /**
+   * Creates a new S3UploadHandler instance.
+   * @param options - Handler options including extraParams to append to upload
+   */
   constructor(private options: IUploadHandlerOptions = {}) {}
 
+  /**
+   * Handles the Dropzone sending callback to configure S3 upload.
+   * Updates the XHR request to post to S3 and appends signature fields
+   * to the form data.
+   * @param file - The file being uploaded (must have __shuboxSignature attached)
+   * @param xhr - XMLHttpRequest object to configure
+   * @param formData - FormData to append signature fields to
+   * @throws Error if signature not found on file
+   */
   handle(file: IDropzoneFile, xhr: XMLHttpRequest, formData: FormData): void {
     const signature = (file as any).__shuboxSignature
 

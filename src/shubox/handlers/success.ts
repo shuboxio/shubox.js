@@ -10,13 +10,31 @@ export interface ISuccessHandlerOptions {
   success?: (file: IDropzoneFile) => void
 }
 
+/**
+ * Orchestrates post-upload actions after successful S3 upload.
+ * Handles template insertion into DOM, transform polling, and user callbacks.
+ */
 export class SuccessHandler {
+  /**
+   * Creates a new SuccessHandler instance.
+   * @param renderer - DOM renderer for inserting templates
+   * @param apiClient - API client for transform polling
+   * @param options - Handler options including successTemplate, textBehavior, transforms, and callbacks
+   */
   constructor(
     private renderer: ShuboxDomRenderer,
     private apiClient: ShuboxApiClient,
     private options: ISuccessHandlerOptions
   ) {}
 
+  /**
+   * Handles the Dropzone success callback after file upload completes.
+   * Performs three main actions:
+   * 1. Inserts success template into preview element (if present)
+   * 2. Starts transform polling for configured transforms
+   * 3. Invokes user success callback
+   * @param file - The successfully uploaded file with s3url attached
+   */
   async handle(file: IDropzoneFile): Promise<void> {
     // Insert template into preview element if present
     if (file.previewElement) {

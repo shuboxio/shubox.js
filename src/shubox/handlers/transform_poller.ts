@@ -6,11 +6,24 @@ export interface ITransformPollerOptions {
   interval?: number
 }
 
+/**
+ * Polls the Shubox API for image/video transform completion.
+ * Repeatedly checks if server-side transforms (resize, crop, format conversion)
+ * are ready and invokes a callback when complete.
+ */
 export class TransformPoller {
   private attempts = 0
   private maxAttempts: number
   private interval: number
 
+  /**
+   * Creates a new TransformPoller instance.
+   * @param apiClient - Shubox API client for polling requests
+   * @param uploadId - Unique identifier for the upload
+   * @param transform - Transform string (e.g., "200x200#" for crop, ".webp" for format)
+   * @param callback - Callback to invoke when transform is ready
+   * @param options - Polling options including maxAttempts and interval
+   */
   constructor(
     private apiClient: ShuboxApiClient,
     private uploadId: string,
@@ -22,10 +35,20 @@ export class TransformPoller {
     this.interval = options.interval || 1000
   }
 
+  /**
+   * Starts polling for transform completion.
+   * Polls at configured interval until transform is ready or max attempts reached.
+   * @returns Promise resolving to transform result when ready
+   * @throws Error if max polling attempts exceeded
+   */
   async start(): Promise<ITransformResult> {
     return this.poll()
   }
 
+  /**
+   * Internal polling method that recursively checks transform status.
+   * @private
+   */
   private async poll(): Promise<ITransformResult> {
     if (this.attempts >= this.maxAttempts) {
       throw new Error('Transform polling exceeded max attempts')
@@ -44,6 +67,10 @@ export class TransformPoller {
     return this.poll()
   }
 
+  /**
+   * Waits for specified milliseconds before next poll attempt.
+   * @private
+   */
   private wait(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
