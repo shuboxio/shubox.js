@@ -112,9 +112,9 @@ export default class Shubox {
 
       const successHandler = new SuccessHandler(this.renderer, this.apiClient, {
         successTemplate: this.options.successTemplate || '{{s3url}}',
-        textBehavior: this.options.textBehavior || 'replace',
-        transforms: this.options.transforms || {},
-        success: this.options.success
+        textBehavior: (this.options.textBehavior || 'replace') as 'replace' | 'append' | 'insertAtCursor',
+        transforms: (this.options.transforms || {}) as any,
+        success: this.options.success as any
       });
 
       // Create callbacks with handlers
@@ -123,8 +123,8 @@ export default class Shubox {
         uploadHandler,
         successHandler,
         {
-          addedfile: this.options.addedfile,
-          error: this.options.error,
+          addedfile: this.options.addedfile as any,
+          error: this.options.error as any,
           uploadingTemplate: this.options.uploadingTemplate
         }
       );

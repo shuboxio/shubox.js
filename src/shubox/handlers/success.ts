@@ -5,7 +5,7 @@ import { TransformPoller } from './transform_poller'
 
 export interface ISuccessHandlerOptions {
   successTemplate: string
-  textBehavior: 'replace' | 'append'
+  textBehavior: 'replace' | 'append' | 'insertAtCursor'
   transforms: Record<string, (file: IDropzoneFile) => void>
   success?: (file: IDropzoneFile) => void
 }

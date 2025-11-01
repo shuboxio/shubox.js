@@ -16,15 +16,17 @@ export class ShuboxDomRenderer {
     element: HTMLElement,
     template: string,
     data: ITemplateData,
-    textBehavior: 'replace' | 'append' = 'replace'
+    textBehavior: 'replace' | 'append' | 'insertAtCursor' = 'replace'
   ): void {
     const interpolated = this.interpolate(template, data)
 
     if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
       if (textBehavior === 'append') {
         element.value += interpolated
-      } else {
+      } else if (textBehavior === 'insertAtCursor') {
         this.insertAtCursor(element, interpolated)
+      } else {
+        element.value = interpolated
       }
     } else {
       if (textBehavior === 'append') {
