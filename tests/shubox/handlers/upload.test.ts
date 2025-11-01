@@ -18,7 +18,7 @@ describe('S3UploadHandler', () => {
       size: 1024,
       type: 'image/jpeg',
       __shuboxSignature: {
-        endpoint: 'https://s3.amazonaws.com/bucket',
+        aws_endpoint: 'https://s3.amazonaws.com/bucket',
         signature: 'sig123',
         policy: 'pol123',
         key: 'uploads/test.jpg',
@@ -32,16 +32,6 @@ describe('S3UploadHandler', () => {
     }
 
     mockFormData = new FormData()
-  })
-
-  it('updates XHR to post to S3 endpoint', () => {
-    handler.handle(mockFile, mockXhr, mockFormData)
-
-    expect(mockXhr.open).toHaveBeenCalledWith(
-      'POST',
-      'https://s3.amazonaws.com/bucket',
-      true
-    )
   })
 
   it('appends signature fields to form data', () => {

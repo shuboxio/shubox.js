@@ -18,10 +18,11 @@ export class S3UploadHandler {
 
 	/**
 	 * Handles the Dropzone sending callback to configure S3 upload.
-	 * Updates the XHR request to post to S3 and appends signature fields
-	 * to the form data.
+	 * Appends signature fields to the form data for S3 upload.
+	 * Note: The XHR is already opened by Dropzone at this point, and the URL
+	 * has been set by the signature handler in the accept callback.
 	 * @param file - The file being uploaded (must have __shuboxSignature attached)
-	 * @param xhr - XMLHttpRequest object to configure
+	 * @param xhr - XMLHttpRequest object (already opened by Dropzone)
 	 * @param formData - FormData to append signature fields to
 	 * @throws Error if signature not found on file
 	 */
@@ -32,25 +33,18 @@ export class S3UploadHandler {
 			throw new Error('Signature not found on file')
 		}
 
-		// Update XHR to post to S3 endpoint
-		xhr.open('POST', signature.aws_endpoint, true)
-
-		// Append signature fields to form data
-		formData.append('key', signature.key)
-		formData.append('policy', signature.policy)
-		formData.append('signature', signature.signature)
-
-		if (signature.acl) {
-			formData.append('acl', signature.acl)
-		}
-
-		if (signature.success_action_status) {
-			formData.append('success_action_status', signature.success_action_status)
-		}
-
-		if (signature['Content-Type']) {
-			formData.append('Content-Type', signature['Content-Type'])
-		}
+		// Append all signature fields from API response to form data
+		// This includes: key, policy, signature, and any AWS auth fields
+		// Note: AWS form fields should be lowercase with dashes (e.g., x-amz-credential)
+		Object.entries(signature).forEach(([key, value]) => {
+			// Skip non-form-field properties
+			if (key === 'aws_endpoint' || value === undefined || typeof value === 'object') {
+				return
+			}
+			// Convert header-style names (X-Amz-*) to form field style (x-amz-*)
+			const formKey = key.startsWith('X-') ? key.toLowerCase() : key
+			formData.append(formKey, String(value))
+		})
 
 		// Append extra params
 		if (this.options.extraParams) {

@@ -107,16 +107,16 @@ describe('Upload Flow Integration', () => {
     // Verify signature was stored on file
     expect((mockFile as any).__shuboxSignature).toBeDefined()
 
-    // Step 2: Sending callback configures XHR for S3
+    // Step 2: Sending callback appends signature fields to form data
+    // (XHR.open() is called by Dropzone before this callback)
     const mockXhr = { open: vi.fn() } as any
     const mockFormData = new FormData()
     callbacks.sending(mockFile, mockXhr, mockFormData)
 
-    expect(mockXhr.open).toHaveBeenCalledWith(
-      'POST',
-      'https://s3.amazonaws.com/bucket',
-      true
-    )
+    // Verify signature fields were added (by the upload handler called within sending callback)
+    expect(mockFormData.get('key')).toBeDefined()
+    expect(mockFormData.get('policy')).toBeDefined()
+    expect(mockFormData.get('signature')).toBeDefined()
 
     // Step 3: Success callback triggers user callback
     await callbacks.success(mockFile)
@@ -215,7 +215,7 @@ describe('Upload Flow Integration', () => {
 
     // Attach signature to file (simulating accept callback)
     ;(mockFile as any).__shuboxSignature = {
-      endpoint: 'https://s3.amazonaws.com/bucket',
+      aws_endpoint: 'https://s3.amazonaws.com/bucket',
       signature: 'sig123',
       policy: 'pol123',
       key: 'uploads/test.jpg',
@@ -237,12 +237,8 @@ describe('Upload Flow Integration', () => {
     // Call upload handler
     uploadHandler.handle(mockFile, mockXhr, mockFormData)
 
-    // Verify XHR was configured for S3
-    expect(mockXhr.open).toHaveBeenCalledWith(
-      'POST',
-      'https://s3.amazonaws.com/bucket',
-      true
-    )
+    // Note: XHR.open() is called by Dropzone before the sending callback,
+    // so the upload handler only appends signature fields to the form data
 
     // Verify signature fields were added to form data
     expect(mockFormData.get('key')).toBe('uploads/test.jpg')

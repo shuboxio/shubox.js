@@ -14,6 +14,7 @@ export interface ISignatureHandlerOptions {
  */
 export class S3SignatureHandler {
   private signature: IS3Signature | null = null
+  private dropzoneInstance: any = null
 
   /**
    * Creates a new S3SignatureHandler instance.
@@ -24,6 +25,13 @@ export class S3SignatureHandler {
     private apiClient: ShuboxApiClient,
     private options: ISignatureHandlerOptions
   ) {}
+
+  /**
+   * Set the Dropzone instance so we can update its URL at runtime
+   */
+  setDropzoneInstance(dropzone: any): void {
+    this.dropzoneInstance = dropzone
+  }
 
   /**
    * Handles the Dropzone accept callback to fetch S3 signature.
@@ -42,6 +50,12 @@ export class S3SignatureHandler {
 
       // Store signature on file for upload handler
       ;(file as any).__shuboxSignature = this.signature
+
+      // Update Dropzone URL to S3 endpoint for this upload
+      // This must happen before the sending callback is invoked
+      if (this.dropzoneInstance) {
+        this.dropzoneInstance.options.url = this.signature!.aws_endpoint
+      }
 
       done()
     } catch (error) {

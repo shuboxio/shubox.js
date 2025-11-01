@@ -1,13 +1,18 @@
 import type Dropzone from 'dropzone'
 
 export interface IS3Signature {
-  endpoint: string
+  aws_endpoint: string
   signature: string
   policy: string
   key: string
   acl?: string
   success_action_status?: string
   'Content-Type'?: string
+  'x-amz-credential'?: string
+  'x-amz-algorithm'?: string
+  'x-amz-date'?: string
+  'x-amz-signature'?: string
+  [key: string]: any
 }
 
 export interface ITransformResult {
