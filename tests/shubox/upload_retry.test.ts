@@ -63,63 +63,6 @@ describe('S3 Upload Retry', () => {
     vi.useRealTimers();
   });
 
-  describe('_isRecoverableUploadError', () => {
-    test('should return true for NetworkError', () => {
-      const error = new NetworkError('Connection failed');
-      expect(shuboxCallbacks._isRecoverableUploadError(error)).toBe(true);
-    });
-
-    test('should return true for timeout errors', () => {
-      const error = new Error('Request timed out');
-      expect(shuboxCallbacks._isRecoverableUploadError(error)).toBe(true);
-    });
-
-    test('should return true for connection errors', () => {
-      const error = new Error('Network connection failed');
-      expect(shuboxCallbacks._isRecoverableUploadError(error)).toBe(true);
-    });
-
-    test('should return true for 5xx server errors', () => {
-      const error = new UploadError('Server error', 500, true);
-      expect(shuboxCallbacks._isRecoverableUploadError(error)).toBe(true);
-    });
-
-    test('should return true for 503 service unavailable', () => {
-      const error = new Error('HTTP 503: Service Unavailable');
-      expect(shuboxCallbacks._isRecoverableUploadError(error)).toBe(true);
-    });
-
-    test('should return true for 429 rate limit', () => {
-      const error = new Error('HTTP 429: Too Many Requests');
-      expect(shuboxCallbacks._isRecoverableUploadError(error)).toBe(true);
-    });
-
-    test('should return false for 4xx client errors', () => {
-      const error = new UploadError('Bad request', 400);
-      expect(shuboxCallbacks._isRecoverableUploadError(error)).toBe(false);
-    });
-
-    test('should return false for 401 unauthorized', () => {
-      const error = new Error('HTTP 401: Unauthorized');
-      expect(shuboxCallbacks._isRecoverableUploadError(error)).toBe(false);
-    });
-
-    test('should return false for 403 forbidden', () => {
-      const error = new Error('HTTP 403: Forbidden');
-      expect(shuboxCallbacks._isRecoverableUploadError(error)).toBe(false);
-    });
-
-    test('should return false for 404 not found', () => {
-      const error = new Error('HTTP 404: Not Found');
-      expect(shuboxCallbacks._isRecoverableUploadError(error)).toBe(false);
-    });
-
-    test('should return false for validation errors', () => {
-      const error = new Error('File type not allowed');
-      expect(shuboxCallbacks._isRecoverableUploadError(error)).toBe(false);
-    });
-  });
-
   describe('error callback with retry logic', () => {
     test('should retry on recoverable error', () => {
       const callbacks = shuboxCallbacks.toHash();

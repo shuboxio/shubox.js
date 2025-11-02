@@ -118,4 +118,39 @@ describe('ShuboxDomRenderer', () => {
       expect(input.value).toBe('https://example.com/image.jpg - 1024 bytes');
     });
   });
+
+  describe('cursor placement', () => {
+    test('placeCursorAfterText positions cursor correctly in INPUT element', () => {
+      const input = document.createElement('input');
+      input.value = 'before text after';
+      element.appendChild(input);
+
+      renderer.placeCursorAfterText(input, 'text');
+
+      expect(input.selectionStart).toBe(11); // Position after 'text'
+      expect(input.selectionEnd).toBe(11);
+    });
+
+    test('placeCursorAfterText positions cursor correctly in TEXTAREA element', () => {
+      const textarea = document.createElement('textarea');
+      textarea.value = 'some text here';
+      element.appendChild(textarea);
+
+      renderer.placeCursorAfterText(textarea, 'text');
+
+      expect(textarea.selectionStart).toBe(9); // Position after 'text'
+      expect(textarea.selectionEnd).toBe(9);
+    });
+
+    test('placeCursorAfterText handles text at beginning of value', () => {
+      const input = document.createElement('input');
+      input.value = 'start of text';
+      element.appendChild(input);
+
+      renderer.placeCursorAfterText(input, 'start');
+
+      expect(input.selectionStart).toBe(5); // Position after 'start'
+      expect(input.selectionEnd).toBe(5);
+    });
+  });
 });

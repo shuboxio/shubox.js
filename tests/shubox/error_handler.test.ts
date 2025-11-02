@@ -3,7 +3,7 @@
  */
 import { describe, expect, test, beforeEach, vi } from 'vitest';
 import { ShuboxErrorHandler } from '../../src/shubox/error_handler';
-import { NetworkError, TimeoutError, OfflineError } from '../../src/shubox/errors';
+import { NetworkError, TimeoutError, OfflineError, UploadError } from '../../src/shubox/errors';
 import { setupJsDom } from '../test_helpers';
 
 describe('ShuboxErrorHandler', () => {
@@ -31,6 +31,56 @@ describe('ShuboxErrorHandler', () => {
     test('isRecoverableError returns true for OfflineError', () => {
       const error = new OfflineError('No connection');
       expect(handler.isRecoverableError(error)).toBe(true);
+    });
+
+    test('isRecoverableError returns true for timeout errors in message', () => {
+      const error = new Error('Request timed out');
+      expect(handler.isRecoverableError(error)).toBe(true);
+    });
+
+    test('isRecoverableError returns true for connection errors in message', () => {
+      const error = new Error('Network connection failed');
+      expect(handler.isRecoverableError(error)).toBe(true);
+    });
+
+    test('isRecoverableError returns true for 5xx server errors', () => {
+      const error = new UploadError('Server error', 500, true);
+      expect(handler.isRecoverableError(error)).toBe(true);
+    });
+
+    test('isRecoverableError returns true for 503 service unavailable in message', () => {
+      const error = new Error('HTTP 503: Service Unavailable');
+      expect(handler.isRecoverableError(error)).toBe(true);
+    });
+
+    test('isRecoverableError returns true for 429 rate limit in message', () => {
+      const error = new Error('HTTP 429: Too Many Requests');
+      expect(handler.isRecoverableError(error)).toBe(true);
+    });
+
+    test('isRecoverableError returns false for 4xx client errors', () => {
+      const error = new UploadError('Bad request', 400);
+      expect(handler.isRecoverableError(error)).toBe(false);
+    });
+
+    test('isRecoverableError returns false for 401 unauthorized in message', () => {
+      const error = new Error('HTTP 401: Unauthorized');
+      expect(handler.isRecoverableError(error)).toBe(false);
+    });
+
+    test('isRecoverableError returns false for 403 forbidden in message', () => {
+      const error = new Error('HTTP 403: Forbidden');
+      expect(handler.isRecoverableError(error)).toBe(false);
+    });
+
+    test('isRecoverableError returns false for 404 not found in message', () => {
+      const error = new Error('HTTP 404: Not Found');
+      expect(handler.isRecoverableError(error)).toBe(false);
+    });
+
+    test('isRecoverableError returns false for validation errors', () => {
+      const error = new Error('File type not allowed');
+      expect(handler.isRecoverableError(error)).toBe(false);
     });
 
     test('isRecoverableError returns false for generic Error', () => {

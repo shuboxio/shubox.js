@@ -427,11 +427,11 @@ work with localhost.
       && !!this.shubox.options.uploadingTemplate
     ) {
       el.value = el.value.replace(uploadingText, interpolatedText);
-      this._placeCursorAfterText(el, interpolatedText);
+      this.domRenderer.placeCursorAfterText(el, interpolatedText);
 
     } else if (this._insertableAtCursor(el)) {
       insertAtCursor(el, interpolatedText);
-      this._placeCursorAfterText(el, interpolatedText);
+      this.domRenderer.placeCursorAfterText(el, interpolatedText);
 
     } else if (this._isAppendingText()) {
       el.value = el.value + interpolatedText;
@@ -439,13 +439,6 @@ work with localhost.
     } else {
       el.value = interpolatedText;
     }
-  }
-
-  public _placeCursorAfterText(el: HTMLInputElement, text: string): void {
-    let pos = el.value.indexOf(text);
-    pos = pos + text.length;
-    el.setSelectionRange(pos, pos);
-    el.focus();
   }
 
   public _isFormElement(): boolean {
@@ -461,15 +454,5 @@ work with localhost.
       el.tagName === "TEXTAREA" &&
       this.shubox.options.textBehavior === "insertAtCursor"
     );
-  }
-
-  /**
-   * Determines if an upload error is recoverable and should be retried
-   * @param error - The error that occurred
-   * @returns true if the error is recoverable and should be retried
-   * @deprecated Use errorHandler.isRecoverableError() instead
-   */
-  public _isRecoverableUploadError(error: Error): boolean {
-    return this.errorHandler.isRecoverableError(error);
   }
 }

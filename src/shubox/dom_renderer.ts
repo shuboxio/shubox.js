@@ -64,4 +64,11 @@ export class ShuboxDomRenderer {
       element.value = interpolatedValue;
     }
   }
+
+  placeCursorAfterText(el: HTMLInputElement | HTMLTextAreaElement, text: string): void {
+    let pos = el.value.indexOf(text);
+    pos = pos + text.length;
+    el.setSelectionRange(pos, pos);
+    el.focus();
+  }
 }
