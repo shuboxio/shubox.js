@@ -72,4 +72,50 @@ describe('ShuboxDomRenderer', () => {
       expect(element.dataset.shuboxProgress).toBeUndefined();
     });
   });
+
+  describe('form value updates', () => {
+    test('updateFormValue replaces INPUT value with template interpolation', () => {
+      const input = document.createElement('input');
+      input.value = '';
+      element.appendChild(input);
+
+      renderer.updateFormValue(input, 'https://example.com/image.jpg', [
+        'height',
+        'width',
+        'name',
+        's3',
+        's3url',
+        'size',
+        'type',
+      ]);
+
+      expect(input.value).toBe('https://example.com/image.jpg');
+    });
+
+    test('updateFormValue with textBehavior append adds to TEXTAREA', () => {
+      const textarea = document.createElement('textarea');
+      textarea.value = 'existing text';
+      element.appendChild(textarea);
+
+      renderer.updateFormValue(textarea, ' new value', ['s3url'], 'append');
+
+      expect(textarea.value).toBe('existing text new value');
+    });
+
+    test('updateFormValue interpolates template variables correctly', () => {
+      const input = document.createElement('input');
+      element.appendChild(input);
+
+      const template = '{{s3url}} - {{size}} bytes';
+      renderer.updateFormValue(
+        input,
+        template,
+        ['s3url', 'size'],
+        'replace',
+        { s3url: 'https://example.com/image.jpg', size: '1024' }
+      );
+
+      expect(input.value).toBe('https://example.com/image.jpg - 1024 bytes');
+    });
+  });
 });

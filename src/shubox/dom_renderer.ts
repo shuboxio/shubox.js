@@ -39,4 +39,29 @@ export class ShuboxDomRenderer {
   clearProgress(): void {
     delete this.element.dataset.shuboxProgress;
   }
+
+  updateFormValue(
+    element: HTMLElement,
+    value: string,
+    replaceables: string[],
+    textBehavior: string = 'replace',
+    interpolations: Record<string, string> = {}
+  ): void {
+    if (!(element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement)) {
+      return;
+    }
+
+    // Interpolate template variables
+    let interpolatedValue = value;
+    for (const [key, val] of Object.entries(interpolations)) {
+      const regex = new RegExp(`{{${key}}}`, 'g');
+      interpolatedValue = interpolatedValue.replace(regex, val);
+    }
+
+    if (textBehavior === 'append') {
+      element.value += interpolatedValue;
+    } else {
+      element.value = interpolatedValue;
+    }
+  }
 }
