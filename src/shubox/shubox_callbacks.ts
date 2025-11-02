@@ -1,14 +1,21 @@
 import Dropzone from "dropzone";
-import Shubox from "./index";
-import { filenameFromFile } from "./filename_from_file";
-import { insertAtCursor } from "./insert_at_cursor";
-import { objectToFormData } from "./object_to_form_data";
-import { TransformCallback } from "./transform_callback";
-import { uploadCompleteEvent } from "./upload_complete_event";
-import { fetchWithRetry, parseJsonResponse } from "./fetch_with_retry";
-import { OfflineError, NetworkError, UploadError, TimeoutError } from "./errors";
+import type { Shubox } from "./index";
+import type { ShuboxDropzoneFile, IShuboxFile } from "./types";
 import { dispatchShuboxEvent } from "./events";
-import type { ShuboxDropzoneFile, SignatureResponse, IShuboxFile } from "./types";
+import { uploadCompleteEvent } from "./upload_complete_event";
+import { TransformCallback } from "./transform_callback";
+import { ShuboxConfig } from "./config";
+import { ShuboxDomRenderer } from "./dom_renderer";
+import { ShuboxApiClient } from "./api_client";
+import { ShuboxErrorHandler } from "./error_handler";
+import { ShuboxResourceManager } from "./resource_manager";
+import { ShuboxTransformManager } from "./transform_manager";
+import {
+  OfflineError,
+  NetworkError,
+  TimeoutError,
+  UploadError,
+} from "./errors";
 
 export interface IShuboxDefaultOptions {
   success?: (file: Dropzone.DropzoneFile) => void;
@@ -45,20 +52,22 @@ export class ShuboxCallbacks {
   }
   public shubox: Shubox;
   public instances: Dropzone[];
-  public readonly replaceable: string[] = [
-    "height",
-    "width",
-    "name",
-    "s3",
-    "s3url",
-    "size",
-    "type",
-  ];
-  // private options: IShuboxDefaultOptions;
+  public readonly replaceable: string[];
+  private domRenderer: ShuboxDomRenderer;
+  private apiClient: ShuboxApiClient;
+  private errorHandler: ShuboxErrorHandler;
+  private resourceManager: ShuboxResourceManager;
+  private transformManager: ShuboxTransformManager;
 
   constructor(shubox: Shubox, instances: Dropzone[]) {
     this.shubox = shubox;
     this.instances = instances;
+    this.replaceable = ShuboxConfig.REPLACEABLE_VARIABLES;
+    this.domRenderer = new ShuboxDomRenderer(shubox.element);
+    this.apiClient = new ShuboxApiClient(shubox);
+    this.errorHandler = new ShuboxErrorHandler(shubox.element);
+    this.resourceManager = new ShuboxResourceManager(shubox.element);
+    this.transformManager = new ShuboxTransformManager();
   }
 
   public toHash() {
