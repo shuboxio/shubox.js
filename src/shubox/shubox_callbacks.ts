@@ -146,160 +146,143 @@ export class ShuboxCallbacks {
       },
 
       addedfile(file: ShuboxDropzoneFile) {
+        if (!self.shubox.options.acceptedFiles) {
+          self.shubox.options.acceptedFiles = ShuboxConfig.DEFAULT_ACCEPTED_FILES;
+        }
+
+        // Call Dropzone default
         Dropzone.prototype.defaultOptions.addedfile!.apply(this, [file]);
+
         if (self.shubox.options.addedfile) {
           self.shubox.options.addedfile(file);
         }
       },
 
       success(file: ShuboxDropzoneFile, response: string) {
-        // Check if this is a recovery from previous failures
-        const hadPreviousFailures = file._shuboxRetryCount && file._shuboxRetryCount > 0;
-
+        // Check for recovery from previous failures
+        const hadPreviousFailures =
+          file._shuboxRetryCount && file._shuboxRetryCount > 0;
         if (hadPreviousFailures) {
-          // Dispatch recovered event
-          dispatchShuboxEvent(self.shubox.element, 'shubox:recovered', {
-            file,
-            attemptCount: file._shuboxRetryCount! + 1, // +1 because the first attempt is not counted
-          });
+          self.errorHandler.dispatchRecoveredEvent(file, file._shuboxRetryCount! + 1);
         }
 
-        self.shubox.element.classList.add("shubox-success");
-        self.shubox.element.classList.remove("shubox-uploading");
-        const match = /\<Location\>(.*)\<\/Location\>/g.exec(response) || ["", ""];
-        const url = match[1];
-        let apiVersion = 1.0
-        file.s3url = url.replace(/%2F/g, "/").replace(/%2B/g, "%20");
+        // Update DOM
+        self.domRenderer.setSuccessState();
 
+        // Parse S3 URL from XML response
+        const match = /\<Location\>(.*)\<\/Location\>/g.exec(response) || ['', ''];
+        file.s3url = match[1].replace(/%2F/g, '/').replace(/%2B/g, '%20');
+
+        // Apply CDN URL if configured
         if (self.shubox.options.cdn) {
-          const path = file.s3url.split("/").slice(4).join("/");
+          const path = file.s3url.split('/').slice(4).join('/');
           file.s3url = `${self.shubox.options.cdn}/${path}`;
         }
 
-        uploadCompleteEvent(self.shubox, file as IShuboxFile, (self.shubox.options.extraParams || {})).then(response => {
-          if (!response) return;
+        // Send upload complete notification
+        let apiVersion = 1.0;
+        uploadCompleteEvent(self.shubox, file as IShuboxFile, self.shubox.options.extraParams || {})
+          .then((response) => {
+            if (!response) return;
 
-          apiVersion = Number(response.headers.get("X-Shubox-API"));
+            apiVersion = Number(response.headers.get("X-Shubox-API"));
 
-          Dropzone.prototype.defaultOptions.success!.apply(this, [<Dropzone.DropzoneFile>file]);
+            // Handle transforms
+            const transformCallbacks = self.shubox.options.transformCallbacks || self.shubox.options.transforms;
 
-          // Update the form value if it is able
-          if (self._isFormElement()) {
-            self._updateFormValue(file, "successTemplate");
-          }
+            if (transformCallbacks) {
+              // If using the legacy transformCallbacks option, we need to translate the variant character to the old style.
+              // EG: 400x400# -> 400x400_hash
+              //
+              // If using the new transforms option, we don't need to do this translation.
+              // EG: 400x400# -> 400x400#
+              const doVariantCharacterTranslation = !!self.shubox.options.transformCallbacks;
 
-          const transformCallbacks = self.shubox.options.transformCallbacks || self.shubox.options.transforms;
-
-          if (transformCallbacks) {
-            // If using the legacy transformCallbacks option, we need to translate the variant character to the old style.
-            // EG: 400x400# -> 400x400_hash
-            //
-            // If using the new transforms option, we don't need to do this translation.
-            // EG: 400x400# -> 400x400#
-            const doVariantCharacterTranslation = !!self.shubox.options.transformCallbacks;
-
-            for (const variant of Object.keys(transformCallbacks)) {
-              const callback = transformCallbacks[variant];
-              new TransformCallback(
-                file as IShuboxFile,
-                variant,
-                callback,
-                apiVersion,
-                doVariantCharacterTranslation,
-                self.shubox.callbacks.error
-              ).run();
+              for (const variant of Object.keys(transformCallbacks)) {
+                const callback = transformCallbacks[variant];
+                new TransformCallback(
+                  file as IShuboxFile,
+                  variant,
+                  callback,
+                  apiVersion,
+                  doVariantCharacterTranslation,
+                  self.shubox.callbacks.error
+                ).run();
+              }
             }
-          }
 
-          // If supplied, run the options callback
-          if (self.shubox.options.success) {
-            self.shubox.options.success(file);
-          }
-        });
+            // Update form value if applicable
+            if (self._isFormElement()) {
+              self._updateFormValue(file, 'successTemplate');
+            }
+
+            // Call user success callback
+            if (self.shubox.options.success) {
+              self.shubox.options.success(file);
+            }
+          })
+          .catch((err) => {
+            console.error('Error in upload complete event:', err);
+          });
+
+        // Call Dropzone default
+        Dropzone.prototype.defaultOptions.success!.apply(this, [file]);
       },
 
-      error(file: ShuboxDropzoneFile, message: string | Error) {
-        // Initialize retry count if not set
+      error(file: ShuboxDropzoneFile, message: string | Error, xhr?: XMLHttpRequest) {
+        const error = message instanceof Error ? message : new Error(String(message));
+
+        // Initialize retry count
         if (file._shuboxRetryCount === undefined) {
           file._shuboxRetryCount = 0;
         }
 
-        // Determine if this error is recoverable and should be retried
-        const error = message instanceof Error ? message : new Error(String(message));
-        const isRecoverable = self._isRecoverableUploadError(error);
+        // Determine if recoverable
+        const isRecoverable = self.errorHandler.isRecoverableError(error);
         const maxRetries = self.shubox.options.retryAttempts || 3;
         const shouldRetry = isRecoverable && file._shuboxRetryCount < maxRetries;
 
-        // Dispatch timeout event if this is a timeout error
+        // Dispatch error-specific events
         if (error instanceof TimeoutError) {
-          dispatchShuboxEvent(self.shubox.element, 'shubox:timeout', {
-            file,
-            timeout: self.shubox.options.timeout || 60000,
-          });
+          self.errorHandler.dispatchTimeoutEvent(file, self.shubox.options.timeout || 60000);
         }
 
+        // Handle retry
         if (shouldRetry) {
           file._shuboxRetryCount++;
 
           // Dispatch retry:start event on first retry
           if (file._shuboxRetryCount === 1) {
-            dispatchShuboxEvent(self.shubox.element, 'shubox:retry:start', {
-              error,
-              file,
-              maxRetries,
-            });
+            self.errorHandler.dispatchRetryStartEvent(error, file, maxRetries);
           }
 
-          // Calculate exponential backoff delay
-          const delay = Math.pow(2, file._shuboxRetryCount - 1) * 1000; // 1s, 2s, 4s
-
-          // Dispatch retry:attempt event
-          dispatchShuboxEvent(self.shubox.element, 'shubox:retry:attempt', {
-            error,
-            file,
-            attempt: file._shuboxRetryCount,
-            maxRetries,
-            delay,
-          });
+          const delay = self.errorHandler.calculateBackoffDelay(file._shuboxRetryCount);
+          self.errorHandler.dispatchRetryEvent(file._shuboxRetryCount, delay, error, file, maxRetries);
 
           // Call onRetry callback if provided
           if (self.shubox.options.onRetry) {
             self.shubox.options.onRetry(file._shuboxRetryCount, error, file);
           }
 
-          // Reset file status to queued to allow retry
           file.status = Dropzone.QUEUED;
+          self.domRenderer.clearErrorState();
 
-          // Remove error styling temporarily
-          self.shubox.element.classList.remove("shubox-error");
-
-          // Schedule retry after delay and store timeout ID for cleanup
           file._shuboxRetryTimeout = setTimeout(() => {
-            // Find the dropzone instance that owns this file
-            const dropzone = self.instances.find(dz => {
-              return Array.from(dz.files).some(f => f === file);
-            });
-
+            const dropzone = self.instances.find((dz) =>
+              Array.from(dz.files).some((f: any) => f === file)
+            );
             if (dropzone) {
               dropzone.processFile(file);
             }
           }, delay);
 
-          return; // Don't call error handler yet, we're retrying
+          return;
         }
 
-        // If we've exhausted retries or error is not recoverable, handle the error
-        self.shubox.element.classList.remove("shubox-uploading");
-        self.shubox.element.classList.add("shubox-error");
-
-        // Dispatch error event
-        dispatchShuboxEvent(self.shubox.element, 'shubox:error', {
-          error,
-          file,
-        });
-
-        const xhr = new XMLHttpRequest(); // bc type signature
-        Dropzone.prototype.defaultOptions.error!.apply(this, [file, message, xhr]);
+        // Handle final error
+        self.domRenderer.clearSuccessState();
+        self.domRenderer.setErrorState();
+        self.errorHandler.dispatchErrorEvent(error, file);
 
         const messageStr = typeof message === 'string' ? message : message.message;
         if (messageStr.includes("Referring domain not permitted") && window.location.hostname === "localhost") {
@@ -317,22 +300,31 @@ work with localhost.
           );
         }
 
+        // Call Dropzone default + user callback
+        const xhrParam = xhr || new XMLHttpRequest();
+        Dropzone.prototype.defaultOptions.error!.apply(this, [
+          file,
+          message,
+          xhrParam,
+        ]);
         if (self.shubox.options.error) {
           self.shubox.options.error(file, message);
         }
       },
 
       uploadProgress(file: ShuboxDropzoneFile, progress: number, bytesSent: number) {
-        self.shubox.element.dataset.shuboxProgress = String(progress);
-        Dropzone.prototype.defaultOptions.uploadprogress!.apply(
-          this,
-          [file, progress, bytesSent],
-        );
+        self.domRenderer.setProgress(progress);
+
+        // Call Dropzone default
+        Dropzone.prototype.defaultOptions.uploadprogress!.apply(this, [
+          file,
+          progress,
+          bytesSent,
+        ]);
       },
 
       canceled(file: ShuboxDropzoneFile) {
-        // Clean up resources when upload is canceled
-        self._cleanupFile(file);
+        self.resourceManager.onFileCanceled(file);
 
         // Call user's canceled callback if provided
         if (self.shubox.options.canceled) {
@@ -341,13 +333,10 @@ work with localhost.
       },
 
       removedfile(file: ShuboxDropzoneFile) {
-        // Clean up resources when file is removed
-        self._cleanupFile(file);
+        self.resourceManager.onFileRemoved(file);
 
-        // Call Dropzone's default removedfile to handle DOM cleanup
-        if (Dropzone.prototype.defaultOptions.removedfile) {
-          Dropzone.prototype.defaultOptions.removedfile!.apply(this, [file]);
-        }
+        // Call Dropzone default
+        Dropzone.prototype.defaultOptions.removedfile!.apply(this, [file]);
 
         // Call user's removedfile callback if provided
         if (self.shubox.options.removedfile) {
@@ -356,8 +345,11 @@ work with localhost.
       },
 
       queuecomplete() {
-        // Remove uploading class when queue is complete
-        self.shubox.element.classList.remove("shubox-uploading");
+        self.resourceManager.onQueueComplete();
+        self.domRenderer.clearProgress();
+
+        // Call Dropzone default
+        Dropzone.prototype.defaultOptions.queuecomplete!.apply(this, []);
 
         // Call user's queuecomplete callback if provided
         if (self.shubox.options.queuecomplete) {
@@ -367,30 +359,6 @@ work with localhost.
     };
 
     return hash;
-  }
-
-  /**
-   * Clean up resources associated with a file
-   * @param file - The file to clean up
-   */
-  private _cleanupFile(file: ShuboxDropzoneFile): void {
-    // Reset retry count
-    if (file._shuboxRetryCount !== undefined) {
-      delete file._shuboxRetryCount;
-    }
-
-    // Clean up any pending retry timeouts
-    if (file._shuboxRetryTimeout !== undefined) {
-      clearTimeout(file._shuboxRetryTimeout);
-      delete file._shuboxRetryTimeout;
-    }
-
-    // Remove upload-related CSS classes
-    this.shubox.element.classList.remove("shubox-uploading");
-    this.shubox.element.classList.remove("shubox-error");
-
-    // Remove progress data attribute
-    delete this.shubox.element.dataset.shuboxProgress;
   }
 
   // Private
@@ -499,53 +467,9 @@ work with localhost.
    * Determines if an upload error is recoverable and should be retried
    * @param error - The error that occurred
    * @returns true if the error is recoverable and should be retried
+   * @deprecated Use errorHandler.isRecoverableError() instead
    */
   public _isRecoverableUploadError(error: Error): boolean {
-    const errorMessage = error.message.toLowerCase();
-
-    // Network errors are recoverable
-    if (error instanceof NetworkError) {
-      return true;
-    }
-
-    // Timeout errors are recoverable (they might succeed on retry)
-    if (errorMessage.includes("timeout") || errorMessage.includes("timed out")) {
-      return true;
-    }
-
-    // Connection errors are recoverable
-    if (errorMessage.includes("network") ||
-        errorMessage.includes("connection") ||
-        errorMessage.includes("fetch")) {
-      return true;
-    }
-
-    // 5xx server errors are recoverable (server might recover)
-    if (error instanceof UploadError && error.statusCode && error.statusCode >= 500) {
-      return true;
-    }
-
-    // HTTP 5xx errors in message
-    if (errorMessage.match(/http 5\d{2}/)) {
-      return true;
-    }
-
-    // 429 rate limit errors are recoverable
-    if (errorMessage.includes("429") || errorMessage.includes("rate limit")) {
-      return true;
-    }
-
-    // Service unavailable, bad gateway, gateway timeout
-    if (errorMessage.includes("503") ||
-        errorMessage.includes("502") ||
-        errorMessage.includes("504") ||
-        errorMessage.includes("service unavailable") ||
-        errorMessage.includes("bad gateway") ||
-        errorMessage.includes("gateway timeout")) {
-      return true;
-    }
-
-    // All other errors (4xx, validation errors, etc.) are not recoverable
-    return false;
+    return this.errorHandler.isRecoverableError(error);
   }
 }

@@ -12,8 +12,12 @@ export class ShuboxResourceManager {
     // Reset retry count
     delete file._shuboxRetryCount;
 
-    // Remove error class
+    // Remove upload-related CSS classes
+    this.element.classList.remove('shubox-uploading');
     this.element.classList.remove('shubox-error');
+
+    // Remove progress data attribute
+    delete this.element.dataset.shuboxProgress;
   }
 
   resetProgress(file: any): void {
@@ -29,6 +33,7 @@ export class ShuboxResourceManager {
   }
 
   onQueueComplete(): void {
-    // No action needed in basic implementation
+    // Remove uploading class when queue is complete
+    this.element.classList.remove('shubox-uploading');
   }
 }
