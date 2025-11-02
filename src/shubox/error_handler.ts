@@ -1,5 +1,5 @@
 // src/shubox/error_handler.ts
-import type { Dropzone } from 'dropzone';
+import Dropzone from 'dropzone';
 import {
   NetworkError,
   TimeoutError,

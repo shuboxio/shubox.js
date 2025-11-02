@@ -1,5 +1,5 @@
 // src/shubox/api_client.ts
-import type { Shubox } from './index';
+import Shubox from './index';
 import { fetchWithRetry } from './fetch_with_retry';
 import { objectToFormData } from './object_to_form_data';
 import { filenameFromFile } from './filename_from_file';

@@ -1,9 +1,10 @@
 import Dropzone from "dropzone";
-import type { Shubox } from "./index";
+import Shubox from "./index";
 import type { ShuboxDropzoneFile, IShuboxFile } from "./types";
 import { dispatchShuboxEvent } from "./events";
 import { uploadCompleteEvent } from "./upload_complete_event";
 import { TransformCallback } from "./transform_callback";
+import { insertAtCursor } from "./insert_at_cursor";
 import { ShuboxConfig } from "./config";
 import { ShuboxDomRenderer } from "./dom_renderer";
 import { ShuboxApiClient } from "./api_client";
@@ -96,7 +97,7 @@ export class ShuboxCallbacks {
               type: file.type,
             },
             {
-              s3Key: self.shubox.options.s3Key,
+              s3Key: self.shubox.options.s3Key || undefined,
               retryAttempts: self.shubox.options.retryAttempts,
               timeout: self.shubox.options.timeout,
             }
