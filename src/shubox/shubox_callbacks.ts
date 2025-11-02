@@ -78,53 +78,47 @@ export class ShuboxCallbacks {
 
     const hash = {
       async accept(file: ShuboxDropzoneFile, done: (error?: string | Error) => void) {
-        // Check if user is offline before attempting to fetch signature
+        // Check offline state
         if (typeof navigator !== 'undefined' && !navigator.onLine) {
-          const offlineError = new OfflineError("Cannot upload while offline. Please check your internet connection.");
+          const offlineError = new OfflineError(
+            'You are offline. Uploads will resume when back online.'
+          );
           self.shubox.callbacks.error(file, offlineError);
           return;
         }
 
         try {
-          const response = await fetchWithRetry(
-            self.shubox.signatureUrl,
+          // Use ShuboxApiClient for signature fetching
+          const signature = await self.apiClient.fetchSignature(
             {
-              headers: { "X-Shubox-Client": self.shubox.version },
-              body: objectToFormData({
-                file: {
-                  name: filenameFromFile(file),
-                  size: file.size,
-                  type: file.type,
-                },
-                key: self.shubox.key,
-                s3Key: self.shubox.options.s3Key,
-              }),
-              method: "post",
-              mode: "cors"
+              name: file.name,
+              size: file.size,
+              type: file.type,
             },
             {
-              retryAttempts: self.shubox.options.retryAttempts || 3,
-              timeout: self.shubox.options.timeout || 30000,
+              s3Key: self.shubox.options.s3Key,
+              retryAttempts: self.shubox.options.retryAttempts,
+              timeout: self.shubox.options.timeout,
             }
           );
 
-          const json = await parseJsonResponse<SignatureResponse>(response);
-
-          if (json.error) {
-            self.shubox.callbacks.error(file, json.error);
-          } else {
-            self.instances.forEach((dz) => {
-              // Dropzone instances allow setting url at runtime
-              dz.options.url = json.aws_endpoint;
-            });
-
-            file.postData = json;
-            file.s3 = json.key;
-            done();
+          if ((signature as any).error) {
+            self.shubox.callbacks.error(file, (signature as any).error);
+            return;
           }
+
+          // Update Dropzone URLs with signature
+          self.instances.forEach((dz) => {
+            dz.options.url = signature.aws_endpoint;
+          });
+
+          // Attach signature to file
+          file.postData = signature;
+          file.s3 = signature.key;
+
+          done();
         } catch (err) {
-          const error = err instanceof Error ? err : new Error(String(err));
-          self.shubox.callbacks.error(file, error);
+          self.shubox.callbacks.error(file, err as Error);
         }
       },
 
