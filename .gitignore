@@ -7,3 +7,4 @@ tags.*
 demo/javascript/shubox_config.js
 yarn.lock
 .worktrees/
+e2e
