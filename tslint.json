@@ -1,14 +1,12 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
-    ],
-    "jsRules": {},
-    "rules": {
-      "no-console": false,
-      "no-debugger": false,
-      "no-empty": [true, "allow-empty-functions"],
-      "no-unused-variable": false
-    },
-    "rulesDirectory": []
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended"],
+  "jsRules": {},
+  "rules": {
+    "no-console": false,
+    "no-debugger": false,
+    "no-empty": [true, "allow-empty-functions"],
+    "no-unused-variable": false
+  },
+  "rulesDirectory": []
 }

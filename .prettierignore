@@ -1,0 +1,7 @@
+dist
+node_modules
+demo/vendor
+coverage
+
+# ignore generated demo files
+demo/build
