@@ -1102,6 +1102,63 @@ acceptedFiles: "image/*,application/pdf,.psd" // image, pdfs, psd
 
 # Development Notes
 
+## Architecture Overview
+
+Shubox.js is organized into 7 modular components that work together seamlessly:
+
+### Core Module (`src/shubox/core/`)
+- **Shubox.ts** - Main library class that orchestrates initialization and offline detection
+- **ShuboxCallbacks.ts** - Dropzone callback implementations that coordinate between modules
+- **ShuboxOptions.ts** - Configuration and option processing
+- **types.ts** - TypeScript type definitions for the entire library
+
+### API Module (`src/shubox/api/`)
+- **ApiClient.ts** - Handles S3 signature fetching with automatic retry and timeout support
+- **fetchWithRetry.ts** - Network utility with exponential backoff retry logic
+- **uploadCompleteEvent.ts** - Metadata upload notifications with non-blocking error handling
+
+### DOM Module (`src/shubox/dom/`)
+- **DomRenderer.ts** - CSS class management, form value updates, cursor positioning
+- **insertAtCursor.ts** - Utility for inserting text at cursor position
+- **ResourceManager.ts** - File lifecycle cleanup, retry timeouts, memory management
+
+### Errors Module (`src/shubox/errors/`)
+- **ShuboxError.ts** - Typed error classes (NetworkError, TimeoutError, OfflineError, etc.)
+- **ErrorHandler.ts** - Error classification, retry scheduling, event dispatching
+
+### Events Module (`src/shubox/events/`)
+- **dispatchEvent.ts** - Custom event system for lifecycle monitoring
+
+### Transforms Module (`src/shubox/transforms/`)
+- **TransformManager.ts** - Image transform configuration management
+- **TransformCallback.ts** - Transform success callbacks
+- **Variant.ts** - Image variant handling
+
+### Utils Module (`src/shubox/utils/`)
+- **config.ts** - Configuration constants
+- **filenameFromFile.ts** - Filename extraction utility
+- **objectToFormData.ts** - Object to FormData conversion
+
+## How Modules Work Together
+
+The modular architecture follows a dependency injection pattern:
+
+1. **Shubox** (main class) initializes and coordinates all modules
+2. **ShuboxCallbacks** receives instances of dependent modules through its constructor
+3. Each callback delegates to the appropriate module for its responsibility:
+   - API calls → **ShuboxApiClient**
+   - DOM updates → **ShuboxDomRenderer**
+   - Error handling → **ShuboxErrorHandler**
+   - Resource cleanup → **ShuboxResourceManager**
+   - Transform processing → **ShuboxTransformManager**
+   - Events → Custom event dispatch
+
+This separation enables:
+- **Focused testing** - Each module can be tested independently
+- **Easy maintenance** - Changes to one concern don't affect others
+- **Tree-shaking** - Unused modules can be eliminated by bundlers
+- **Clear responsibilities** - Each module has a single, well-defined purpose
+
 ## Development Setup
 
 *Clone this repo:*
@@ -1146,6 +1203,60 @@ npm run dev
 ```
 
 ![](https://shubox.io/images/README/localhost-9001.png)
+
+## Working with the Modular Architecture
+
+### Running Tests
+
+Test individual modules:
+```sh
+npm test -- tests/shubox/api_client.test.ts
+npm test -- tests/shubox/error_handler.test.ts
+npm test -- tests/shubox/dom_renderer.test.ts
+```
+
+Run all tests:
+```sh
+npm test
+```
+
+### Building the Project
+
+Build with TypeScript and Vite:
+```sh
+npm run build
+```
+
+This produces:
+- ES module: `dist/shubox.es.js` (115.98 kB)
+- UMD module: `dist/shubox.umd.js` (65.39 kB)
+- Type declarations in `dist/src/shubox/`
+
+### Adding New Features
+
+To add a new feature:
+
+1. **Identify the module** - Which area does it belong to? (API, DOM, Errors, Transforms, etc.)
+2. **Create the module** - Add new file to appropriate `src/shubox/{module}/` directory
+3. **Write tests first** - Create test file in `tests/shubox/` following TDD pattern
+4. **Update types** - Add/update type definitions in `src/shubox/core/types.ts` if needed
+5. **Integrate** - If affecting callbacks, update `ShuboxCallbacks.ts` to use the new module
+6. **Update barrel exports** - Update `src/shubox/{module}/index.ts` if creating new exports
+
+### Import Patterns
+
+**Public API imports:**
+```typescript
+import Shubox, { NetworkError, TimeoutError, OfflineError } from 'shubox'
+```
+
+**Internal module imports:**
+```typescript
+// From core/ShuboxCallbacks.ts
+import { ShuboxApiClient } from '../api/ApiClient'
+import { ShuboxDomRenderer } from '../dom/DomRenderer'
+import { ShuboxErrorHandler } from '../errors/ErrorHandler'
+```
 
 # Code of Conduct
 
