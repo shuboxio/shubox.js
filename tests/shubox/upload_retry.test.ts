@@ -5,7 +5,7 @@ import { describe, expect, test, vi, beforeEach, afterEach } from 'vitest';
 import { ShuboxCallbacks } from '../../src/shubox/core/ShuboxCallbacks';
 import { NetworkError, UploadError } from '../../src/shubox/errors/ShuboxError';
 import type { ShuboxDropzoneFile } from '../../src/shubox/core/types';
-import Shubox from '../../src/shubox/core/Shubox'
+import Shubox from '../../src/shubox/core/Shubox';
 import Dropzone from 'dropzone';
 
 describe('S3 Upload Retry', () => {
@@ -198,7 +198,7 @@ describe('S3 Upload Retry', () => {
       expect(mockShubox.options.onRetry).toHaveBeenCalledWith(
         1, // attempt number
         networkError, // error object
-        mockFile // file
+        mockFile, // file
       );
     });
 
@@ -226,7 +226,7 @@ describe('S3 Upload Retry', () => {
     test('should pass timeout to Dropzone options', () => {
       const shubox = new Shubox('.upload', {
         key: 'test-key',
-        timeout: 120000
+        timeout: 120000,
       });
 
       // The timeout should be set in Dropzone options
@@ -236,7 +236,7 @@ describe('S3 Upload Retry', () => {
 
     test('should use default timeout when not specified', () => {
       const shubox = new Shubox('.upload', {
-        key: 'test-key'
+        key: 'test-key',
       });
 
       // Default timeout should be undefined (will use Dropzone default of 60s)

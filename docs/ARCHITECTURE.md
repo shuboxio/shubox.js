@@ -49,6 +49,7 @@ src/shubox/
 ### Core Module
 
 **Shubox.ts** - Main library orchestrator
+
 - Initializes the library
 - Creates Dropzone instances
 - Sets up offline detection
@@ -56,17 +57,20 @@ src/shubox/
 - Entry point for the entire library
 
 **ShuboxCallbacks.ts** - Callback coordinator
+
 - Implements Dropzone callback handlers
 - Coordinates between all other modules
 - Delegates to appropriate modules for each responsibility
 - Uses dependency injection to receive module instances
 
 **ShuboxOptions.ts** - Configuration processor
+
 - Handles user-provided options
 - Merges with default configuration
 - Validates option values
 
 **types.ts** - Type definitions
+
 - Defines all TypeScript interfaces and types
 - Extends Dropzone types where needed
 - Documents expected data structures
@@ -74,12 +78,14 @@ src/shubox/
 ### API Module
 
 **ApiClient.ts** - API communication
+
 - Fetches S3 signatures for file uploads
 - Handles retry logic through `fetchWithRetry`
 - Manages request timeout and configuration
 - Processes API responses
 
 **fetchWithRetry.ts** - Network utility
+
 - Implements fetch with exponential backoff
 - Handles timeout with AbortController
 - Classifies HTTP status codes
@@ -87,6 +93,7 @@ src/shubox/
 - Merges multiple abort signals
 
 **uploadCompleteEvent.ts** - Metadata notifications
+
 - Sends upload completion data to backend
 - Non-blocking (failures logged but don't block UI)
 - Handles retry of metadata uploads
@@ -95,6 +102,7 @@ src/shubox/
 ### DOM Module
 
 **DomRenderer.ts** - DOM state management
+
 - Manages CSS class lifecycle (uploading, success, error)
 - Updates form element values with templates
 - Manages progress indicators via data attributes
@@ -102,11 +110,13 @@ src/shubox/
 - Provides template interpolation
 
 **insertAtCursor.ts** - Text insertion utility
+
 - Inserts text at cursor position in inputs/textareas
 - Preserves existing text
 - Works with selection ranges
 
 **ResourceManager.ts** - File lifecycle management
+
 - Tracks and cleans up retry timeouts
 - Removes CSS classes on upload completion
 - Cleans up retry counters
@@ -116,6 +126,7 @@ src/shubox/
 ### Errors Module
 
 **ShuboxError.ts** - Error type system
+
 - Defines base `ShuboxError` class
 - Implements specific error types:
   - `NetworkError` - Network failures
@@ -127,6 +138,7 @@ src/shubox/
 - Each error has code, message, and recoverable flag
 
 **ErrorHandler.ts** - Error handling and retries
+
 - Classifies errors as recoverable or not
 - Calculates exponential backoff delays
 - Dispatches error events (error, timeout, retry, recovered)
@@ -136,6 +148,7 @@ src/shubox/
 ### Events Module
 
 **dispatchEvent.ts** - Custom event system
+
 - Dispatches custom events throughout upload lifecycle
 - Events bubble and are cancelable
 - Provides strongly typed event details
@@ -144,35 +157,41 @@ src/shubox/
 ### Transforms Module
 
 **TransformManager.ts** - Transform coordination
+
 - Checks if transforms are configured
 - Lists available transform variants
 - Coordinates transform processing
 
 **TransformCallback.ts** - Transform success callbacks
+
 - Executes user callbacks when transforms are ready
 - Handles variant-specific callbacks
 - Integrates with error handling for transform failures
 
 **Variant.ts** - Variant handling
+
 - Processes image variants
 - Manages variant URLs and metadata
 
 ### Utils Module
 
 **config.ts** - Configuration constants
+
 - `DEFAULT_TIMEOUT` - Default request timeout (30000ms)
 - `DEFAULT_RETRY_ATTEMPTS` - Default retry count (3)
 - `REPLACEABLE_VARIABLES` - Template placeholder names
-- `DEFAULT_ACCEPTED_FILES` - Default file types (image/*)
+- `DEFAULT_ACCEPTED_FILES` - Default file types (image/\*)
 - `DEFAULT_TEXT_BEHAVIOR` - Default text insertion mode (replace)
 - `DEFAULT_SUCCESS_TEMPLATE` - Default success template
 - `DEFAULT_UPLOADING_TEMPLATE` - Default uploading template
 
 **filenameFromFile.ts** - Filename extraction
+
 - Extracts filename from file object
 - Handles special characters and encoding
 
 **objectToFormData.ts** - Object serialization
+
 - Converts objects to FormData format
 - Handles nested objects
 - Preserves field types
@@ -200,7 +219,7 @@ src/shubox/
 
 ### Offline Detection
 
-1. **Library initialization** → Shubox._setupOfflineDetection() adds event listeners
+1. **Library initialization** → Shubox.\_setupOfflineDetection() adds event listeners
 2. **User goes offline** → offline event fires → all dropzones disabled
 3. **User comes online** → online event fires → all dropzones enabled
 
@@ -220,6 +239,7 @@ constructor(shubox: Shubox, instances: Dropzone[]) {
 ```
 
 Benefits:
+
 - **Testability** - Easy to mock dependencies in tests
 - **Flexibility** - Can swap implementations without changing call sites
 - **Clarity** - Dependencies are explicit and visible
@@ -262,18 +282,21 @@ To add a new feature:
 ## Import Guidelines
 
 **Public imports** (for library users):
+
 ```typescript
-import Shubox, { NetworkError, TimeoutError, OfflineError } from 'shubox'
+import Shubox, { NetworkError, TimeoutError, OfflineError } from 'shubox';
 ```
 
 **Internal imports** (between modules):
+
 ```typescript
 // Relative path from one module to another
-import { ShuboxApiClient } from '../api/ApiClient'
-import type { SignatureResponse } from '../core/types'
+import { ShuboxApiClient } from '../api/ApiClient';
+import type { SignatureResponse } from '../core/types';
 ```
 
 **Never**:
+
 - Import from `src/` paths in production code
 - Create circular dependencies between modules
 - Import private/internal implementation details

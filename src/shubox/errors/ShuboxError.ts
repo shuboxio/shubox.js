@@ -6,14 +6,9 @@ export class ShuboxError extends Error {
   public readonly recoverable: boolean;
   public readonly originalError?: Error;
 
-  constructor(
-    message: string,
-    code: string,
-    recoverable: boolean = false,
-    originalError?: Error,
-  ) {
+  constructor(message: string, code: string, recoverable: boolean = false, originalError?: Error) {
     super(message);
-    this.name = "ShuboxError";
+    this.name = 'ShuboxError';
     this.code = code;
     this.recoverable = recoverable;
     this.originalError = originalError;
@@ -30,8 +25,8 @@ export class ShuboxError extends Error {
  */
 export class NetworkError extends ShuboxError {
   constructor(message: string, originalError?: Error) {
-    super(message, "NETWORK_ERROR", true, originalError);
-    this.name = "NetworkError";
+    super(message, 'NETWORK_ERROR', true, originalError);
+    this.name = 'NetworkError';
   }
 }
 
@@ -40,8 +35,8 @@ export class NetworkError extends ShuboxError {
  */
 export class SignatureError extends ShuboxError {
   constructor(message: string, recoverable: boolean = false, originalError?: Error) {
-    super(message, "SIGNATURE_ERROR", recoverable, originalError);
-    this.name = "SignatureError";
+    super(message, 'SIGNATURE_ERROR', recoverable, originalError);
+    this.name = 'SignatureError';
   }
 }
 
@@ -57,8 +52,8 @@ export class UploadError extends ShuboxError {
     recoverable: boolean = false,
     originalError?: Error,
   ) {
-    super(message, "UPLOAD_ERROR", recoverable, originalError);
-    this.name = "UploadError";
+    super(message, 'UPLOAD_ERROR', recoverable, originalError);
+    this.name = 'UploadError';
     this.statusCode = statusCode;
   }
 }
@@ -70,8 +65,8 @@ export class TransformError extends ShuboxError {
   public readonly variant: string;
 
   constructor(message: string, variant: string, originalError?: Error) {
-    super(message, "TRANSFORM_ERROR", false, originalError);
-    this.name = "TransformError";
+    super(message, 'TRANSFORM_ERROR', false, originalError);
+    this.name = 'TransformError';
     this.variant = variant;
   }
 }
@@ -81,8 +76,8 @@ export class TransformError extends ShuboxError {
  */
 export class ValidationError extends ShuboxError {
   constructor(message: string, originalError?: Error) {
-    super(message, "VALIDATION_ERROR", false, originalError);
-    this.name = "ValidationError";
+    super(message, 'VALIDATION_ERROR', false, originalError);
+    this.name = 'ValidationError';
   }
 }
 
@@ -90,9 +85,9 @@ export class ValidationError extends ShuboxError {
  * Timeout errors
  */
 export class TimeoutError extends ShuboxError {
-  constructor(message: string = "Request timed out") {
-    super(message, "TIMEOUT_ERROR", true);
-    this.name = "TimeoutError";
+  constructor(message: string = 'Request timed out') {
+    super(message, 'TIMEOUT_ERROR', true);
+    this.name = 'TimeoutError';
   }
 }
 
@@ -100,8 +95,8 @@ export class TimeoutError extends ShuboxError {
  * Offline errors
  */
 export class OfflineError extends ShuboxError {
-  constructor(message: string = "Cannot upload while offline") {
-    super(message, "OFFLINE_ERROR", true);
-    this.name = "OfflineError";
+  constructor(message: string = 'Cannot upload while offline') {
+    super(message, 'OFFLINE_ERROR', true);
+    this.name = 'OfflineError';
   }
 }

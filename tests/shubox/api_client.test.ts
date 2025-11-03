@@ -38,7 +38,7 @@ describe('ShuboxApiClient', () => {
         Promise.resolve({
           ok: true,
           json: () => Promise.resolve(mockSignature),
-        } as Response)
+        } as Response),
       );
 
       const file = {
@@ -59,7 +59,7 @@ describe('ShuboxApiClient', () => {
           ok: false,
           status: 401,
           statusText: 'Unauthorized',
-        } as Response)
+        } as Response),
       );
 
       const file = {

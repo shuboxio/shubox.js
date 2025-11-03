@@ -171,7 +171,7 @@ small screens.
   top: 0;
   left: 0; /* "#menu width" */
   background: #000;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
   font-size: 10px; /* change this value to increase/decrease button size */
   z-index: 10;
   width: 2em;
@@ -201,13 +201,12 @@ small screens.
 .menu-link span:after {
   position: absolute;
   margin-top: -0.6em;
-  content: " ";
+  content: ' ';
 }
 
 .menu-link span:after {
   margin-top: 0.6em;
 }
-
 
 /* -- Responsive Styles (Media Queries) ------------------------------------- */
 
@@ -215,7 +214,6 @@ small screens.
 Hides the menu at `48em`, but modify this based on your app's needs.
 */
 @media (min-width: 48em) {
-
   .header,
   .content {
     padding-left: 2em;

@@ -13,6 +13,7 @@
 ## Task 1: Create ShuboxConfig Module
 
 **Files:**
+
 - Create: `src/shubox/config.ts`
 - Test: `tests/shubox/config.test.ts`
 
@@ -113,6 +114,7 @@ git commit -m "feat: create ShuboxConfig module for configuration constants"
 ## Task 2: Create ShuboxDomRenderer Module - Part 1 (CSS Classes)
 
 **Files:**
+
 - Create: `src/shubox/dom_renderer.ts`
 - Test: `tests/shubox/dom_renderer.test.ts`
 
@@ -271,6 +273,7 @@ git commit -m "feat: create ShuboxDomRenderer module for CSS class and data attr
 ## Task 3: Extend ShuboxDomRenderer - Form Value Updates
 
 **Files:**
+
 - Modify: `src/shubox/dom_renderer.ts`
 - Modify: `tests/shubox/dom_renderer.test.ts`
 
@@ -279,51 +282,48 @@ git commit -m "feat: create ShuboxDomRenderer module for CSS class and data attr
 Add these tests to `tests/shubox/dom_renderer.test.ts`:
 
 ```typescript
-  describe('form value updates', () => {
-    test('updateFormValue replaces INPUT value with template interpolation', () => {
-      const input = document.createElement('input');
-      input.value = '';
-      element.appendChild(input);
+describe('form value updates', () => {
+  test('updateFormValue replaces INPUT value with template interpolation', () => {
+    const input = document.createElement('input');
+    input.value = '';
+    element.appendChild(input);
 
-      renderer.updateFormValue(input, 'https://example.com/image.jpg', [
-        'height',
-        'width',
-        'name',
-        's3',
-        's3url',
-        'size',
-        'type',
-      ]);
+    renderer.updateFormValue(input, 'https://example.com/image.jpg', [
+      'height',
+      'width',
+      'name',
+      's3',
+      's3url',
+      'size',
+      'type',
+    ]);
 
-      expect(input.value).toBe('https://example.com/image.jpg');
-    });
-
-    test('updateFormValue with textBehavior append adds to TEXTAREA', () => {
-      const textarea = document.createElement('textarea');
-      textarea.value = 'existing text';
-      element.appendChild(textarea);
-
-      renderer.updateFormValue(textarea, ' new value', ['s3url'], 'append');
-
-      expect(textarea.value).toBe('existing text new value');
-    });
-
-    test('updateFormValue interpolates template variables correctly', () => {
-      const input = document.createElement('input');
-      element.appendChild(input);
-
-      const template = '{{s3url}} - {{size}} bytes';
-      renderer.updateFormValue(
-        input,
-        template,
-        ['s3url', 'size'],
-        'replace',
-        { s3url: 'https://example.com/image.jpg', size: '1024' }
-      );
-
-      expect(input.value).toBe('https://example.com/image.jpg - 1024 bytes');
-    });
+    expect(input.value).toBe('https://example.com/image.jpg');
   });
+
+  test('updateFormValue with textBehavior append adds to TEXTAREA', () => {
+    const textarea = document.createElement('textarea');
+    textarea.value = 'existing text';
+    element.appendChild(textarea);
+
+    renderer.updateFormValue(textarea, ' new value', ['s3url'], 'append');
+
+    expect(textarea.value).toBe('existing text new value');
+  });
+
+  test('updateFormValue interpolates template variables correctly', () => {
+    const input = document.createElement('input');
+    element.appendChild(input);
+
+    const template = '{{s3url}} - {{size}} bytes';
+    renderer.updateFormValue(input, template, ['s3url', 'size'], 'replace', {
+      s3url: 'https://example.com/image.jpg',
+      size: '1024',
+    });
+
+    expect(input.value).toBe('https://example.com/image.jpg - 1024 bytes');
+  });
+});
 ```
 
 **Step 2: Run test to verify it fails**
@@ -385,6 +385,7 @@ git commit -m "feat: add form value update and template interpolation to ShuboxD
 ## Task 4: Create ShuboxApiClient Module
 
 **Files:**
+
 - Create: `src/shubox/api_client.ts`
 - Test: `tests/shubox/api_client.test.ts`
 
@@ -431,7 +432,7 @@ describe('ShuboxApiClient', () => {
         Promise.resolve({
           ok: true,
           json: () => Promise.resolve(mockSignature),
-        } as Response)
+        } as Response),
       );
 
       const file = {
@@ -452,7 +453,7 @@ describe('ShuboxApiClient', () => {
           ok: false,
           status: 401,
           statusText: 'Unauthorized',
-        } as Response)
+        } as Response),
       );
 
       const file = {
@@ -502,7 +503,7 @@ export class ShuboxApiClient {
 
   async fetchSignature(
     file: FileInfo,
-    options: FetchSignatureOptions = {}
+    options: FetchSignatureOptions = {},
   ): Promise<SignatureResponse> {
     const response = await fetchWithRetry(
       this.shubox.signatureUrl,
@@ -525,7 +526,7 @@ export class ShuboxApiClient {
       {
         retryAttempts: options.retryAttempts || this.shubox.options.retryAttempts || 3,
         timeout: options.timeout || this.shubox.options.timeout || 30000,
-      }
+      },
     );
 
     if (!response.ok) {
@@ -557,6 +558,7 @@ git commit -m "feat: create ShuboxApiClient module for API communication"
 ## Task 5: Create ShuboxErrorHandler Module
 
 **Files:**
+
 - Create: `src/shubox/error_handler.ts`
 - Test: `tests/shubox/error_handler.test.ts`
 
@@ -663,12 +665,7 @@ Expected output: "Cannot find module '../src/shubox/error_handler'"
 ```typescript
 // src/shubox/error_handler.ts
 import type { Dropzone } from 'dropzone';
-import {
-  NetworkError,
-  TimeoutError,
-  OfflineError,
-  ShuboxError,
-} from './errors';
+import { NetworkError, TimeoutError, OfflineError, ShuboxError } from './errors';
 import { dispatchShuboxEvent } from './events';
 
 export class ShuboxErrorHandler {
@@ -735,6 +732,7 @@ git commit -m "feat: create ShuboxErrorHandler module for error handling and ret
 ## Task 6: Create ShuboxResourceManager Module
 
 **Files:**
+
 - Create: `src/shubox/resource_manager.ts`
 - Test: `tests/shubox/resource_manager.test.ts`
 
@@ -897,6 +895,7 @@ git commit -m "feat: create ShuboxResourceManager module for lifecycle and clean
 ## Task 7: Create ShuboxTransformManager Module
 
 **Files:**
+
 - Create: `src/shubox/transform_manager.ts`
 - Test: `tests/shubox/transform_manager.test.ts`
 
@@ -993,6 +992,7 @@ git commit -m "feat: create ShuboxTransformManager module for image transform ha
 ## Task 8: Refactor ShuboxCallbacks to Use New Modules - Part 1
 
 **Files:**
+
 - Modify: `src/shubox/shubox_callbacks.ts`
 - Modify: `tests/shubox/uploading_template.test.ts`
 
@@ -1013,11 +1013,7 @@ import { ShuboxApiClient } from './api_client';
 import { ShuboxErrorHandler } from './error_handler';
 import { ShuboxResourceManager } from './resource_manager';
 import { ShuboxTransformManager } from './transform_manager';
-import {
-  OfflineError,
-  NetworkError,
-  TimeoutError,
-} from './errors';
+import { OfflineError, NetworkError, TimeoutError } from './errors';
 ```
 
 **Step 2: Update ShuboxCallbacks constructor**
@@ -1063,6 +1059,7 @@ git commit -m "refactor: integrate new modules into ShuboxCallbacks"
 ## Task 9: Migrate accept() Callback to Use ShuboxApiClient
 
 **Files:**
+
 - Modify: `src/shubox/shubox_callbacks.ts`
 
 **Step 1: Update accept callback**
@@ -1141,6 +1138,7 @@ git commit -m "refactor: migrate accept callback to use ShuboxApiClient"
 ## Task 10: Migrate error() Callback to Use ShuboxErrorHandler
 
 **Files:**
+
 - Modify: `src/shubox/shubox_callbacks.ts`
 
 **Step 1: Update error callback**
@@ -1230,6 +1228,7 @@ git commit -m "refactor: migrate error callback to use ShuboxErrorHandler"
 ## Task 11: Migrate success() Callback to Use New Modules
 
 **Files:**
+
 - Modify: `src/shubox/shubox_callbacks.ts`
 
 **Step 1: Update success callback**
@@ -1316,6 +1315,7 @@ git commit -m "refactor: migrate success callback to use new modules"
 ## Task 12: Migrate Remaining Callbacks to Use New Modules
 
 **Files:**
+
 - Modify: `src/shubox/shubox_callbacks.ts`
 
 **Step 1: Update uploadProgress callback**
@@ -1415,9 +1415,10 @@ git commit -m "refactor: migrate remaining callbacks to use new modules"
 ## Task 13: Clean Up ShuboxCallbacks Private Methods - Part 1
 
 **Files:**
+
 - Modify: `src/shubox/shubox_callbacks.ts`
 
-**Step 1: Remove _cleanupFile method**
+**Step 1: Remove \_cleanupFile method**
 
 Remove the `_cleanupFile` method - it's now handled by `ShuboxResourceManager.cleanupFile()`
 
@@ -1489,6 +1490,7 @@ git commit -m "refactor: remove cleanup methods from ShuboxCallbacks, delegate t
 ## Task 14: Update ShuboxDomRenderer with Cursor Placement
 
 **Files:**
+
 - Modify: `src/shubox/dom_renderer.ts`
 - Modify: `tests/shubox/dom_renderer.test.ts`
 
@@ -1497,30 +1499,30 @@ git commit -m "refactor: remove cleanup methods from ShuboxCallbacks, delegate t
 Add to `tests/shubox/dom_renderer.test.ts`:
 
 ```typescript
-  describe('cursor placement', () => {
-    test('placeCursorAfterText positions cursor after inserted text', () => {
-      const textarea = document.createElement('textarea');
-      textarea.value = 'Hello world new text';
-      element.appendChild(textarea);
+describe('cursor placement', () => {
+  test('placeCursorAfterText positions cursor after inserted text', () => {
+    const textarea = document.createElement('textarea');
+    textarea.value = 'Hello world new text';
+    element.appendChild(textarea);
 
-      renderer.placeCursorAfterText(textarea, 'new text');
+    renderer.placeCursorAfterText(textarea, 'new text');
 
-      // Cursor should be after "new text"
-      expect(textarea.selectionStart).toBe('Hello world new text'.length);
-      expect(textarea.selectionEnd).toBe('Hello world new text'.length);
-    });
-
-    test('placeCursorAfterText works with INPUT elements', () => {
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.value = 'test value';
-      element.appendChild(input);
-
-      renderer.placeCursorAfterText(input, 'value');
-
-      expect(input.selectionStart).toBe(input.value.length);
-    });
+    // Cursor should be after "new text"
+    expect(textarea.selectionStart).toBe('Hello world new text'.length);
+    expect(textarea.selectionEnd).toBe('Hello world new text'.length);
   });
+
+  test('placeCursorAfterText works with INPUT elements', () => {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = 'test value';
+    element.appendChild(input);
+
+    renderer.placeCursorAfterText(input, 'value');
+
+    expect(input.selectionStart).toBe(input.value.length);
+  });
+});
 ```
 
 **Step 2: Run test to verify it fails**
@@ -1569,12 +1571,13 @@ git commit -m "feat: add cursor placement functionality to ShuboxDomRenderer"
 
 ---
 
-## Task 15: Remove _isRecoverableUploadError from ShuboxCallbacks
+## Task 15: Remove \_isRecoverableUploadError from ShuboxCallbacks
 
 **Files:**
+
 - Modify: `src/shubox/shubox_callbacks.ts`
 
-**Step 1: Remove the _isRecoverableUploadError method**
+**Step 1: Remove the \_isRecoverableUploadError method**
 
 This method is now in `ShuboxErrorHandler.isRecoverableError()`
 
@@ -1602,6 +1605,7 @@ git commit -m "refactor: remove _isRecoverableUploadError, use ShuboxErrorHandle
 ## Task 16: End-to-End Integration Test
 
 **Files:**
+
 - Modify: `tests/shubox/shubox_callbacks.test.ts` (create if doesn't exist)
 
 **Step 1: Create integration test**
@@ -1687,6 +1691,7 @@ git commit -m "test: add integration tests for refactored ShuboxCallbacks"
 ## Task 17: Demo Upload Test with Playwright
 
 **Files:**
+
 - No new files, but requires running dev server and Playwright test
 
 **Step 1: Create Playwright test**
@@ -1762,6 +1767,7 @@ git commit -m "test: add Playwright e2e test for upload functionality"
 ## Task 18: Final Test Run and Cleanup
 
 **Files:**
+
 - Review all changes
 
 **Step 1: Run all tests**

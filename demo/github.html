@@ -1,71 +1,88 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+  <head>
+    <!-- Shubox -->
+    <script src="javascript/shubox_config.js"></script>
+    <script type="module" src="javascript/demo.js"></script>
 
-<head>
-  <!-- Shubox -->
-  <script src="javascript/shubox_config.js"></script>
-  <script type="module" src="javascript/demo.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/side-menu.css" />
+    <link rel="stylesheet" href="css/demos.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/purecss@latest/build/pure-min.css"
+      crossorigin="anonymous"
+    />
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="css/side-menu.css">
-  <link rel="stylesheet" href="css/demos.css">
-  <link rel="stylesheet" href="https://unpkg.com/purecss@latest/build/pure-min.css" crossorigin="anonymous">
+    <!-- Everything else :) -->
+    <title>GitHub Textarea</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="images/favicon.ico" />
+  </head>
 
-  <!-- Everything else :) -->
-  <title>GitHub Textarea</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="images/favicon.ico" />
-</head>
+  <body class="github-textarea">
+    <div id="layout">
+      <a href="#menu" id="menuLink" class="menu-link">
+        <span></span>
+      </a>
 
-<body class="github-textarea">
-  <div id="layout">
-    <a href="#menu" id="menuLink" class="menu-link">
-      <span></span>
-    </a>
+      <div id="menu">
+        <div class="pure-menu">
+          <a class="pure-menu-heading" href="/demo/">Shubox.js</a>
 
-    <div id="menu">
-      <div class="pure-menu">
-        <a class="pure-menu-heading" href="/demo/">Shubox.js</a>
+          <ul class="pure-menu-list">
+            <li class="pure-menu-item avatar-demo">
+              <a href="/demo/index.html" class="pure-menu-link">Avatar Demo</a>
+            </li>
+            <li class="pure-menu-item multiple-files">
+              <a href="/demo/multiple-files.html" class="pure-menu-link">Multiple File Previews</a>
+            </li>
+            <li class="pure-menu-item standalone-script">
+              <a href="/demo/standalone.html" class="pure-menu-link">Standalone Script</a>
+            </li>
+            <li class="pure-menu-item github-textarea">
+              <a href="/demo/github.html" class="pure-menu-link">GitHub Textarea</a>
+            </li>
+            <li class="pure-menu-item inserting-text">
+              <a href="/demo/form-insert-at.html" class="pure-menu-link">Inserting Text</a>
+            </li>
+            <li class="pure-menu-item event-handlers">
+              <a href="/demo/events.html" class="pure-menu-link">Event Handlers</a>
+            </li>
+            <li class="pure-menu-item wait-for-a-variant">
+              <a href="/demo/await_generation.html" class="pure-menu-link">Image Variants</a>
+            </li>
+          </ul>
+        </div>
+      </div>
 
-        <ul class="pure-menu-list">
-          <li class="pure-menu-item avatar-demo"><a href="/demo/index.html" class="pure-menu-link">Avatar Demo</a></li>
-          <li class="pure-menu-item multiple-files"><a href="/demo/multiple-files.html" class="pure-menu-link">Multiple File Previews</a></li>
-          <li class="pure-menu-item standalone-script"><a href="/demo/standalone.html" class="pure-menu-link">Standalone Script</a></li>
-          <li class="pure-menu-item github-textarea"><a href="/demo/github.html" class="pure-menu-link">GitHub Textarea</a></li>
-          <li class="pure-menu-item inserting-text"><a href="/demo/form-insert-at.html" class="pure-menu-link">Inserting Text</a></li>
-          <li class="pure-menu-item event-handlers"><a href="/demo/events.html" class="pure-menu-link">Event Handlers</a></li>
-          <li class="pure-menu-item wait-for-a-variant"><a href="/demo/await_generation.html" class="pure-menu-link">Image Variants</a></li>
-        </ul>
+      <div id="main">
+        <!-- head GitHub Textarea -->
+
+        <div class="header">
+          <h1>A GitHub Form-Like Experience</h1>
+          <h2>Let's replicate that GitHub comment form!</h2>
+        </div>
+
+        <div class="content">
+          <form class="shubox--form">
+            <textarea
+              tabindex="1"
+              placeholder="Leave a comment or drag and drop some images."
+              class="shubox--textarea"
+              id="shubox--textarea"
+            ></textarea>
+
+            <div tabindex="2" id="shubox--click-to-upload" class="shubox--click-to-upload">
+              Attach files by dragging &amp; dropping, <strong>selecting them</strong>, or pasting
+              from the clipboard.
+            </div>
+          </form>
+        </div>
+
+        <!-- tail -->
       </div>
     </div>
-
-    <div id="main">
-
-<!-- head GitHub Textarea -->
-
-<div class="header">
-  <h1>A GitHub Form-Like Experience</h1>
-  <h2>Let's replicate that GitHub comment form!</h2>
-</div>
-
-<div class="content">
-   <form class="shubox--form">
-    <textarea
-      tabindex="1"
-      placeholder="Leave a comment or drag and drop some images."
-      class="shubox--textarea"
-      id="shubox--textarea"></textarea>
-
-    <div tabindex="2" id="shubox--click-to-upload" class="shubox--click-to-upload">
-      Attach files by dragging &amp; dropping, <strong>selecting them</strong>,
-      or pasting from the clipboard.
-    </div>
-  </form>
-</div>
-
-<!-- tail -->
-    </div>
-  </div>
-</body>
+  </body>
 </html>

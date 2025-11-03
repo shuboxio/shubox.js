@@ -1,9 +1,10 @@
 // src/shubox/api/ApiClient.ts
 import Shubox from '../core/Shubox';
-import { fetchWithRetry } from './fetchWithRetry';
 import { objectToFormData } from '../utils/objectToFormData';
 import { filenameFromFile } from '../utils/filenameFromFile';
 import type { SignatureResponse } from '../core/types';
+
+import { fetchWithRetry } from './fetchWithRetry';
 
 export interface FileInfo {
   name: string;
@@ -22,7 +23,7 @@ export class ShuboxApiClient {
 
   async fetchSignature(
     file: FileInfo,
-    options: FetchSignatureOptions = {}
+    options: FetchSignatureOptions = {},
   ): Promise<SignatureResponse> {
     const response = await fetchWithRetry(
       this.shubox.signatureUrl,
@@ -45,7 +46,7 @@ export class ShuboxApiClient {
       {
         retryAttempts: options.retryAttempts || this.shubox.options.retryAttempts || 3,
         timeout: options.timeout || this.shubox.options.timeout || 30000,
-      }
+      },
     );
 
     if (!response.ok) {

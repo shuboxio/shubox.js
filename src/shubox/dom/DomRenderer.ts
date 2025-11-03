@@ -45,7 +45,7 @@ export class ShuboxDomRenderer {
     value: string,
     replaceables: string[],
     textBehavior: string = 'replace',
-    interpolations: Record<string, string> = {}
+    interpolations: Record<string, string> = {},
   ): void {
     if (!(element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement)) {
       return;

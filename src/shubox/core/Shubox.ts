@@ -1,9 +1,11 @@
-import Dropzone from "dropzone";
-import { ShuboxCallbacks } from "./ShuboxCallbacks";
-import { ShuboxOptions as ShuboxOptionsClass } from "./ShuboxOptions";
-import { OfflineError } from "../errors";
-import { version } from "../../../package.json";
-import type { ShuboxOptions, ShuboxCallbackMethods } from "./types";
+import Dropzone from 'dropzone';
+
+import { OfflineError } from '../errors';
+import { version } from '../../../package.json';
+
+import { ShuboxCallbacks } from './ShuboxCallbacks';
+import { ShuboxOptions as ShuboxOptionsClass } from './ShuboxOptions';
+import type { ShuboxOptions, ShuboxCallbackMethods } from './types';
 
 export interface IUserOptions extends Partial<ShuboxOptions> {
   baseUrl?: string;
@@ -18,10 +20,10 @@ export interface IUserOptions extends Partial<ShuboxOptions> {
 export default class Shubox {
   public static instances: Dropzone[] = [];
 
-  public baseUrl: string = "https://api.shubox.io";
+  public baseUrl: string = 'https://api.shubox.io';
   public signatureUrl: string = `${this.baseUrl}/signatures`;
   public uploadUrl: string = `${this.baseUrl}/uploads`;
-  public key: string = "";
+  public key: string = '';
   public selector: string;
   public element: HTMLElement | HTMLInputElement;
   public options: ShuboxOptions = {} as ShuboxOptions;
@@ -30,7 +32,7 @@ export default class Shubox {
   private offlineCheckEnabled: boolean = true;
   private dropzoneInstances: Dropzone[] = [];
 
-  constructor(selector: string = ".shubox", options: IUserOptions = {}) {
+  constructor(selector: string = '.shubox', options: IUserOptions = {}) {
     this.selector = selector;
     this.element = document.createElement('div') as HTMLDivElement;
 
@@ -77,7 +79,7 @@ export default class Shubox {
       this.callbacks = new ShuboxCallbacks(this as Shubox, Shubox.instances).toHash();
       this.options = {
         ...this.options,
-        ...(new ShuboxOptionsClass(this as Shubox).toHash()),
+        ...new ShuboxOptionsClass(this as Shubox).toHash(),
         ...options,
       } as ShuboxOptions;
 
@@ -93,7 +95,7 @@ export default class Shubox {
         sending: this.callbacks.sending as any,
         success: this.callbacks.success as any,
         uploadprogress: this.callbacks.uploadProgress as any,
-        url: "http://localhost",
+        url: 'http://localhost',
         // Set timeout for XHR requests (default: 60 seconds for uploads)
         timeout: this.options.timeout || 60000,
       };
@@ -106,7 +108,7 @@ export default class Shubox {
       // Track instances for this Shubox instance
       this.dropzoneInstances.push(dropzone);
 
-      this.element.addEventListener("paste", ShuboxCallbacks.pasteCallback(dropzone));
+      this.element.addEventListener('paste', ShuboxCallbacks.pasteCallback(dropzone));
       Shubox.instances.push(dropzone);
 
       // Apply offline state if currently offline
@@ -119,7 +121,9 @@ export default class Shubox {
   public upload(file: Dropzone.DropzoneFile) {
     // Check if user is offline before attempting upload
     if (typeof navigator !== 'undefined' && !navigator.onLine) {
-      const offlineError = new OfflineError("Cannot upload while offline. Please check your internet connection.");
+      const offlineError = new OfflineError(
+        'Cannot upload while offline. Please check your internet connection.',
+      );
       if (this.callbacks.error) {
         this.callbacks.error(file as any, offlineError);
       }
@@ -140,14 +144,14 @@ export default class Shubox {
 
     // Handle going offline
     window.addEventListener('offline', () => {
-      this.dropzoneInstances.forEach(dropzone => {
+      this.dropzoneInstances.forEach((dropzone) => {
         this._disableDropzone(dropzone);
       });
     });
 
     // Handle coming back online
     window.addEventListener('online', () => {
-      this.dropzoneInstances.forEach(dropzone => {
+      this.dropzoneInstances.forEach((dropzone) => {
         this._enableDropzone(dropzone);
       });
     });

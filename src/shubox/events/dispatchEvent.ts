@@ -1,4 +1,4 @@
-import type { ShuboxDropzoneFile } from "../core/types";
+import type { ShuboxDropzoneFile } from '../core/types';
 
 /**
  * Event detail for shubox:error events
@@ -50,11 +50,7 @@ export interface ShuboxTimeoutEventDetail {
  * @param eventName - The name of the event (e.g., 'shubox:error')
  * @param detail - The event detail data
  */
-export function dispatchShuboxEvent<T>(
-  element: HTMLElement,
-  eventName: string,
-  detail: T
-): void {
+export function dispatchShuboxEvent<T>(element: HTMLElement, eventName: string, detail: T): void {
   const event = new CustomEvent(eventName, {
     detail,
     bubbles: true,

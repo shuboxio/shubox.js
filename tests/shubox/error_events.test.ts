@@ -226,7 +226,7 @@ describe('Error Event System', () => {
       shubox.callbacks.success(mockFile, mockResponse);
 
       // Wait for next tick to let any async operations complete
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
       expect(eventHandler).toHaveBeenCalledTimes(1);
       const event = eventHandler.mock.calls[0][0];
@@ -252,7 +252,7 @@ describe('Error Event System', () => {
       shubox.callbacks.success(mockFile, mockResponse);
 
       // Wait for next tick to let any async operations complete
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
       expect(eventHandler).not.toHaveBeenCalled();
     });

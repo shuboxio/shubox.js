@@ -70,7 +70,7 @@ describe('fetchWithRetry', () => {
     global.fetch = vi.fn().mockResolvedValue(mockResponse);
 
     await expect(
-      fetchWithRetry('https://api.test.com/endpoint', {}, { retryAttempts: 3 })
+      fetchWithRetry('https://api.test.com/endpoint', {}, { retryAttempts: 3 }),
     ).rejects.toThrow('HTTP 400');
 
     expect(fetch).toHaveBeenCalledTimes(1);
@@ -82,7 +82,7 @@ describe('fetchWithRetry', () => {
     global.fetch = vi.fn().mockResolvedValue(mockResponse);
 
     await expect(
-      fetchWithRetry('https://api.test.com/endpoint', {}, { retryAttempts: 3 })
+      fetchWithRetry('https://api.test.com/endpoint', {}, { retryAttempts: 3 }),
     ).rejects.toThrow('HTTP 404');
 
     expect(fetch).toHaveBeenCalledTimes(1);
@@ -97,7 +97,7 @@ describe('fetchWithRetry', () => {
     const promise = fetchWithRetry('https://api.test.com/endpoint', {}, { retryAttempts: 3 });
 
     // Set up error expectation before advancing timers
-    const errorPromise = promise.catch(err => err);
+    const errorPromise = promise.catch((err) => err);
 
     // Advance through all retry delays
     await vi.advanceTimersByTimeAsync(1000); // First retry
@@ -126,7 +126,7 @@ describe('fetchWithRetry', () => {
     const promise = fetchWithRetry(
       'https://api.test.com/endpoint',
       {},
-      { retryAttempts: 3, retryDelay: customDelay }
+      { retryAttempts: 3, retryDelay: customDelay },
     ).catch(() => {}); // Catch immediately to prevent unhandled rejection
 
     // Advance through all retry delays
@@ -168,7 +168,7 @@ describe('fetchWithRetry', () => {
     const promise = fetchWithRetry('https://api.test.com/endpoint', {}, { retryAttempts: 2 });
 
     // Set up error expectation before advancing timers
-    const errorPromise = promise.catch(err => err);
+    const errorPromise = promise.catch((err) => err);
 
     await vi.advanceTimersByTimeAsync(1000);
     await vi.runOnlyPendingTimersAsync();
@@ -194,7 +194,7 @@ describe('fetchWithRetry', () => {
     const promise = fetchWithRetry(
       'https://api.test.com/endpoint',
       {},
-      { retryAttempts: 3, retryDelay: customDelay }
+      { retryAttempts: 3, retryDelay: customDelay },
     ).catch(() => {}); // Catch immediately to prevent unhandled rejection
 
     await vi.advanceTimersByTimeAsync(100); // First retry after 0ms (0 * 100)
@@ -228,7 +228,7 @@ describe('parseJsonResponse', () => {
     });
 
     await expect(parseJsonResponse(mockResponse)).rejects.toThrow(
-      'Expected JSON response but got text/html'
+      'Expected JSON response but got text/html',
     );
   });
 
@@ -237,9 +237,7 @@ describe('parseJsonResponse', () => {
       headers: {},
     });
 
-    await expect(parseJsonResponse(mockResponse)).rejects.toThrow(
-      'Expected JSON response but got'
-    );
+    await expect(parseJsonResponse(mockResponse)).rejects.toThrow('Expected JSON response but got');
   });
 
   it('should throw error if JSON parsing fails', async () => {
@@ -247,9 +245,7 @@ describe('parseJsonResponse', () => {
       headers: { 'Content-Type': 'application/json' },
     });
 
-    await expect(parseJsonResponse(mockResponse)).rejects.toThrow(
-      'Failed to parse JSON response'
-    );
+    await expect(parseJsonResponse(mockResponse)).rejects.toThrow('Failed to parse JSON response');
   });
 
   it('should handle JSON with charset in content-type', async () => {

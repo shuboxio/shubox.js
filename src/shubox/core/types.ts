@@ -1,4 +1,4 @@
-import Dropzone from "dropzone";
+import Dropzone from 'dropzone';
 
 /**
  * Response from Shubox API signature endpoint
@@ -9,10 +9,10 @@ export interface SignatureResponse {
   policy: string;
   success_action_status: string;
   acl: string;
-  "x-amz-credential": string;
-  "x-amz-algorithm": string;
-  "x-amz-date": string;
-  "x-amz-signature": string;
+  'x-amz-credential': string;
+  'x-amz-algorithm': string;
+  'x-amz-date': string;
+  'x-amz-signature': string;
   error?: string;
   [key: string]: string | undefined;
 }
@@ -66,7 +66,11 @@ export type TransformCallbacks = Record<string, TransformCallback>;
 /**
  * Complete Shubox configuration options
  */
-export interface ShuboxOptions extends Omit<Dropzone.DropzoneOptions, 'previewsContainer' | 'success' | 'error' | 'sending' | 'addedfile'> {
+export interface ShuboxOptions
+  extends Omit<
+    Dropzone.DropzoneOptions,
+    'previewsContainer' | 'success' | 'error' | 'sending' | 'addedfile'
+  > {
   // Shubox-specific options
   acceptedFiles?: string;
   cdn?: string | null;
@@ -74,7 +78,7 @@ export interface ShuboxOptions extends Omit<Dropzone.DropzoneOptions, 'previewsC
   previewsContainer?: string | HTMLElement | boolean;
   s3Key?: string | null;
   successTemplate?: string;
-  textBehavior?: "replace" | "append" | "insertAtCursor";
+  textBehavior?: 'replace' | 'append' | 'insertAtCursor';
   transforms?: TransformCallbacks | null;
   uploadingTemplate?: string;
 

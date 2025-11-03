@@ -1,11 +1,12 @@
-import { Variant } from "./Variant";
-import { TransformError } from "../errors/ShuboxError";
-import type { IShuboxFile, TransformResult } from "../core/types";
+import { TransformError } from '../errors/ShuboxError';
+import type { IShuboxFile, TransformResult } from '../core/types';
+
+import { Variant } from './Variant';
 
 export class TransformCallback {
   public file: IShuboxFile;
-  public variant: string = "";
-  public variantUrl: string = "";
+  public variant: string = '';
+  public variantUrl: string = '';
   public callback: (file: IShuboxFile) => void;
   public errorCallback?: (file: IShuboxFile, error: Error | string) => void;
   public retry: number = 10;
@@ -13,11 +14,11 @@ export class TransformCallback {
 
   constructor(
     file: IShuboxFile,
-    variant: string = "",
+    variant: string = '',
     callback: (file: IShuboxFile) => void,
     apiVersion: number = 1.0,
     doVariantCharacterTranslation: boolean = true,
-    errorCallback?: (file: IShuboxFile, error: Error | string) => void
+    errorCallback?: (file: IShuboxFile, error: Error | string) => void,
   ) {
     this.file = file;
     this.variant = variant;
@@ -33,7 +34,7 @@ export class TransformCallback {
       this.retry -= 1;
 
       setTimeout(() => {
-        fetch(this.cacheBustedUrl(), { method: "HEAD" })
+        fetch(this.cacheBustedUrl(), { method: 'HEAD' })
           .then(this.validateResponse)
           .catch(this.run);
       }, delay);
@@ -42,14 +43,16 @@ export class TransformCallback {
       const transformError = new TransformError(
         `Image processing failed for variant '${this.variant}'. Original file uploaded successfully.`,
         this.variant,
-        error instanceof Error ? error : undefined
+        error instanceof Error ? error : undefined,
       );
       this.errorCallback(this.file, transformError);
     }
-  }
+  };
 
   public validateResponse = (response: Response) => {
-    if (!response.ok) { throw Error(response.statusText); }
+    if (!response.ok) {
+      throw Error(response.statusText);
+    }
 
     this.success = true;
     this.file.transforms = this.file.transforms ? this.file.transforms : {};
@@ -57,11 +60,11 @@ export class TransformCallback {
     this.callback(this.file);
 
     return response;
-  }
+  };
 
   private cacheBustedUrl = () => {
     const rand = Math.floor(Math.random() * Math.floor(10000000000));
 
     return `${this.variantUrl}?q=${rand}`;
-  }
+  };
 }

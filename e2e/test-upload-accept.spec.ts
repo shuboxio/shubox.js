@@ -16,7 +16,7 @@ test('upload image to Shubox demo - test accept() callback', async ({ page }) =>
   // Set up a file chooser listener before triggering the click
   const [fileChooser] = await Promise.all([
     page.waitForEvent('filechooser'),
-    page.click('#avatar')
+    page.click('#avatar'),
   ]);
 
   await fileChooser.setFiles(filePath);

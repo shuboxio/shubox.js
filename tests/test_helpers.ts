@@ -4,5 +4,5 @@ export const setupJsDom = async () => {
       <div class="upload upload1"></div>
       <div class="upload upload2"></div>
     </div>
-  `
-}
+  `;
+};

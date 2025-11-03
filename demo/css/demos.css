@@ -14,8 +14,12 @@
   height: 9rem;
   border-radius: 50%;
   overflow: hidden;
-  background: url(../images/avatar.png) center center no-repeat, url(../images/white.png) left 100% no-repeat;
-  background-size: 4.5rem, 100% 0%;
+  background:
+    url(../images/avatar.png) center center no-repeat,
+    url(../images/white.png) left 100% no-repeat;
+  background-size:
+    4.5rem,
+    100% 0%;
   overflow: hidden;
 }
 
@@ -26,406 +30,605 @@
 }
 
 .avatar[data-shubox-progress^='1.'] {
-  background-size: 4.5rem, 100% 1%;
+  background-size:
+    4.5rem,
+    100% 1%;
 }
 
 .avatar[data-shubox-progress^='2.'] {
-  background-size: 4.5rem, 100% 2%;
+  background-size:
+    4.5rem,
+    100% 2%;
 }
 
 .avatar[data-shubox-progress^='3.'] {
-  background-size: 4.5rem, 100% 3%;
+  background-size:
+    4.5rem,
+    100% 3%;
 }
 
 .avatar[data-shubox-progress^='4.'] {
-  background-size: 4.5rem, 100% 4%;
+  background-size:
+    4.5rem,
+    100% 4%;
 }
 
 .avatar[data-shubox-progress^='5.'] {
-  background-size: 4.5rem, 100% 5%;
+  background-size:
+    4.5rem,
+    100% 5%;
 }
 
 .avatar[data-shubox-progress^='6.'] {
-  background-size: 4.5rem, 100% 6%;
+  background-size:
+    4.5rem,
+    100% 6%;
 }
 
 .avatar[data-shubox-progress^='7.'] {
-  background-size: 4.5rem, 100% 7%;
+  background-size:
+    4.5rem,
+    100% 7%;
 }
 
 .avatar[data-shubox-progress^='8.'] {
-  background-size: 4.5rem, 100% 8%;
+  background-size:
+    4.5rem,
+    100% 8%;
 }
 
 .avatar[data-shubox-progress^='9.'] {
-  background-size: 4.5rem, 100% 9%;
+  background-size:
+    4.5rem,
+    100% 9%;
 }
 
 .avatar[data-shubox-progress^='10.'] {
-  background-size: 4.5rem, 100% 10%;
+  background-size:
+    4.5rem,
+    100% 10%;
 }
 
 .avatar[data-shubox-progress^='11.'] {
-  background-size: 4.5rem, 100% 11%;
+  background-size:
+    4.5rem,
+    100% 11%;
 }
 
 .avatar[data-shubox-progress^='12.'] {
-  background-size: 4.5rem, 100% 12%;
+  background-size:
+    4.5rem,
+    100% 12%;
 }
 
 .avatar[data-shubox-progress^='13.'] {
-  background-size: 4.5rem, 100% 13%;
+  background-size:
+    4.5rem,
+    100% 13%;
 }
 
 .avatar[data-shubox-progress^='14.'] {
-  background-size: 4.5rem, 100% 14%;
+  background-size:
+    4.5rem,
+    100% 14%;
 }
 
 .avatar[data-shubox-progress^='15.'] {
-  background-size: 4.5rem, 100% 15%;
+  background-size:
+    4.5rem,
+    100% 15%;
 }
 
 .avatar[data-shubox-progress^='16.'] {
-  background-size: 4.5rem, 100% 16%;
+  background-size:
+    4.5rem,
+    100% 16%;
 }
 
 .avatar[data-shubox-progress^='17.'] {
-  background-size: 4.5rem, 100% 17%;
+  background-size:
+    4.5rem,
+    100% 17%;
 }
 
 .avatar[data-shubox-progress^='18.'] {
-  background-size: 4.5rem, 100% 18%;
+  background-size:
+    4.5rem,
+    100% 18%;
 }
 
 .avatar[data-shubox-progress^='19.'] {
-  background-size: 4.5rem, 100% 19%;
+  background-size:
+    4.5rem,
+    100% 19%;
 }
 
 .avatar[data-shubox-progress^='20.'] {
-  background-size: 4.5rem, 100% 20%;
+  background-size:
+    4.5rem,
+    100% 20%;
 }
 
 .avatar[data-shubox-progress^='21.'] {
-  background-size: 4.5rem, 100% 21%;
+  background-size:
+    4.5rem,
+    100% 21%;
 }
 
 .avatar[data-shubox-progress^='22.'] {
-  background-size: 4.5rem, 100% 22%;
+  background-size:
+    4.5rem,
+    100% 22%;
 }
 
 .avatar[data-shubox-progress^='23.'] {
-  background-size: 4.5rem, 100% 23%;
+  background-size:
+    4.5rem,
+    100% 23%;
 }
 
 .avatar[data-shubox-progress^='24.'] {
-  background-size: 4.5rem, 100% 24%;
+  background-size:
+    4.5rem,
+    100% 24%;
 }
 
 .avatar[data-shubox-progress^='25.'] {
-  background-size: 4.5rem, 100% 25%;
+  background-size:
+    4.5rem,
+    100% 25%;
 }
 
 .avatar[data-shubox-progress^='26.'] {
-  background-size: 4.5rem, 100% 26%;
+  background-size:
+    4.5rem,
+    100% 26%;
 }
 
 .avatar[data-shubox-progress^='27.'] {
-  background-size: 4.5rem, 100% 27%;
+  background-size:
+    4.5rem,
+    100% 27%;
 }
 
 .avatar[data-shubox-progress^='28.'] {
-  background-size: 4.5rem, 100% 28%;
+  background-size:
+    4.5rem,
+    100% 28%;
 }
 
 .avatar[data-shubox-progress^='29.'] {
-  background-size: 4.5rem, 100% 29%;
+  background-size:
+    4.5rem,
+    100% 29%;
 }
 
 .avatar[data-shubox-progress^='30.'] {
-  background-size: 4.5rem, 100% 30%;
+  background-size:
+    4.5rem,
+    100% 30%;
 }
 
 .avatar[data-shubox-progress^='31.'] {
-  background-size: 4.5rem, 100% 31%;
+  background-size:
+    4.5rem,
+    100% 31%;
 }
 
 .avatar[data-shubox-progress^='32.'] {
-  background-size: 4.5rem, 100% 32%;
+  background-size:
+    4.5rem,
+    100% 32%;
 }
 
 .avatar[data-shubox-progress^='33.'] {
-  background-size: 4.5rem, 100% 33%;
+  background-size:
+    4.5rem,
+    100% 33%;
 }
 
 .avatar[data-shubox-progress^='34.'] {
-  background-size: 4.5rem, 100% 34%;
+  background-size:
+    4.5rem,
+    100% 34%;
 }
 
 .avatar[data-shubox-progress^='35.'] {
-  background-size: 4.5rem, 100% 35%;
+  background-size:
+    4.5rem,
+    100% 35%;
 }
 
 .avatar[data-shubox-progress^='36.'] {
-  background-size: 4.5rem, 100% 36%;
+  background-size:
+    4.5rem,
+    100% 36%;
 }
 
 .avatar[data-shubox-progress^='37.'] {
-  background-size: 4.5rem, 100% 37%;
+  background-size:
+    4.5rem,
+    100% 37%;
 }
 
 .avatar[data-shubox-progress^='38.'] {
-  background-size: 4.5rem, 100% 38%;
+  background-size:
+    4.5rem,
+    100% 38%;
 }
 
 .avatar[data-shubox-progress^='39.'] {
-  background-size: 4.5rem, 100% 39%;
+  background-size:
+    4.5rem,
+    100% 39%;
 }
 
 .avatar[data-shubox-progress^='40.'] {
-  background-size: 4.5rem, 100% 40%;
+  background-size:
+    4.5rem,
+    100% 40%;
 }
 
 .avatar[data-shubox-progress^='41.'] {
-  background-size: 4.5rem, 100% 41%;
+  background-size:
+    4.5rem,
+    100% 41%;
 }
 
 .avatar[data-shubox-progress^='42.'] {
-  background-size: 4.5rem, 100% 42%;
+  background-size:
+    4.5rem,
+    100% 42%;
 }
 
 .avatar[data-shubox-progress^='43.'] {
-  background-size: 4.5rem, 100% 43%;
+  background-size:
+    4.5rem,
+    100% 43%;
 }
 
 .avatar[data-shubox-progress^='44.'] {
-  background-size: 4.5rem, 100% 44%;
+  background-size:
+    4.5rem,
+    100% 44%;
 }
 
 .avatar[data-shubox-progress^='45.'] {
-  background-size: 4.5rem, 100% 45%;
+  background-size:
+    4.5rem,
+    100% 45%;
 }
 
 .avatar[data-shubox-progress^='46.'] {
-  background-size: 4.5rem, 100% 46%;
+  background-size:
+    4.5rem,
+    100% 46%;
 }
 
 .avatar[data-shubox-progress^='47.'] {
-  background-size: 4.5rem, 100% 47%;
+  background-size:
+    4.5rem,
+    100% 47%;
 }
 
 .avatar[data-shubox-progress^='48.'] {
-  background-size: 4.5rem, 100% 48%;
+  background-size:
+    4.5rem,
+    100% 48%;
 }
 
 .avatar[data-shubox-progress^='49.'] {
-  background-size: 4.5rem, 100% 49%;
+  background-size:
+    4.5rem,
+    100% 49%;
 }
 
 .avatar[data-shubox-progress^='50.'] {
-  background-size: 4.5rem, 100% 50%;
+  background-size:
+    4.5rem,
+    100% 50%;
 }
 
 .avatar[data-shubox-progress^='51.'] {
-  background-size: 4.5rem, 100% 51%;
+  background-size:
+    4.5rem,
+    100% 51%;
 }
 
 .avatar[data-shubox-progress^='52.'] {
-  background-size: 4.5rem, 100% 52%;
+  background-size:
+    4.5rem,
+    100% 52%;
 }
 
 .avatar[data-shubox-progress^='53.'] {
-  background-size: 4.5rem, 100% 53%;
+  background-size:
+    4.5rem,
+    100% 53%;
 }
 
 .avatar[data-shubox-progress^='54.'] {
-  background-size: 4.5rem, 100% 54%;
+  background-size:
+    4.5rem,
+    100% 54%;
 }
 
 .avatar[data-shubox-progress^='55.'] {
-  background-size: 4.5rem, 100% 55%;
+  background-size:
+    4.5rem,
+    100% 55%;
 }
 
 .avatar[data-shubox-progress^='56.'] {
-  background-size: 4.5rem, 100% 56%;
+  background-size:
+    4.5rem,
+    100% 56%;
 }
 
 .avatar[data-shubox-progress^='57.'] {
-  background-size: 4.5rem, 100% 57%;
+  background-size:
+    4.5rem,
+    100% 57%;
 }
 
 .avatar[data-shubox-progress^='58.'] {
-  background-size: 4.5rem, 100% 58%;
+  background-size:
+    4.5rem,
+    100% 58%;
 }
 
 .avatar[data-shubox-progress^='59.'] {
-  background-size: 4.5rem, 100% 59%;
+  background-size:
+    4.5rem,
+    100% 59%;
 }
 
 .avatar[data-shubox-progress^='60.'] {
-  background-size: 4.5rem, 100% 60%;
+  background-size:
+    4.5rem,
+    100% 60%;
 }
 
 .avatar[data-shubox-progress^='61.'] {
-  background-size: 4.5rem, 100% 61%;
+  background-size:
+    4.5rem,
+    100% 61%;
 }
 
 .avatar[data-shubox-progress^='62.'] {
-  background-size: 4.5rem, 100% 62%;
+  background-size:
+    4.5rem,
+    100% 62%;
 }
 
 .avatar[data-shubox-progress^='63.'] {
-  background-size: 4.5rem, 100% 63%;
+  background-size:
+    4.5rem,
+    100% 63%;
 }
 
 .avatar[data-shubox-progress^='64.'] {
-  background-size: 4.5rem, 100% 64%;
+  background-size:
+    4.5rem,
+    100% 64%;
 }
 
 .avatar[data-shubox-progress^='65.'] {
-  background-size: 4.5rem, 100% 65%;
+  background-size:
+    4.5rem,
+    100% 65%;
 }
 
 .avatar[data-shubox-progress^='66.'] {
-  background-size: 4.5rem, 100% 66%;
+  background-size:
+    4.5rem,
+    100% 66%;
 }
 
 .avatar[data-shubox-progress^='67.'] {
-  background-size: 4.5rem, 100% 67%;
+  background-size:
+    4.5rem,
+    100% 67%;
 }
 
 .avatar[data-shubox-progress^='68.'] {
-  background-size: 4.5rem, 100% 68%;
+  background-size:
+    4.5rem,
+    100% 68%;
 }
 
 .avatar[data-shubox-progress^='69.'] {
-  background-size: 4.5rem, 100% 69%;
+  background-size:
+    4.5rem,
+    100% 69%;
 }
 
 .avatar[data-shubox-progress^='70.'] {
-  background-size: 4.5rem, 100% 70%;
+  background-size:
+    4.5rem,
+    100% 70%;
 }
 
 .avatar[data-shubox-progress^='71.'] {
-  background-size: 4.5rem, 100% 71%;
+  background-size:
+    4.5rem,
+    100% 71%;
 }
 
 .avatar[data-shubox-progress^='72.'] {
-  background-size: 4.5rem, 100% 72%;
+  background-size:
+    4.5rem,
+    100% 72%;
 }
 
 .avatar[data-shubox-progress^='73.'] {
-  background-size: 4.5rem, 100% 73%;
+  background-size:
+    4.5rem,
+    100% 73%;
 }
 
 .avatar[data-shubox-progress^='74.'] {
-  background-size: 4.5rem, 100% 74%;
+  background-size:
+    4.5rem,
+    100% 74%;
 }
 
 .avatar[data-shubox-progress^='75.'] {
-  background-size: 4.5rem, 100% 75%;
+  background-size:
+    4.5rem,
+    100% 75%;
 }
 
 .avatar[data-shubox-progress^='76.'] {
-  background-size: 4.5rem, 100% 76%;
+  background-size:
+    4.5rem,
+    100% 76%;
 }
 
 .avatar[data-shubox-progress^='77.'] {
-  background-size: 4.5rem, 100% 77%;
+  background-size:
+    4.5rem,
+    100% 77%;
 }
 
 .avatar[data-shubox-progress^='78.'] {
-  background-size: 4.5rem, 100% 78%;
+  background-size:
+    4.5rem,
+    100% 78%;
 }
 
 .avatar[data-shubox-progress^='79.'] {
-  background-size: 4.5rem, 100% 79%;
+  background-size:
+    4.5rem,
+    100% 79%;
 }
 
 .avatar[data-shubox-progress^='80.'] {
-  background-size: 4.5rem, 100% 80%;
+  background-size:
+    4.5rem,
+    100% 80%;
 }
 
 .avatar[data-shubox-progress^='81.'] {
-  background-size: 4.5rem, 100% 81%;
+  background-size:
+    4.5rem,
+    100% 81%;
 }
 
 .avatar[data-shubox-progress^='82.'] {
-  background-size: 4.5rem, 100% 82%;
+  background-size:
+    4.5rem,
+    100% 82%;
 }
 
 .avatar[data-shubox-progress^='83.'] {
-  background-size: 4.5rem, 100% 83%;
+  background-size:
+    4.5rem,
+    100% 83%;
 }
 
 .avatar[data-shubox-progress^='84.'] {
-  background-size: 4.5rem, 100% 84%;
+  background-size:
+    4.5rem,
+    100% 84%;
 }
 
 .avatar[data-shubox-progress^='85.'] {
-  background-size: 4.5rem, 100% 85%;
+  background-size:
+    4.5rem,
+    100% 85%;
 }
 
 .avatar[data-shubox-progress^='86.'] {
-  background-size: 4.5rem, 100% 86%;
+  background-size:
+    4.5rem,
+    100% 86%;
 }
 
 .avatar[data-shubox-progress^='87.'] {
-  background-size: 4.5rem, 100% 87%;
+  background-size:
+    4.5rem,
+    100% 87%;
 }
 
 .avatar[data-shubox-progress^='88.'] {
-  background-size: 4.5rem, 100% 88%;
+  background-size:
+    4.5rem,
+    100% 88%;
 }
 
 .avatar[data-shubox-progress^='89.'] {
-  background-size: 4.5rem, 100% 89%;
+  background-size:
+    4.5rem,
+    100% 89%;
 }
 
 .avatar[data-shubox-progress^='90.'] {
-  background-size: 4.5rem, 100% 90%;
+  background-size:
+    4.5rem,
+    100% 90%;
 }
 
 .avatar[data-shubox-progress^='91.'] {
-  background-size: 4.5rem, 100% 91%;
+  background-size:
+    4.5rem,
+    100% 91%;
 }
 
 .avatar[data-shubox-progress^='92.'] {
-  background-size: 4.5rem, 100% 92%;
+  background-size:
+    4.5rem,
+    100% 92%;
 }
 
 .avatar[data-shubox-progress^='93.'] {
-  background-size: 4.5rem, 100% 93%;
+  background-size:
+    4.5rem,
+    100% 93%;
 }
 
 .avatar[data-shubox-progress^='94.'] {
-  background-size: 4.5rem, 100% 94%;
+  background-size:
+    4.5rem,
+    100% 94%;
 }
 
 .avatar[data-shubox-progress^='95.'] {
-  background-size: 4.5rem, 100% 95%;
+  background-size:
+    4.5rem,
+    100% 95%;
 }
 
 .avatar[data-shubox-progress^='96.'] {
-  background-size: 4.5rem, 100% 96%;
+  background-size:
+    4.5rem,
+    100% 96%;
 }
 
 .avatar[data-shubox-progress^='97.'] {
-  background-size: 4.5rem, 100% 97%;
+  background-size:
+    4.5rem,
+    100% 97%;
 }
 
 .avatar[data-shubox-progress^='98.'] {
-  background-size: 4.5rem, 100% 98%;
+  background-size:
+    4.5rem,
+    100% 98%;
 }
 
 .avatar[data-shubox-progress^='99.'] {
-  background-size: 4.5rem, 100% 99%;
+  background-size:
+    4.5rem,
+    100% 99%;
 }
 
 .avatar[data-shubox-progress^='100'] {
-  background-size: 4.5rem, 100% 100%;
+  background-size:
+    4.5rem,
+    100% 100%;
   cursor: default;
 }
-
 
 .shubox--form {
   padding: 10px;
@@ -439,7 +642,7 @@
   border-radius: 3px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  box-shadow: inset 0 1px 2px rgba(27,31,35,.075);
+  box-shadow: inset 0 1px 2px rgba(27, 31, 35, 0.075);
   color: #24292e;
   display: block;
   font-size: 14px;
@@ -514,11 +717,11 @@ textarea.shubox--textarea--no-click-bar {
 }
 .shubox--upload-target:before {
   content: 'Drag && Drop || Click';
-  font-size: .6rem;
+  font-size: 0.6rem;
   color: silver;
   display: block;
   font-family: courier;
-  margin-top: .4rem;
+  margin-top: 0.4rem;
   line-height: 1rem;
 }
 
@@ -551,7 +754,7 @@ textarea.shubox--textarea--no-click-bar {
   clear: both;
 }
 
-.dz-upload[style="width: 100%;"] {
+.dz-upload[style='width: 100%;'] {
   display: none;
 }
 

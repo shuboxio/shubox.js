@@ -1,22 +1,19 @@
-import Dropzone from "dropzone";
-import Shubox from "./Shubox";
-import type { ShuboxDropzoneFile, IShuboxFile } from "./types";
-import { dispatchShuboxEvent } from "../events";
-import { uploadCompleteEvent } from "../api/uploadCompleteEvent";
-import { TransformCallback } from "../transforms/TransformCallback";
-import { insertAtCursor } from "../dom/insertAtCursor";
-import { ShuboxConfig } from "../utils/config";
-import { ShuboxDomRenderer } from "../dom/DomRenderer";
-import { ShuboxApiClient } from "../api/ApiClient";
-import { ShuboxErrorHandler } from "../errors/ErrorHandler";
-import { ShuboxResourceManager } from "../dom/ResourceManager";
-import { ShuboxTransformManager } from "../transforms/TransformManager";
-import {
-  OfflineError,
-  NetworkError,
-  TimeoutError,
-  UploadError,
-} from "../errors";
+import Dropzone from 'dropzone';
+
+import { dispatchShuboxEvent } from '../events';
+import { uploadCompleteEvent } from '../api/uploadCompleteEvent';
+import { TransformCallback } from '../transforms/TransformCallback';
+import { insertAtCursor } from '../dom/insertAtCursor';
+import { ShuboxConfig } from '../utils/config';
+import { ShuboxDomRenderer } from '../dom/DomRenderer';
+import { ShuboxApiClient } from '../api/ApiClient';
+import { ShuboxErrorHandler } from '../errors/ErrorHandler';
+import { ShuboxResourceManager } from '../dom/ResourceManager';
+import { ShuboxTransformManager } from '../transforms/TransformManager';
+import { OfflineError, NetworkError, TimeoutError, UploadError } from '../errors';
+
+import type { ShuboxDropzoneFile, IShuboxFile } from './types';
+import Shubox from './Shubox';
 
 export interface IShuboxDefaultOptions {
   success?: (file: Dropzone.DropzoneFile) => void;
@@ -38,18 +35,17 @@ export interface IShuboxDefaultOptions {
 }
 
 export class ShuboxCallbacks {
-
   public static pasteCallback(dz: Dropzone) {
-    return ((event: ClipboardEvent) => {
-      const items = (event.clipboardData)!.items;
+    return (event: ClipboardEvent) => {
+      const items = event.clipboardData!.items;
 
       for (const item of items) {
-        if (item.kind === "file") {
+        if (item.kind === 'file') {
           // adds the file to your dropzone instance
           dz.addFile(item.getAsFile() as Dropzone.DropzoneFile);
         }
       }
-    });
+    };
   }
   public shubox: Shubox;
   public instances: Dropzone[];
@@ -82,7 +78,7 @@ export class ShuboxCallbacks {
         // Check offline state
         if (typeof navigator !== 'undefined' && !navigator.onLine) {
           const offlineError = new OfflineError(
-            'You are offline. Uploads will resume when back online.'
+            'You are offline. Uploads will resume when back online.',
           );
           self.shubox.callbacks.error(file, offlineError);
           return;
@@ -100,7 +96,7 @@ export class ShuboxCallbacks {
               s3Key: self.shubox.options.s3Key || undefined,
               retryAttempts: self.shubox.options.retryAttempts,
               timeout: self.shubox.options.timeout,
-            }
+            },
           );
 
           if ((signature as any).error) {
@@ -124,11 +120,11 @@ export class ShuboxCallbacks {
       },
 
       sending(file: ShuboxDropzoneFile, xhr: XMLHttpRequest, formData: FormData) {
-        self.shubox.element.classList.add("shubox-uploading");
+        self.shubox.element.classList.add('shubox-uploading');
 
         // Update the form value if it is able
         if (self._isFormElement()) {
-          self._updateFormValue(file, "uploadingTemplate");
+          self._updateFormValue(file, 'uploadingTemplate');
         }
 
         const keys = Object.keys(file.postData);
@@ -160,8 +156,7 @@ export class ShuboxCallbacks {
 
       success(file: ShuboxDropzoneFile, response: string) {
         // Check for recovery from previous failures
-        const hadPreviousFailures =
-          file._shuboxRetryCount && file._shuboxRetryCount > 0;
+        const hadPreviousFailures = file._shuboxRetryCount && file._shuboxRetryCount > 0;
         if (hadPreviousFailures) {
           self.errorHandler.dispatchRecoveredEvent(file, file._shuboxRetryCount! + 1);
         }
@@ -185,10 +180,11 @@ export class ShuboxCallbacks {
           .then((response) => {
             if (!response) return;
 
-            apiVersion = Number(response.headers.get("X-Shubox-API"));
+            apiVersion = Number(response.headers.get('X-Shubox-API'));
 
             // Handle transforms
-            const transformCallbacks = self.shubox.options.transformCallbacks || self.shubox.options.transforms;
+            const transformCallbacks =
+              self.shubox.options.transformCallbacks || self.shubox.options.transforms;
 
             if (transformCallbacks) {
               // If using the legacy transformCallbacks option, we need to translate the variant character to the old style.
@@ -206,7 +202,7 @@ export class ShuboxCallbacks {
                   callback,
                   apiVersion,
                   doVariantCharacterTranslation,
-                  self.shubox.callbacks.error
+                  self.shubox.callbacks.error,
                 ).run();
               }
             }
@@ -257,7 +253,13 @@ export class ShuboxCallbacks {
           }
 
           const delay = self.errorHandler.calculateBackoffDelay(file._shuboxRetryCount);
-          self.errorHandler.dispatchRetryEvent(file._shuboxRetryCount, delay, error, file, maxRetries);
+          self.errorHandler.dispatchRetryEvent(
+            file._shuboxRetryCount,
+            delay,
+            error,
+            file,
+            maxRetries,
+          );
 
           // Call onRetry callback if provided
           if (self.shubox.options.onRetry) {
@@ -269,7 +271,7 @@ export class ShuboxCallbacks {
 
           file._shuboxRetryTimeout = setTimeout(() => {
             const dropzone = self.instances.find((dz) =>
-              Array.from(dz.files).some((f: any) => f === file)
+              Array.from(dz.files).some((f: any) => f === file),
             );
             if (dropzone) {
               dropzone.processFile(file);
@@ -285,28 +287,27 @@ export class ShuboxCallbacks {
         self.errorHandler.dispatchErrorEvent(error, file);
 
         const messageStr = typeof message === 'string' ? message : message.message;
-        if (messageStr.includes("Referring domain not permitted") && window.location.hostname === "localhost") {
-          console.log(`%cOOPS!`, "font-size: 14px; color:#7c5cd1; font-weight: bold;");
+        if (
+          messageStr.includes('Referring domain not permitted') &&
+          window.location.hostname === 'localhost'
+        ) {
+          console.log(`%cOOPS!`, 'font-size: 14px; color:#7c5cd1; font-weight: bold;');
           console.log(
             `%cIt looks like you're attempting to test Shubox on localhost but are running into an issue.
 You should check to make sure you're using your %c"Sandbox" %ckey while you test as it will
 work with localhost.
 
 %cFor more information and instructions: https://dashboard.shubox.io/domains/sandbox`,
-            "font-size: 12px; color:#7c5cd1;",
-            "font-size: 12px; color:#7c5cd1; font-weight:bold",
-            "font-size: 12px; color:#7c5cd1;",
-            "font-size: 13px; color:#7c5cd1; font-weight:bold;",
+            'font-size: 12px; color:#7c5cd1;',
+            'font-size: 12px; color:#7c5cd1; font-weight:bold',
+            'font-size: 12px; color:#7c5cd1;',
+            'font-size: 13px; color:#7c5cd1; font-weight:bold;',
           );
         }
 
         // Call Dropzone default + user callback
         const xhrParam = xhr || new XMLHttpRequest();
-        Dropzone.prototype.defaultOptions.error!.apply(this, [
-          file,
-          message,
-          xhrParam,
-        ]);
+        Dropzone.prototype.defaultOptions.error!.apply(this, [file, message, xhrParam]);
         if (self.shubox.options.error) {
           self.shubox.options.error(file, message);
         }
@@ -316,11 +317,7 @@ work with localhost.
         self.domRenderer.setProgress(progress);
 
         // Call Dropzone default
-        Dropzone.prototype.defaultOptions.uploadprogress!.apply(this, [
-          file,
-          progress,
-          bytesSent,
-        ]);
+        Dropzone.prototype.defaultOptions.uploadprogress!.apply(this, [file, progress, bytesSent]);
       },
 
       canceled(file: ShuboxDropzoneFile) {
@@ -365,8 +362,8 @@ work with localhost.
 
   public _updateFormValue(file: ShuboxDropzoneFile, templateName: string) {
     const el = this.shubox.element as HTMLInputElement;
-    let interpolatedText = "";
-    let uploadingText = "";
+    let interpolatedText = '';
+    let uploadingText = '';
 
     // If passed the transformName option, warn about its deprecation.
     if (this.shubox.options.transformName) {
@@ -385,21 +382,22 @@ work with localhost.
     // the deprecated "s3urlTemplate" option, then rename the template name
     // to use that one as the key.
     let effectiveTemplateName = templateName;
-    if (templateName === "successTemplate" && this.shubox.options.s3urlTemplate) {
+    if (templateName === 'successTemplate' && this.shubox.options.s3urlTemplate) {
       window.console!.warn(
         `DEPRECATION: The "s3urlTemplate" will be deprecated by version 1.0. Please update to "successTemplate".`,
       );
 
-      effectiveTemplateName = "s3urlTemplate";
+      effectiveTemplateName = 's3urlTemplate';
     }
 
-    const templateValue = effectiveTemplateName === "successTemplate"
-      ? this.shubox.options.successTemplate
-      : effectiveTemplateName === "s3urlTemplate"
-        ? this.shubox.options.s3urlTemplate
-        : effectiveTemplateName === "uploadingTemplate"
-          ? this.shubox.options.uploadingTemplate
-          : undefined;
+    const templateValue =
+      effectiveTemplateName === 'successTemplate'
+        ? this.shubox.options.successTemplate
+        : effectiveTemplateName === 's3urlTemplate'
+          ? this.shubox.options.s3urlTemplate
+          : effectiveTemplateName === 'uploadingTemplate'
+            ? this.shubox.options.uploadingTemplate
+            : undefined;
 
     if (templateValue) {
       interpolatedText = templateValue;
@@ -423,36 +421,30 @@ work with localhost.
     // uploadingTemplate, at cursor, at the end, or replace the
     // whole field.
     if (
-      (templateName === "successTemplate" || templateName === "s3urlTemplate")
-      && !!this.shubox.options.uploadingTemplate
+      (templateName === 'successTemplate' || templateName === 's3urlTemplate') &&
+      !!this.shubox.options.uploadingTemplate
     ) {
       el.value = el.value.replace(uploadingText, interpolatedText);
       this.domRenderer.placeCursorAfterText(el, interpolatedText);
-
     } else if (this._insertableAtCursor(el)) {
       insertAtCursor(el, interpolatedText);
       this.domRenderer.placeCursorAfterText(el, interpolatedText);
-
     } else if (this._isAppendingText()) {
       el.value = el.value + interpolatedText;
-
     } else {
       el.value = interpolatedText;
     }
   }
 
   public _isFormElement(): boolean {
-    return (["INPUT", "TEXTAREA"].indexOf(this.shubox.element.tagName) > -1);
+    return ['INPUT', 'TEXTAREA'].indexOf(this.shubox.element.tagName) > -1;
   }
 
   public _isAppendingText(): boolean {
-    return (this.shubox.options.textBehavior === "append");
+    return this.shubox.options.textBehavior === 'append';
   }
 
   public _insertableAtCursor(el: HTMLInputElement): boolean {
-    return (
-      el.tagName === "TEXTAREA" &&
-      this.shubox.options.textBehavior === "insertAtCursor"
-    );
+    return el.tagName === 'TEXTAREA' && this.shubox.options.textBehavior === 'insertAtCursor';
   }
 }

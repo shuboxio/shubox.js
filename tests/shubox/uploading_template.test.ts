@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, test, expect, beforeEach, afterEach } from 'vitest';
-import Shubox from '../../src/shubox/core/Shubox'
+import Shubox from '../../src/shubox/core/Shubox';
 import { ShuboxCallbacks } from '../../src/shubox/core/ShuboxCallbacks';
 
 describe('Shubox uploadingTemplate functionality', () => {
@@ -23,7 +23,7 @@ describe('Shubox uploadingTemplate functionality', () => {
       key: 'test-key',
       uploadingTemplate: '![Uploading {{name}}...]()\n',
       successTemplate: '![{{name}}]({{s3url}})\n',
-      textBehavior: 'append'
+      textBehavior: 'append',
     });
 
     // Create a mock file
@@ -33,7 +33,7 @@ describe('Shubox uploadingTemplate functionality', () => {
       type: 'image/jpeg',
       s3: 'path/to/test.jpg',
       s3url: 'https://example.com/test.jpg',
-      postData: {}
+      postData: {},
     } as any;
 
     // Trigger the sending callback (upload starts)
@@ -49,7 +49,7 @@ describe('Shubox uploadingTemplate functionality', () => {
       key: 'test-key',
       uploadingTemplate: '![Uploading {{name}}...]()\n',
       successTemplate: '![{{name}}]({{s3url}})\n',
-      textBehavior: 'append'
+      textBehavior: 'append',
     });
 
     const mockFile = {
@@ -58,7 +58,7 @@ describe('Shubox uploadingTemplate functionality', () => {
       type: 'image/jpeg',
       s3: 'path/to/test.jpg',
       s3url: 'https://example.com/test.jpg',
-      postData: {}
+      postData: {},
     } as any;
 
     // Manually set the uploading text first (simulating sending phase)

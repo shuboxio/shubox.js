@@ -1,4 +1,4 @@
-import { NetworkError, TimeoutError } from "../errors/ShuboxError";
+import { NetworkError, TimeoutError } from '../errors/ShuboxError';
 
 export interface FetchWithRetryOptions {
   retryAttempts?: number;
@@ -39,11 +39,7 @@ export async function fetchWithRetry(
   init: RequestInit = {},
   options: FetchWithRetryOptions = {},
 ): Promise<Response> {
-  const {
-    retryAttempts = 3,
-    timeout = 30000,
-    retryDelay = defaultRetryDelay,
-  } = options;
+  const { retryAttempts = 3, timeout = 30000, retryDelay = defaultRetryDelay } = options;
 
   let lastError: Error | undefined;
 
@@ -70,16 +66,15 @@ export async function fetchWithRetry(
         if (!response.ok) {
           // For 4xx errors (client errors), don't retry
           if (response.status >= 400 && response.status < 500 && response.status !== 429) {
-            throw new Error(
-              `HTTP ${response.status}: ${response.statusText}`,
-            );
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
           }
 
           // For 5xx errors (server errors) or 429 (rate limit), retry if we have attempts left
           if (shouldRetryStatus(response.status) && attempt < retryAttempts - 1) {
-            const retryMessage = response.status === 429
-              ? "Rate limit reached. Retrying..."
-              : "Shubox service temporarily unavailable. Retrying...";
+            const retryMessage =
+              response.status === 429
+                ? 'Rate limit reached. Retrying...'
+                : 'Shubox service temporarily unavailable. Retrying...';
             lastError = new Error(retryMessage);
             // Wait before retrying
             await delay(retryDelay(attempt));
@@ -87,16 +82,14 @@ export async function fetchWithRetry(
           }
 
           // No more retries, throw error
-          const finalMessage = response.status === 429
-            ? "Rate limit exceeded. Please try again later."
-            : response.status >= 500
-              ? "Shubox service is unavailable. Please try again later."
-              : `Upload failed: ${response.statusText}`;
+          const finalMessage =
+            response.status === 429
+              ? 'Rate limit exceeded. Please try again later.'
+              : response.status >= 500
+                ? 'Shubox service is unavailable. Please try again later.'
+                : `Upload failed: ${response.statusText}`;
 
-          throw new NetworkError(
-            finalMessage,
-            new Error(response.statusText),
-          );
+          throw new NetworkError(finalMessage, new Error(response.statusText));
         }
 
         // Success!
@@ -109,20 +102,20 @@ export async function fetchWithRetry(
       const err = error as Error;
 
       // Handle timeout
-      if (err.name === "AbortError") {
+      if (err.name === 'AbortError') {
         if (attempt < retryAttempts - 1) {
-          lastError = new TimeoutError("Request timed out. Retrying...");
+          lastError = new TimeoutError('Request timed out. Retrying...');
           await delay(retryDelay(attempt));
           continue;
         }
-        throw new TimeoutError("Upload timed out. Please check your connection and try again.");
+        throw new TimeoutError('Upload timed out. Please check your connection and try again.');
       }
 
       // Handle network errors (connection refused, DNS failure, etc.)
       if (
-        err.message.includes("fetch") ||
-        err.message.includes("network") ||
-        err.name === "TypeError"
+        err.message.includes('fetch') ||
+        err.message.includes('network') ||
+        err.name === 'TypeError'
       ) {
         if (attempt < retryAttempts - 1) {
           lastError = err;
@@ -130,7 +123,7 @@ export async function fetchWithRetry(
           continue;
         }
         throw new NetworkError(
-          "Upload failed due to network error. Please check your connection and try again.",
+          'Upload failed due to network error. Please check your connection and try again.',
           err,
         );
       }
@@ -141,10 +134,7 @@ export async function fetchWithRetry(
   }
 
   // Should never reach here, but just in case
-  throw new NetworkError(
-    "Request failed after retries",
-    lastError,
-  );
+  throw new NetworkError('Request failed after retries', lastError);
 }
 
 /**
@@ -166,7 +156,7 @@ function mergeSignals(signals: AbortSignal[]): AbortSignal {
       controller.abort();
       break;
     }
-    signal.addEventListener("abort", () => controller.abort(), { once: true });
+    signal.addEventListener('abort', () => controller.abort(), { once: true });
   }
 
   return controller.signal;
@@ -180,19 +170,17 @@ function mergeSignals(signals: AbortSignal[]): AbortSignal {
  * @throws Error if JSON parsing fails
  */
 export async function parseJsonResponse<T = unknown>(response: Response): Promise<T> {
-  const contentType = response.headers.get("content-type");
+  const contentType = response.headers.get('content-type');
 
-  if (!contentType || !contentType.includes("application/json")) {
-    throw new Error(
-      `Expected JSON response but got ${contentType || "unknown content type"}`,
-    );
+  if (!contentType || !contentType.includes('application/json')) {
+    throw new Error(`Expected JSON response but got ${contentType || 'unknown content type'}`);
   }
 
   try {
     return await response.json();
   } catch (error) {
     throw new Error(
-      `Failed to parse JSON response: ${error instanceof Error ? error.message : "unknown error"}`,
+      `Failed to parse JSON response: ${error instanceof Error ? error.message : 'unknown error'}`,
     );
   }
 }

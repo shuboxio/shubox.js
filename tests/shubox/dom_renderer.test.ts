@@ -107,13 +107,10 @@ describe('ShuboxDomRenderer', () => {
       element.appendChild(input);
 
       const template = '{{s3url}} - {{size}} bytes';
-      renderer.updateFormValue(
-        input,
-        template,
-        ['s3url', 'size'],
-        'replace',
-        { s3url: 'https://example.com/image.jpg', size: '1024' }
-      );
+      renderer.updateFormValue(input, template, ['s3url', 'size'], 'replace', {
+        s3url: 'https://example.com/image.jpg',
+        size: '1024',
+      });
 
       expect(input.value).toBe('https://example.com/image.jpg - 1024 bytes');
     });

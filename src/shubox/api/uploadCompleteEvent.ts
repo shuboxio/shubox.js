@@ -1,8 +1,9 @@
-import Shubox from "../core/Shubox";
-import { filenameFromFile } from "../utils/filenameFromFile";
-import { objectToFormData } from "../utils/objectToFormData";
-import { fetchWithRetry } from "./fetchWithRetry";
-import type { IShuboxFile, ExtraParams } from "../core/types";
+import Shubox from '../core/Shubox';
+import { filenameFromFile } from '../utils/filenameFromFile';
+import { objectToFormData } from '../utils/objectToFormData';
+import type { IShuboxFile, ExtraParams } from '../core/types';
+
+import { fetchWithRetry } from './fetchWithRetry';
 
 export async function uploadCompleteEvent(
   shubox: Shubox,
@@ -13,9 +14,9 @@ export async function uploadCompleteEvent(
     const response = await fetchWithRetry(
       shubox.uploadUrl,
       {
-        headers: { "X-Shubox-Client": shubox.version },
+        headers: { 'X-Shubox-Client': shubox.version },
         body: objectToFormData({
-          bucket: "localhost-4100",
+          bucket: 'localhost-4100',
           extraParams,
           file: {
             height: file.height,
@@ -32,20 +33,22 @@ export async function uploadCompleteEvent(
           transformName: shubox.options.transformName,
           transforms: shubox.options.transforms,
         }),
-        method: "POST",
-        mode: "cors",
+        method: 'POST',
+        mode: 'cors',
       },
       {
         retryAttempts: shubox.options.retryAttempts || 3,
         timeout: shubox.options.timeout || 30000,
-      }
+      },
     );
 
     return response;
   } catch (err) {
     // This is non-critical metadata upload, so we log the error but don't block the UI
     // The main upload has already succeeded at this point
-    console.error(`Upload complete notification failed: ${err instanceof Error ? err.message : String(err)}`);
+    console.error(
+      `Upload complete notification failed: ${err instanceof Error ? err.message : String(err)}`,
+    );
     return null;
   }
 }

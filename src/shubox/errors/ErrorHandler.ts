@@ -1,13 +1,9 @@
 // src/shubox/errors/ErrorHandler.ts
 import Dropzone from 'dropzone';
-import {
-  NetworkError,
-  TimeoutError,
-  OfflineError,
-  ShuboxError,
-  UploadError,
-} from './ShuboxError';
+
 import { dispatchShuboxEvent } from '../events/dispatchEvent';
+
+import { NetworkError, TimeoutError, OfflineError, ShuboxError, UploadError } from './ShuboxError';
 
 export class ShuboxErrorHandler {
   constructor(private element: HTMLElement) {}
@@ -31,14 +27,16 @@ export class ShuboxErrorHandler {
     }
 
     // Timeout errors in message
-    if (errorMessage.includes("timeout") || errorMessage.includes("timed out")) {
+    if (errorMessage.includes('timeout') || errorMessage.includes('timed out')) {
       return true;
     }
 
     // Connection errors are recoverable
-    if (errorMessage.includes("network") ||
-        errorMessage.includes("connection") ||
-        errorMessage.includes("fetch")) {
+    if (
+      errorMessage.includes('network') ||
+      errorMessage.includes('connection') ||
+      errorMessage.includes('fetch')
+    ) {
       return true;
     }
 
@@ -53,17 +51,19 @@ export class ShuboxErrorHandler {
     }
 
     // 429 rate limit errors are recoverable
-    if (errorMessage.includes("429") || errorMessage.includes("rate limit")) {
+    if (errorMessage.includes('429') || errorMessage.includes('rate limit')) {
       return true;
     }
 
     // Service unavailable, bad gateway, gateway timeout
-    if (errorMessage.includes("503") ||
-        errorMessage.includes("502") ||
-        errorMessage.includes("504") ||
-        errorMessage.includes("service unavailable") ||
-        errorMessage.includes("bad gateway") ||
-        errorMessage.includes("gateway timeout")) {
+    if (
+      errorMessage.includes('503') ||
+      errorMessage.includes('502') ||
+      errorMessage.includes('504') ||
+      errorMessage.includes('service unavailable') ||
+      errorMessage.includes('bad gateway') ||
+      errorMessage.includes('gateway timeout')
+    ) {
       return true;
     }
 
@@ -103,7 +103,13 @@ export class ShuboxErrorHandler {
     dispatchShuboxEvent(this.element, 'shubox:timeout', detail);
   }
 
-  dispatchRetryEvent(attemptNumber: number, delay: number, error?: Error, file?: any, maxRetries?: number): void {
+  dispatchRetryEvent(
+    attemptNumber: number,
+    delay: number,
+    error?: Error,
+    file?: any,
+    maxRetries?: number,
+  ): void {
     const detail: any = {
       attempt: attemptNumber,
       delay,

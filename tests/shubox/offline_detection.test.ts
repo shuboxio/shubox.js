@@ -104,7 +104,7 @@ describe('Offline Detection', () => {
 
       const shubox = new Shubox('.shubox-test', {
         key: 'test-key',
-        offlineCheck: false
+        offlineCheck: false,
       });
       const element = document.querySelector('.shubox-test') as HTMLElement;
 
@@ -144,7 +144,7 @@ describe('Offline Detection', () => {
       const elements = document.querySelectorAll('.shubox-multi');
 
       // Initially online
-      elements.forEach(el => {
+      elements.forEach((el) => {
         expect(el.classList.contains('shubox-offline')).toBe(false);
       });
 
@@ -153,7 +153,7 @@ describe('Offline Detection', () => {
       window.dispatchEvent(new Event('offline'));
 
       // All should be offline
-      elements.forEach(el => {
+      elements.forEach((el) => {
         expect(el.classList.contains('shubox-offline')).toBe(true);
         expect(el.getAttribute('data-shubox-offline')).toBe('true');
       });
@@ -166,7 +166,7 @@ describe('Offline Detection', () => {
       const elements = document.querySelectorAll('.shubox-multi');
 
       // Initially offline
-      elements.forEach(el => {
+      elements.forEach((el) => {
         expect(el.classList.contains('shubox-offline')).toBe(true);
       });
 
@@ -175,7 +175,7 @@ describe('Offline Detection', () => {
       window.dispatchEvent(new Event('online'));
 
       // All should be online
-      elements.forEach(el => {
+      elements.forEach((el) => {
         expect(el.classList.contains('shubox-offline')).toBe(false);
         expect(el.getAttribute('data-shubox-offline')).toBeNull();
       });

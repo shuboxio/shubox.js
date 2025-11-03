@@ -29,7 +29,5 @@ export function filenameFromFile(file: IFile | IPastedFile, date?: Date): string
     file.name = `paste-${datetime}.jpg`;
   }
 
-  return file.name
-    .replace(/^.*(\\\\|\/)/g, "")
-    .replace(/[^0-9A-Za-z.\-_]/g, "_");
+  return file.name.replace(/^.*(\\\\|\/)/g, '').replace(/[^0-9A-Za-z.\-_]/g, '_');
 }

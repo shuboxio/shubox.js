@@ -31,9 +31,7 @@ describe('Partial Success Handling', () => {
       const successCallback = vi.fn();
 
       // Mock fetch to always fail (404)
-      global.fetch = vi.fn().mockResolvedValue(
-        new Response('Not Found', { status: 404 })
-      );
+      global.fetch = vi.fn().mockResolvedValue(new Response('Not Found', { status: 404 }));
 
       const transformCallback = new TransformCallback(
         mockFile,
@@ -41,7 +39,7 @@ describe('Partial Success Handling', () => {
         successCallback,
         1.0,
         true,
-        errorCallback
+        errorCallback,
       );
 
       // Start the transform polling
@@ -91,7 +89,7 @@ describe('Partial Success Handling', () => {
         successCallback,
         1.0,
         true,
-        errorCallback
+        errorCallback,
       );
 
       transformCallback.run();
@@ -122,9 +120,7 @@ describe('Partial Success Handling', () => {
 
       const errorCallback = vi.fn();
 
-      global.fetch = vi.fn().mockResolvedValue(
-        new Response('Not Found', { status: 404 })
-      );
+      global.fetch = vi.fn().mockResolvedValue(new Response('Not Found', { status: 404 }));
 
       const transformCallback = new TransformCallback(
         mockFile,
@@ -132,7 +128,7 @@ describe('Partial Success Handling', () => {
         vi.fn(),
         1.0,
         true,
-        errorCallback
+        errorCallback,
       );
 
       transformCallback.run();
@@ -204,7 +200,7 @@ describe('Partial Success Handling', () => {
       await uploadCompleteEvent(mockShubox, mockFile, {});
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Upload complete notification failed')
+        expect.stringContaining('Upload complete notification failed'),
       );
 
       consoleErrorSpy.mockRestore();
@@ -264,9 +260,7 @@ describe('Partial Success Handling', () => {
 
       const errorCallback = vi.fn();
 
-      global.fetch = vi.fn().mockResolvedValue(
-        new Response('Not Found', { status: 404 })
-      );
+      global.fetch = vi.fn().mockResolvedValue(new Response('Not Found', { status: 404 }));
 
       const transformCallback = new TransformCallback(
         mockFile,
@@ -274,7 +268,7 @@ describe('Partial Success Handling', () => {
         vi.fn(),
         1.0,
         true,
-        errorCallback
+        errorCallback,
       );
 
       transformCallback.run();
