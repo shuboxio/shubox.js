@@ -18,7 +18,11 @@ describe('Error Event System', () => {
     global.HTMLElement = initialDom.window.HTMLElement;
     global.CustomEvent = initialDom.window.CustomEvent;
     global.Event = initialDom.window.Event;
-    global.navigator = initialDom.window.navigator;
+    Object.defineProperty(global, 'navigator', {
+      value: initialDom.window.navigator,
+      writable: true,
+      configurable: true,
+    });
     global.XMLHttpRequest = initialDom.window.XMLHttpRequest;
 
     // Now safe to import Shubox
@@ -34,7 +38,11 @@ describe('Error Event System', () => {
     global.HTMLElement = dom.window.HTMLElement;
     global.CustomEvent = dom.window.CustomEvent;
     global.Event = dom.window.Event;
-    global.navigator = dom.window.navigator;
+    Object.defineProperty(global, 'navigator', {
+      value: dom.window.navigator,
+      writable: true,
+      configurable: true,
+    });
     global.XMLHttpRequest = dom.window.XMLHttpRequest;
 
     // Mock navigator.onLine to be online

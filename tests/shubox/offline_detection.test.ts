@@ -15,7 +15,11 @@ describe('Offline Detection', () => {
     global.HTMLElement = initialDom.window.HTMLElement;
     global.CustomEvent = initialDom.window.CustomEvent;
     global.Event = initialDom.window.Event;
-    global.navigator = initialDom.window.navigator;
+    Object.defineProperty(global, 'navigator', {
+      value: initialDom.window.navigator,
+      writable: true,
+      configurable: true,
+    });
 
     // Now safe to import Shubox
     const module = await import('~/shubox');
@@ -30,7 +34,11 @@ describe('Offline Detection', () => {
     global.HTMLElement = dom.window.HTMLElement;
     global.CustomEvent = dom.window.CustomEvent;
     global.Event = dom.window.Event;
-    global.navigator = dom.window.navigator;
+    Object.defineProperty(global, 'navigator', {
+      value: dom.window.navigator,
+      writable: true,
+      configurable: true,
+    });
 
     // Mock navigator.onLine
     navigatorOnLineSpy = vi.spyOn(navigator, 'onLine', 'get');
