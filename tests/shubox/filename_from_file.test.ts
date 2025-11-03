@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, test } from 'vitest'
-import { filenameFromFile } from "../../src/shubox/filename_from_file";
+import { filenameFromFile } from "../../src/shubox/utils/filenameFromFile";
 
 export interface IFile {
   name: string | null | undefined;

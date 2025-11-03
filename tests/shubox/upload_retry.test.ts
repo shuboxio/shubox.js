@@ -2,10 +2,10 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, test, vi, beforeEach, afterEach } from 'vitest';
-import { ShuboxCallbacks } from '../../src/shubox/shubox_callbacks';
-import { NetworkError, UploadError } from '../../src/shubox/errors';
-import type { ShuboxDropzoneFile } from '../../src/shubox/types';
-import Shubox from '../../src/shubox';
+import { ShuboxCallbacks } from '../../src/shubox/core/ShuboxCallbacks';
+import { NetworkError, UploadError } from '../../src/shubox/errors/ShuboxError';
+import type { ShuboxDropzoneFile } from '../../src/shubox/core/types';
+import Shubox from '../../src/shubox/core/Shubox'
 import Dropzone from 'dropzone';
 
 describe('S3 Upload Retry', () => {

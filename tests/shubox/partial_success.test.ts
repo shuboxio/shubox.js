@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { TransformCallback } from '../../src/shubox/transform_callback';
-import { uploadCompleteEvent } from '../../src/shubox/upload_complete_event';
-import { TransformError } from '../../src/shubox/errors';
-import type { IShuboxFile } from '../../src/shubox/types';
+import { TransformCallback } from '../../src/shubox/transforms/TransformCallback';
+import { uploadCompleteEvent } from '../../src/shubox/api/uploadCompleteEvent';
+import { TransformError } from '../../src/shubox/errors/ShuboxError';
+import type { IShuboxFile } from '../../src/shubox/core/types';
 
 describe('Partial Success Handling', () => {
   beforeEach(() => {

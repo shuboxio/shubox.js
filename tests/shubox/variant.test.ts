@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, test } from 'vitest';
-import { Variant } from "../../src/shubox/variant";
+import { Variant } from "../../src/shubox/transforms/Variant";
 
 export interface IShuboxFile {
   s3url: string;

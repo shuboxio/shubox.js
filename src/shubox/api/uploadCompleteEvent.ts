@@ -1,8 +1,8 @@
-import Shubox from "./index";
-import { filenameFromFile } from "./filename_from_file";
-import { objectToFormData } from "./object_to_form_data";
-import { fetchWithRetry } from "./fetch_with_retry";
-import type { IShuboxFile, ExtraParams } from "./types";
+import Shubox from "../core/Shubox";
+import { filenameFromFile } from "../utils/filenameFromFile";
+import { objectToFormData } from "../utils/objectToFormData";
+import { fetchWithRetry } from "./fetchWithRetry";
+import type { IShuboxFile, ExtraParams } from "../core/types";
 
 export async function uploadCompleteEvent(
   shubox: Shubox,

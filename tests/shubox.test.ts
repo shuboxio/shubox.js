@@ -1,7 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
-import Shubox from '../src/shubox';
+import Shubox from '../src/shubox/core/Shubox';
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { setupJsDom } from './test_helpers';
 import { OfflineError } from '../src/shubox/errors';

@@ -1,4 +1,4 @@
-// src/shubox/error_handler.ts
+// src/shubox/errors/ErrorHandler.ts
 import Dropzone from 'dropzone';
 import {
   NetworkError,
@@ -6,8 +6,8 @@ import {
   OfflineError,
   ShuboxError,
   UploadError,
-} from './errors';
-import { dispatchShuboxEvent } from './events';
+} from './ShuboxError';
+import { dispatchShuboxEvent } from '../events/dispatchEvent';
 
 export class ShuboxErrorHandler {
   constructor(private element: HTMLElement) {}

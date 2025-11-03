@@ -1,9 +1,9 @@
-// src/shubox/api_client.ts
-import Shubox from './index';
-import { fetchWithRetry } from './fetch_with_retry';
-import { objectToFormData } from './object_to_form_data';
-import { filenameFromFile } from './filename_from_file';
-import type { SignatureResponse } from './types';
+// src/shubox/api/ApiClient.ts
+import Shubox from '../core/Shubox';
+import { fetchWithRetry } from './fetchWithRetry';
+import { objectToFormData } from '../utils/objectToFormData';
+import { filenameFromFile } from '../utils/filenameFromFile';
+import type { SignatureResponse } from '../core/types';
 
 export interface FileInfo {
   name: string;

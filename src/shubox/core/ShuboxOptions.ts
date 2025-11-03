@@ -1,4 +1,4 @@
-import Shubox from "./index";
+import Shubox from "./Shubox";
 import type { ShuboxDropzoneFile } from "./types";
 
 export class ShuboxOptions {

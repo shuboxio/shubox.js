@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { fetchWithRetry, parseJsonResponse } from '../../src/shubox/fetch_with_retry';
-import { NetworkError, TimeoutError } from '../../src/shubox/errors';
+import { fetchWithRetry, parseJsonResponse } from '../../src/shubox/api/fetchWithRetry';
+import { NetworkError, TimeoutError } from '../../src/shubox/errors/ShuboxError';
 
 describe('fetchWithRetry', () => {
   beforeEach(() => {

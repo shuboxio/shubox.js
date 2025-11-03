@@ -8,7 +8,7 @@ import {
   ValidationError,
   TimeoutError,
   OfflineError,
-} from '../../src/shubox/errors';
+} from '../../src/shubox/errors/ShuboxError';
 
 describe('ShuboxError', () => {
   it('should create a base error with all properties', () => {

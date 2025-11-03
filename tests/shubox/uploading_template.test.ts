@@ -2,8 +2,8 @@
  * @vitest-environment jsdom
  */
 import { describe, test, expect, beforeEach, afterEach } from 'vitest';
-import Shubox from '../../src/shubox';
-import { ShuboxCallbacks } from '../../src/shubox/shubox_callbacks';
+import Shubox from '../../src/shubox/core/Shubox'
+import { ShuboxCallbacks } from '../../src/shubox/core/ShuboxCallbacks';
 
 describe('Shubox uploadingTemplate functionality', () => {
   let textarea: HTMLTextAreaElement;

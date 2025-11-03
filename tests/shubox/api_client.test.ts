@@ -2,8 +2,8 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, test, beforeEach, vi } from 'vitest';
-import { ShuboxApiClient } from '../../src/shubox/api_client';
-import Shubox from '../../src/shubox/index';
+import { ShuboxApiClient } from '../../src/shubox/api/ApiClient';
+import Shubox from '../../src/shubox/core/Shubox';
 import { setupJsDom } from '../test_helpers';
 
 describe('ShuboxApiClient', () => {

@@ -2,8 +2,8 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ShuboxCallbacks } from '../../src/shubox/shubox_callbacks';
-import type { ShuboxDropzoneFile } from '../../src/shubox/types';
+import { ShuboxCallbacks } from '../../src/shubox/core/ShuboxCallbacks';
+import type { ShuboxDropzoneFile } from '../../src/shubox/core/types';
 import Dropzone from 'dropzone';
 
 describe('Resource Cleanup', () => {

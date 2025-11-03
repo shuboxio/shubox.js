@@ -1,4 +1,4 @@
-import type { IShuboxFile } from "./types";
+import type { IShuboxFile } from "../core/types";
 
 export class Variant {
   public s3url: string = "";

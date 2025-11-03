@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, test, beforeEach } from 'vitest';
-import { ShuboxDomRenderer } from '../../src/shubox/dom_renderer';
+import { ShuboxDomRenderer } from '../../src/shubox/dom/DomRenderer';
 import { setupJsDom } from '../test_helpers';
 
 describe('ShuboxDomRenderer', () => {

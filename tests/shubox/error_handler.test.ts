@@ -2,8 +2,8 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, test, beforeEach, vi } from 'vitest';
-import { ShuboxErrorHandler } from '../../src/shubox/error_handler';
-import { NetworkError, TimeoutError, OfflineError, UploadError } from '../../src/shubox/errors';
+import { ShuboxErrorHandler } from '../../src/shubox/errors/ErrorHandler';
+import { NetworkError, TimeoutError, OfflineError, UploadError } from '../../src/shubox/errors/ShuboxError';
 import { setupJsDom } from '../test_helpers';
 
 describe('ShuboxErrorHandler', () => {

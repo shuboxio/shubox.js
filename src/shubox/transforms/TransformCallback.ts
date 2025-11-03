@@ -1,6 +1,6 @@
-import { Variant } from "./variant";
-import { TransformError } from "./errors";
-import type { IShuboxFile, TransformResult } from "./types";
+import { Variant } from "./Variant";
+import { TransformError } from "../errors/ShuboxError";
+import type { IShuboxFile, TransformResult } from "../core/types";
 
 export class TransformCallback {
   public file: IShuboxFile;

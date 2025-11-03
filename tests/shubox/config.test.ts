@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, test } from 'vitest';
-import { ShuboxConfig } from '../../src/shubox/config';
+import { ShuboxConfig } from '../../src/shubox/utils/config';
 
 describe('ShuboxConfig', () => {
   test('exports DEFAULT_TIMEOUT constant', () => {

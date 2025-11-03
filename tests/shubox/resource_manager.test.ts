@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, test, beforeEach, vi } from 'vitest';
-import { ShuboxResourceManager } from '../../src/shubox/resource_manager';
+import { ShuboxResourceManager } from '../../src/shubox/dom/ResourceManager';
 import { setupJsDom } from '../test_helpers';
 
 describe('ShuboxResourceManager', () => {

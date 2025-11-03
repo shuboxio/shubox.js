@@ -1,22 +1,22 @@
 import Dropzone from "dropzone";
-import Shubox from "./index";
+import Shubox from "./Shubox";
 import type { ShuboxDropzoneFile, IShuboxFile } from "./types";
-import { dispatchShuboxEvent } from "./events";
-import { uploadCompleteEvent } from "./upload_complete_event";
-import { TransformCallback } from "./transform_callback";
-import { insertAtCursor } from "./insert_at_cursor";
-import { ShuboxConfig } from "./config";
-import { ShuboxDomRenderer } from "./dom_renderer";
-import { ShuboxApiClient } from "./api_client";
-import { ShuboxErrorHandler } from "./error_handler";
-import { ShuboxResourceManager } from "./resource_manager";
-import { ShuboxTransformManager } from "./transform_manager";
+import { dispatchShuboxEvent } from "../events";
+import { uploadCompleteEvent } from "../api/uploadCompleteEvent";
+import { TransformCallback } from "../transforms/TransformCallback";
+import { insertAtCursor } from "../dom/insertAtCursor";
+import { ShuboxConfig } from "../utils/config";
+import { ShuboxDomRenderer } from "../dom/DomRenderer";
+import { ShuboxApiClient } from "../api/ApiClient";
+import { ShuboxErrorHandler } from "../errors/ErrorHandler";
+import { ShuboxResourceManager } from "../dom/ResourceManager";
+import { ShuboxTransformManager } from "../transforms/TransformManager";
 import {
   OfflineError,
   NetworkError,
   TimeoutError,
   UploadError,
-} from "./errors";
+} from "../errors";
 
 export interface IShuboxDefaultOptions {
   success?: (file: Dropzone.DropzoneFile) => void;

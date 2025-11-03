@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, test, beforeEach, vi } from 'vitest';
-import { ShuboxTransformManager } from '../../src/shubox/transform_manager';
+import { ShuboxTransformManager } from '../../src/shubox/transforms/TransformManager';
 import { setupJsDom } from '../test_helpers';
 
 describe('ShuboxTransformManager', () => {

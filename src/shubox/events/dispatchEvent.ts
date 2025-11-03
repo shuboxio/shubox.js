@@ -1,4 +1,4 @@
-import type { ShuboxDropzoneFile } from "./types";
+import type { ShuboxDropzoneFile } from "../core/types";
 
 /**
  * Event detail for shubox:error events

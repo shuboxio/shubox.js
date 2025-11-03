@@ -1,4 +1,4 @@
-import { NetworkError, TimeoutError } from "./errors";
+import { NetworkError, TimeoutError } from "../errors/ShuboxError";
 
 export interface FetchWithRetryOptions {
   retryAttempts?: number;
