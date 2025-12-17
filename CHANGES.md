@@ -2,6 +2,8 @@
 
 ## Master
 
+## 2.0.0
+
 ### Added
 
 - **7-module architecture** - Reorganized into core, api, dom, errors, events, transforms, and utils modules.
